@@ -32,7 +32,7 @@ jobs:
           python -m joulescope_docs html
       - name: Check external links (report only)
         run: python -m joulescope_docs linkcheck || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: linkcheck
           path: build/linkcheck/output.txt

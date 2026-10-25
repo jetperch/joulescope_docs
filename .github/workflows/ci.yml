@@ -39,7 +39,7 @@ jobs:
         run: python -m joulescope_docs html
       - name: Test
         run: python -m pytest
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: site
           path: build/site/
@@ -68,7 +68,7 @@ jobs:
           python -m joulescope_docs doxygen-install
       - name: Build PDFs
         run: python -m joulescope_docs pdf
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: pdf
           path: build/site/pdf/
