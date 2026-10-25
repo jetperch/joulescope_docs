@@ -25,7 +25,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0  # SOURCE_DATE_EPOCH comes from the last commit
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install system packages
@@ -51,7 +51,7 @@ jobs:
         with:
           submodules: true
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VERSION }}
       - name: Install system packages
