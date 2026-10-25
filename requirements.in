@@ -20,7 +20,7 @@ wheel
 psutil
 requests
 pymonocypher
-python-dateutil<3
+python-dateutil<4
 
 # Tests
 pytest
