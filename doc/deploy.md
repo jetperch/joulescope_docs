@@ -1,14 +1,16 @@
 # Deployment
 
-Status: NOT SET UP.  Nothing has been created in AWS and DNS is unchanged.
+Status: set up 2026-10-25 and deploying.  The live names differ from the
+examples below: role `github_docs_to_s3`, function `serve_index`,
+distribution `E2HQ3JT4KRQ9EG`.
 
 docs.joulescope.com is static files in a private S3 bucket behind
-CloudFront, set up like download.joulescope.com.  GitHub Actions deploys
-with short-lived OIDC credentials, so no AWS keys are stored anywhere.
+CloudFront, set up like download.joulescope.com.  Every green push to `main`
+deploys automatically, with short-lived OIDC credentials, so no AWS keys are stored anywhere.
 
 ```
-GitHub Actions (deploy.yml, "production" environment, reviewer approval)
-   │  OIDC token: repo:jetperch/joulescope_docs:environment:production
+GitHub Actions (ci.yml "deploy" job: push to main, "production" environment)
+   │  OIDC token: repo:jetperch@43996129/joulescope_docs@1433283186:environment:production
    ▼
 IAM role joulescope-docs-deploy
    │  s3 sync                           cloudfront:CreateInvalidation
@@ -27,8 +29,7 @@ happens instead of at the first deploy.
 
 ### joulescope_docs on GitHub, with submodules
 
-The deploy workflow publishes the artifacts of a green `ci` run, and CI
-checks out the projects as submodules.  During development `external/` held
+CI checks out the projects as submodules.  During development `external/` held
 plain clones.  First check that each clone has nothing left to push:
 
 ```bash
@@ -50,8 +51,8 @@ git commit -m "Initial joulescope_docs"
 gh repo create jetperch/joulescope_docs --private --source . --push
 ```
 
-Wait for a green `ci` run (Actions tab).  `deploy` publishes that run's
-`site` and `pdf` artifacts.
+Wait for a green `ci` run (Actions tab).  Until step 9, its `deploy` job
+fails: the AWS role and the GitHub variables do not exist yet.
 
 ### Tools and shell variables
 
@@ -67,8 +68,15 @@ export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
 export DOMAIN=docs.joulescope.com
 export BUCKET=docs-joulescope-com     # globally unique, no dots
 export GITHUB_REPO=jetperch/joulescope_docs     # exactly as on GitHub
+export OIDC_SUB_PREFIX=$(gh api "repos/$GITHUB_REPO/actions/oidc/customization/sub" \
+    --jq .sub_claim_prefix)
 mkdir -p build/aws
 ```
+
+GitHub's OIDC subject names the repository by name and numeric ID, such as
+`repo:jetperch@43996129/joulescope_docs@1433283186`, so a deleted and
+re-created repository with the same name cannot assume the role.
+`OIDC_SUB_PREFIX` must not be empty.
 
 The bucket name has no dots.  Dotted names do not match the wildcard TLS
 certificate of `*.s3.amazonaws.com`.
@@ -263,8 +271,9 @@ aws iam get-role --role-name joulescope-docs-deploy \
     --query "Role.AssumeRolePolicyDocument.Statement[0].Condition"
 ```
 
-The `sub` must be exactly
-`repo:jetperch/joulescope_docs:environment:production`.
+The `sub` must be exactly `$OIDC_SUB_PREFIX:environment:production`.
+To fix a policy later, edit the template and run `aws iam
+update-assume-role-policy --role-name ... --policy-document file://...`.
 
 
 ## 8. GitHub environment and variables
@@ -279,19 +288,29 @@ gh variable list --env production --repo "$GITHUB_REPO"
 ```
 
 These are variables, not secrets: none of them grants access on its own.
-They must be on the `production` environment, which `deploy.yml` uses.
+They must be on the `production` environment, which the `deploy` job uses.
 
-Then, in the repository's **Settings → Environments → production**:
+Limit the environment to `main`.  The role trusts any job that uses the
+environment, and this stops a workflow edited on another branch from
+deploying:
 
-* **Required reviewers**: add yourself and anyone else who may publish.
-* **Deployment branches and tags**: selected branches, `main` only.
+```bash
+gh api -X PUT "repos/$GITHUB_REPO/environments/production" --input - <<'EOF2'
+{"deployment_branch_policy": {"protected_branches": false, "custom_branch_policies": true}}
+EOF2
+gh api -X POST "repos/$GITHUB_REPO/environments/production/deployment-branch-policies" \
+    -f name=main -f type=branch
+```
+
+Do not add required reviewers: they would hold every push to `main` for
+approval.
 
 
 ## 9. First deploy, then DNS
 
-1. Run the `deploy` workflow (Actions → deploy → Run workflow) with the run
-   id of a green `ci` run on `main`.  The run id is the number in the run's
-   URL.  Approve the deployment when asked.
+1. Push to `main`, or re-run the latest `ci` run on `main`
+   (`gh run rerun <run id> --failed`).  The `deploy` job runs after `html`
+   and `pdf` pass.
 2. Check the site on the CloudFront domain:
 
    ```bash
@@ -315,21 +334,17 @@ Then, in the repository's **Settings → Environments → production**:
 
 ## Updating the site
 
-1. Merge to `main` and wait for a green `ci` run.
-2. Run `deploy` with that run's id, plus an `archive_run_id` to publish a
-   release archive, and approve it.
-
-The sync uses `--delete` but excludes `archive/*`, so published archives are
-never removed, and publishing an archive that exists fails.  Browsers cache
-pages for 5 minutes and archives for a day.  Every deploy invalidates
-CloudFront.
+Push or merge to `main`.  When `ci` passes, its `deploy` job syncs the site,
+the PDFs, and the release archives listed in `archives.toml` with
+`--delete`, then invalidates CloudFront.  Pull requests and other branches
+build and test but never deploy.  Browsers cache pages for 5 minutes.
 
 
 ## Troubleshooting
 
 | Symptom | Cause and fix |
 |---|---|
-| `Not authorized to perform sts:AssumeRoleWithWebIdentity` | The token's `sub` does not match the trust policy.  Check the repository name (case, `_`), that the job uses `environment: production`, and that the organization has not customized the subject claim: `gh api orgs/jetperch/actions/oidc/customization/sub`. |
+| `Not authorized to perform sts:AssumeRoleWithWebIdentity` | The token's `sub` does not match the trust policy.  Compare the trust policy with `gh api repos/jetperch/joulescope_docs/actions/oidc/customization/sub`: with `use_immutable_subject` the `sub` contains the owner and repository IDs.  Also check that the job uses `environment: production`. |
 | `Could not load credentials from any providers` | The workflow lacks `permissions: id-token: write`, or `AWS_DEPLOY_ROLE_ARN` is empty because the variable is on the repository instead of the `production` environment. |
 | `AccessDenied` on `ListObjectsV2` during `s3 sync` | `s3:ListBucket` must be on the bucket ARN (`arn:aws:s3:::bucket`), not `bucket/*`. |
 | `AccessDenied` on `PutObject` or `DeleteObject` | The object statement must use `arn:aws:s3:::bucket/*`, and `DOCS_BUCKET` must match the real bucket. |

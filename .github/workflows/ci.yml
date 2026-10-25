@@ -1,7 +1,8 @@
 # SPDX-FileCopyrightText: Copyright 2026 Jetperch LLC
 # SPDX-License-Identifier: Apache-2.0
 #
-# Build and test the documentation.  No AWS access; see deploy.yml.
+# Build and test the documentation on every push and pull request.  A green
+# push to main deploys to S3 + CloudFront.  Setup: doc/deploy.md.
 # The software projects are git submodules under external/.
 
 name: ci
@@ -39,6 +40,9 @@ jobs:
         run: python -m joulescope_docs html
       - name: Test
         run: python -m pytest
+      - name: Build release archives (archives.toml)
+        # Last: it installs older package releases.
+        run: python -m joulescope_docs archive --all
       - uses: actions/upload-artifact@v7
         with:
           name: site
@@ -72,3 +76,41 @@ jobs:
         with:
           name: pdf
           path: build/site/pdf/
+
+  deploy:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [html, pdf]
+    runs-on: ubuntu-24.04
+    environment: production  # the AWS role trusts only this environment
+    concurrency: deploy      # one at a time; a newer push replaces a waiting one
+    permissions:
+      contents: read
+      id-token: write        # OIDC
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          name: site
+          path: site
+      - uses: actions/download-artifact@v8
+        with:
+          name: pdf
+          path: site/pdf
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Sync to S3
+        # Short browser cache: pages change with every deploy.  The CLI may
+        # guess .yaml as binary, so the datasheets get an explicit text type.
+        run: |
+          aws s3 sync site/ "s3://${{ vars.DOCS_BUCKET }}/" --delete \
+              --cache-control "public, max-age=300"
+          aws s3 cp site/products/datasheets/ \
+              "s3://${{ vars.DOCS_BUCKET }}/products/datasheets/" --recursive \
+              --exclude "*" --include "*.yaml" \
+              --content-type "text/yaml; charset=utf-8" \
+              --cache-control "public, max-age=300" --metadata-directive REPLACE
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+              --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*"

@@ -62,5 +62,3 @@ To automate tests or integrate Joulescope into a larger test setup, use the
 with Python bindings, or the original
 {doc}`pyjoulescope <software/pyjoulescope/index>` Python API.  Joulescope
 recordings use the {doc}`JLS file format <software/jls/index>`.
-
-New to Joulescope?  Continue with {doc}`getting_started/index`.

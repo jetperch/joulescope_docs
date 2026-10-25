@@ -81,7 +81,9 @@ def test_parser_commands():
     for cmd in ['deps', 'doxygen-install', 'html', 'pdf', 'linkcheck', 'serve']:
         assert p.parse_args([cmd]).command == cmd
     args = p.parse_args(['archive', 'jls', 'v0.19.1'])
-    assert (args.project, args.tag) == ('jls', 'v0.19.1')
+    assert (args.project, args.tag, args.all) == ('jls', 'v0.19.1', False)
+    args = p.parse_args(['archive', '--all'])
+    assert (args.project, args.all) == (None, True)
     assert pathlib.Path(ROOT, 'projects.toml').is_file()
 
 
@@ -110,3 +112,24 @@ def test_serve_host():
     assert p.parse_args(['serve']).host == 'localhost'
     args = p.parse_args(['serve', '--host', '0.0.0.0', '--port', '8001'])
     assert (args.host, args.port) == ('0.0.0.0', 8001)
+
+
+@pytest.mark.parametrize('argv', [['archive'], ['archive', 'jls'], ['archive', '--all', 'jls']])
+def test_archive_invalid_args(argv):
+    with pytest.raises(SystemExit):
+        cli.cmd_archive(cli.parser().parse_args(argv))
+
+
+def test_archive_all_skips_built_and_copies(tmp_path, monkeypatch):
+    archive, site = tmp_path / 'archive', tmp_path / 'site'
+    (archive / 'jls' / 'v0.19.1').mkdir(parents=True)
+    (archive / 'jls' / 'v0.19.1' / 'index.html').write_text('')
+    (site / 'archive' / 'jls').mkdir(parents=True)
+    (site / 'archive' / 'jls' / 'versions.json').write_text('[]')
+    monkeypatch.setattr(cli, 'ARCHIVE', archive)
+    monkeypatch.setattr(cli, 'SITE', site)
+    monkeypatch.setattr(cli, 'load_archives', lambda: {'jls': ['v0.19.1']})
+    monkeypatch.setattr(cli, '_run', lambda *a, **k: pytest.fail('nothing to build'))
+    cli.cmd_archive(cli.parser().parse_args(['archive', '--all']))
+    assert (site / 'archive' / 'jls' / 'v0.19.1' / 'index.html').exists()
+    assert (site / 'archive' / 'jls' / 'versions.json').exists()

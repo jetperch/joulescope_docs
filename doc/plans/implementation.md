@@ -27,6 +27,13 @@ Done locally; nothing is committed or pushed.
 
 Changes from the plan below:
 
+* **One workflow (2026-10-25, Matt)**: `ci.yml` builds and tests every push
+  and pull request, and its `deploy` job publishes every green push to
+  `main`.  There is no manual deploy, weekly run, or archive workflow.
+  `archive --all` rebuilds the `archives.toml` entries in CI, so archives are
+  no longer immutable uploads.  `linkcheck` is a local command only, and the
+  reproducibility check is a manual test.
+
 * **D3**: there is no backfill.  Read the Docs remains the reference for old
   releases and is listed in each project's version switcher.
 * **D5**: the projects are temporary clones in `external/` (gitignored) on

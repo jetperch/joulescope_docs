@@ -21,7 +21,7 @@ joulescope_docs/                          external/ (one per software project)
 └── joulescope_docs/  (build tooling)
         │
         ▼  one sphinx-build
-build/site/  ──▶ S3 + CloudFront (deploy.yml, manual approval)
+build/site/  ──▶ S3 + CloudFront (ci.yml, every green push to main)
 build/site/pdf/  (LaTeX builder, same sources)
 ```
 
@@ -106,9 +106,11 @@ commit time.
 
 The current site always documents the latest sources.  Release archives are
 standalone builds of one project tag, made with the same configuration in
-"archive mode", published under `/archive/<project>/<tag>/` and never
-rebuilt.  Each archive has its own search index, so searching an archive
-searches only that version.  A per-project version switcher
+"archive mode" and published under `/archive/<project>/<tag>/`.  CI rebuilds
+every archive listed in `archives.toml` with the site, so the site and its
+archives always deploy together and one `s3 sync --delete` publishes both.
+Each archive has its own search index, so searching an archive searches only
+that version.  A per-project version switcher
 (`/archive/<project>/versions.json`, generated from `archives.toml`) links
 the current site, the archives, and Read the Docs, which remains the
 reference for releases made before this site (decision D3).

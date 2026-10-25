@@ -17,7 +17,7 @@ The Joulescope software supports these 64-bit operating systems:
 | Operating system | Supported versions |
 |---|---|
 | Microsoft® Windows® | Windows 11 |
-| Apple® macOS® | macOS 26 and 27, Intel and Apple Silicon |
+| Apple® macOS® | macOS 26 and 27, Intel and Apple Silicon.  The Joulescope UI requires macOS 14 or newer. |
 | Linux® | Ubuntu® 26.04 LTS.  Other distributions may work, but are not officially supported. |
 
 To install the Joulescope software with pip, or to use the Python packages

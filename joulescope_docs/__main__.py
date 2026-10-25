@@ -14,7 +14,8 @@ import socket
 import subprocess
 import sys
 
-from . import BUILD, EXTERNAL, INCLUDE, MOUNT, ROOT, SITE, SOURCE, DOXYGEN_XML, load_projects
+from . import BUILD, EXTERNAL, INCLUDE, MOUNT, ROOT, SITE, SOURCE, DOXYGEN_XML
+from . import load_archives, load_projects
 from . import doxygen, mount
 
 TOOLS = BUILD / 'tools'
@@ -143,35 +144,63 @@ def cmd_linkcheck(args):
     _sphinx('linkcheck', SOURCE, BUILD / 'linkcheck', _env(), strict=False)
 
 
-def cmd_archive(args):
-    """Build one project at one tag as a standalone archive."""
-    projects = load_projects()
-    p = projects.get(args.project)
+def _archive(projects, checkouts, project, tag):
+    """Build one project at one tag into build/archive/<project>/<tag>."""
+    p = projects.get(project)
     if p is None or 'doc_dir' not in p:
-        raise SystemExit(f'unknown project or no Sphinx docs: {args.project}')
-    checkout = _checkouts(args, projects)[args.project]
-    version = args.tag.removeprefix('v')
+        raise SystemExit(f'unknown project or no Sphinx docs: {project}')
+    checkout = checkouts[project]
+    version = tag.removeprefix('v')
     installed = _version(p['package'])
     if installed != version:
         raise SystemExit(f'autodoc needs {p["package"]}=={version}, found {installed}.\n'
                          f'Install it first, for example: pip install {p["package"]}=={version}')
-    outdir = ARCHIVE / args.project / args.tag
+    outdir = ARCHIVE / project / tag
     if outdir.exists():
-        raise SystemExit(f'{outdir} exists; archives are immutable (delete it to rebuild)')
-    worktree = BUILD / 'worktrees' / f'{args.project}-{args.tag}'
+        raise SystemExit(f'{outdir} exists; delete it to rebuild')
+    # CI checks out submodules without their tags.
+    if subprocess.run(['git', '-C', checkout, 'rev-parse', '-q', '--verify', f'refs/tags/{tag}'],
+                      capture_output=True).returncode:
+        _run(['git', '-C', checkout, 'fetch', '--tags', 'origin'])
+    worktree = BUILD / 'worktrees' / f'{project}-{tag}'
     if worktree.exists():
         _run(['git', '-C', checkout, 'worktree', 'remove', '--force', worktree])
-    _run(['git', '-C', checkout, 'worktree', 'add', '--detach', worktree, args.tag])
+    _run(['git', '-C', checkout, 'worktree', 'add', '--detach', worktree, tag])
     try:
         if 'breathe' in p:
-            out = BUILD / 'doxygen-archive' / args.project
+            out = BUILD / 'doxygen-archive' / project
             doxygen.generate(doxygen.find(TOOLS), worktree, out, version)
-        env = _env(**{ARCHIVE_ENV: f'{args.project}:{args.tag}'})
+        env = _env(**{ARCHIVE_ENV: f'{project}:{tag}'})
         _sphinx('html', worktree / p['doc_dir'], outdir, env, strict=False,
-                doctrees=BUILD / 'doctrees' / 'archive' / args.project / args.tag)
+                doctrees=BUILD / 'doctrees' / 'archive' / project / tag)
     finally:
         _run(['git', '-C', checkout, 'worktree', 'remove', '--force', worktree])
-    print(f'Archive: {outdir}\nAdd "{args.tag}" to archives.toml [{args.project}] versions.')
+    return outdir
+
+
+def cmd_archive(args):
+    """Build one project tag, or with --all every archives.toml entry."""
+    projects = load_projects()
+    checkouts = _checkouts(args, projects)
+    if not args.all:
+        if not args.tag:
+            raise SystemExit('archive needs PROJECT TAG, or --all')
+        outdir = _archive(projects, checkouts, args.project, args.tag)
+        print(f'Archive: {outdir}\nAdd "{args.tag}" to archives.toml [{args.project}] versions.')
+        return
+    if args.project:
+        raise SystemExit('archive --all takes no PROJECT TAG')
+    for project, tags in load_archives().items():
+        package = projects[project]['package']
+        for tag in tags:
+            if (ARCHIVE / project / tag).exists():
+                continue
+            # autodoc documents the released package that matches the tag.
+            _run([sys.executable, '-m', 'pip', 'install',
+                  f'{package}=={tag.removeprefix("v")}'], env=_env())
+            _archive(projects, checkouts, project, tag)
+    if ARCHIVE.exists():  # next to versions.json from "html", as deployed
+        shutil.copytree(ARCHIVE, SITE / 'archive', dirs_exist_ok=True)
 
 
 def cmd_serve(args):
@@ -202,9 +231,12 @@ def parser():
         '--no-strict', action='store_true', help='Do not treat warnings as errors.')
     add('pdf', cmd_pdf, 'Build the PDF guides into build/site/pdf.')
     add('linkcheck', cmd_linkcheck, 'Check external links (report only).')
-    s = add('archive', cmd_archive, 'Build a standalone archive of one project tag.')
-    s.add_argument('project')
-    s.add_argument('tag')
+    s = add('archive', cmd_archive, 'Build standalone archives of project tags.')
+    s.add_argument('project', nargs='?')
+    s.add_argument('tag', nargs='?')
+    s.add_argument('--all', action='store_true',
+                   help='Build every archives.toml entry, installing each released '
+                        'package version, and copy the results into build/site/archive.')
     s = add('serve', cmd_serve, 'Serve the built site locally.')
     s.add_argument('--port', type=int, default=8000)
     s.add_argument('--host', default='localhost',

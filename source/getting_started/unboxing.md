@@ -9,9 +9,6 @@ This page describes the Joulescope JS320.  For another instrument, see
 :relative-images:
 ```
 
-Next, {ref}`Meet Your Joulescope JS320 <js320-meet-your-joulescope-js320>`
-describes the connectors and indicators.
-
 (getting-started-other-devices)=
 
 ## Other devices

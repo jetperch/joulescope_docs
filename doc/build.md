@@ -43,7 +43,7 @@ is faster but may not match unreleased sources.
 | `python -m joulescope_docs html` | `build/site/`; warnings are errors |
 | `python -m joulescope_docs pdf` | `build/site/pdf/*.pdf` |
 | `python -m joulescope_docs serve` | http://localhost:8000/ serving `build/site/`; add `--host 0.0.0.0` to serve to the LAN |
-| `python -m joulescope_docs linkcheck` | `build/linkcheck/output.txt` (external links) |
+| `python -m joulescope_docs linkcheck` | `build/linkcheck/output.txt` (external links, not in CI) |
 | `python -m pytest` | Tooling tests, plus site checks when `build/site/` exists |
 
 To preview changes to a project's documentation, mount another checkout:
@@ -84,18 +84,21 @@ Breathe release fixes that.
 
 ## Release archives
 
-When a project releases, archive the documentation of the previous release
-before the current site moves on:
+To keep the documentation of a project release online, add its tag to
+`archives.toml` (newest first).  CI builds every listed archive into
+`/archive/<project>/<tag>/`, and the version switcher lists it.  Removing a
+tag removes the archive at the next deploy.
+
+To preview one locally:
 
 ```bash
 pip install pyjls==0.19.1          # autodoc must import the released package
 python -m joulescope_docs archive jls v0.19.1
 ```
 
-The archive is written to `build/archive/<project>/<tag>/` and refuses to
-overwrite an existing one.  Add the tag to `archives.toml` (newest first) so
-the version switcher lists it.  In CI, run the `archive` workflow, then
-`deploy` with its run id.
+The archive is written to `build/archive/<project>/<tag>/`.  `archive --all`
+builds every `archives.toml` entry the way CI does: it installs each released
+package version into the current environment, so use a separate venv.
 
 
 ## Importing a Word guide
