@@ -8,7 +8,7 @@ sphinx==9.2.0
 myst-parser==5.1.0
 breathe==5.1.0
 pydata-sphinx-theme==0.23.0
-sphinxcontrib-svg2pdfconverter==2.0.0
+sphinxcontrib-svg2pdfconverter==2.1.0
 PyYAML
 
 # Build and runtime dependencies of the documented packages, which are

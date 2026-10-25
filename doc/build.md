@@ -59,15 +59,27 @@ hidden.
 
 ## Updating dependencies
 
-Edit `requirements.in`, then:
+Python packages: edit `requirements.in` (the exact pins are the Sphinx
+toolchain), then re-lock.  `--upgrade` also moves every unpinned package to
+its newest compatible release:
 
 ```bash
-uv pip compile --universal --generate-hashes --python-version 3.13 \
+pip install uv
+uv pip compile --universal --generate-hashes --python-version 3.13 --upgrade \
     requirements.in -o requirements.txt
 ```
 
-Dependabot proposes updates to `requirements.txt`, the GitHub Actions and the
-submodules.  Each runs the full CI.
+Check the diff: the Windows-only `colorama` entry and `setuptools` must stay.
+Dependabot does not update this file, because its pip-compile re-lock drops
+those entries; see `.github/dependabot.yml`.
+
+GitHub Actions use major version tags (`actions/checkout@v7`), so they pick
+up fixes within a major version.  Dependabot proposes new major versions and
+submodule updates; each runs the full CI.
+
+Doxygen for CI is pinned in `joulescope_docs/doxygen.py` (version and
+SHA-256).  Doxygen 1.18.0 breaks Breathe 5.1.0, so it stays at 1.17.0 until a
+Breathe release fixes that.
 
 
 ## Release archives

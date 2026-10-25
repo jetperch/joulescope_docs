@@ -18,10 +18,10 @@ jobs:
   linkcheck:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.14"
       - run: sudo apt-get update && sudo apt-get install -y libusb-1.0-0-dev libudev-dev
@@ -32,7 +32,7 @@ jobs:
           python -m joulescope_docs html
       - name: Check external links (report only)
         run: python -m joulescope_docs linkcheck || true
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: linkcheck
           path: build/linkcheck/output.txt
@@ -40,10 +40,10 @@ jobs:
   reproducible:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           submodules: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.14"
       - run: sudo apt-get update && sudo apt-get install -y libusb-1.0-0-dev libudev-dev

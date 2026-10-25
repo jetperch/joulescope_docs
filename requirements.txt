@@ -726,9 +726,9 @@ sphinxcontrib-serializinghtml==2.0.0 \
     --hash=sha256:6e2cb0eef194e10c27ec0023bfeb25badbbb5868244cf5bc5bdc04e4464bf331 \
     --hash=sha256:e9d912827f872c029017a53f0ef2180b327c3f7fd23c87229f7a8e8b70031d4d
     # via sphinx
-sphinxcontrib-svg2pdfconverter==2.0.0 \
-    --hash=sha256:ab9c8f1080391e231812d20abf2657a69ee35574563b1014414f953964a95fa3 \
-    --hash=sha256:b23bfda91aecd24287bfcf1b30dd728086a205decc5a46cf2f4b2aa4a0d1f447
+sphinxcontrib-svg2pdfconverter==2.1.0 \
+    --hash=sha256:805635ac274583e1606b0ec7fb21f16b69ca8ff223dd7e237d91127015628b0c \
+    --hash=sha256:9756e82d5f3bf11629ffcbafb1f8a1092d3bb4789e33494032cdce9a9c8459d3
     # via -r requirements.in
 typing-extensions==4.16.0 \
     --hash=sha256:481caa481374e813c1b176ada14e97f1f67a4539ce9cfeb3f350d78d6370c2e8 \

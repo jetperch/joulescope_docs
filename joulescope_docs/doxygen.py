@@ -17,11 +17,13 @@ import tarfile
 import urllib.request
 
 # Pinned Doxygen release for Linux x86_64, used by CI.  Update together.
-DOXYGEN_VERSION = '1.14.0'
+# 1.18.0 emits C declarations that Breathe 5.1.0 cannot parse (jls
+# h_format/h_reader fail the strict build); recheck after a Breathe release.
+DOXYGEN_VERSION = '1.17.0'
 DOXYGEN_URL = ('https://github.com/doxygen/doxygen/releases/download/'
                f'Release_{DOXYGEN_VERSION.replace(".", "_")}/'
                f'doxygen-{DOXYGEN_VERSION}.linux.bin.tar.gz')
-DOXYGEN_SHA256 = 'e5d6ae24d0bf3f0cdc4d8f146726b89ca323922f19441af99b1872d503665ad6'
+DOXYGEN_SHA256 = '75419ef4f446fc1c24ef12514b574e66e898ee6f527c6ae2ad84f91a905823c2'
 
 # Appended overrides: XML only, quiet.  Later Doxyfile assignments win.
 _OVERRIDES = """
