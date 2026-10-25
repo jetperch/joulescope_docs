@@ -17,7 +17,7 @@ Quick start:
 git clone --recurse-submodules <this repository>
 cd joulescope_docs
 python3 -m venv .venv && . .venv/bin/activate
-pip install --require-hashes -r requirements.txt
+pip install -r requirements.txt
 python -m joulescope_docs deps
 python -m joulescope_docs html
 python -m joulescope_docs serve     # http://localhost:8000/

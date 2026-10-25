@@ -32,7 +32,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y libusb-1.0-0-dev libudev-dev
       - name: Install Python packages
         run: |
-          python -m pip install --require-hashes -r requirements.txt
+          python -m pip install -r requirements.txt
           python -m joulescope_docs deps
           python -m joulescope_docs doxygen-install
       - name: Build HTML (warnings are errors)
@@ -63,7 +63,7 @@ jobs:
               fonts-noto-cjk latexmk librsvg2-bin
       - name: Install Python packages
         run: |
-          python -m pip install --require-hashes -r requirements.txt
+          python -m pip install -r requirements.txt
           python -m joulescope_docs deps
           python -m joulescope_docs doxygen-install
       - name: Build PDFs

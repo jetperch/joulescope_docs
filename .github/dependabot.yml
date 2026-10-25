@@ -1,10 +1,10 @@
 # Weekly update proposals; each runs the full CI.
 #
-# No "pip" entry: requirements.txt is a universal, hashed uv lock, and
+# No "pip" entry: requirements.txt is a universal uv lock, and
 # Dependabot re-locks it with pip-compile, which drops platform-specific
-# entries (colorama on Windows) and setuptools, and loosens deliberate
-# constraints (python-dateutil<3, which pyjoulescope requires).  Update it
-# with uv as described in doc/build.md.  Dependabot security alerts still
+# entries (colorama on Windows) and setuptools, and loosens version
+# constraints without knowing why they exist.  Update it with uv as
+# described in doc/build.md.  Dependabot security alerts still
 # cover requirements.txt through the dependency graph.
 version: 2
 updates:

@@ -33,6 +33,8 @@ Changes from the plan below:
   branch `feature/unified_docs`.  They are not submodules yet.  After the
   upstream changes are committed and pushed, replace them with submodules
   (`git submodule add`); CI already expects submodules.
+* **No hashes in the lock (2026-10-25, Matt).**  `requirements.txt` keeps
+  exact versions but not SHA-256 hashes, matching the other Jetperch repos.
 * **Warning baseline dropped.**  The upstream fixes (U1-U3, U5, U7) made the
   build warning-free, so plain `-W` replaces `known_warnings.txt`.
 * **U4 not needed.**  The combined-build link failures came from Sphinx
@@ -243,12 +245,12 @@ External URLs that must keep working (printed PDFs, PyPI pages, READMEs):
 ### 2.6 Dependencies for one combined build
 
 * Python 3.14 (verified here).  The packages already support 3.15.
-* Pinned with hashes: `sphinx==9.2.0`, `myst-parser==5.1.0`,
+* Pinned: `sphinx==9.2.0`, `myst-parser==5.1.0`,
   `breathe==5.1.0`, `pydata-sphinx-theme==0.23.0`, `sphinx-design==0.7.0`
   (optional), `docutils==0.22.4`, `PyYAML==6.0.3`, `numpy`, `pytest`, and
   `sphinxcontrib-svg2pdfconverter` for PDF.  Versions are the latest
   available on 2026-10-24.  The lock file is produced with
-  `uv pip compile --generate-hashes`.
+  `uv pip compile --universal`.
 * For autodoc, the three packages are installed from the submodule sources
   (`pip install ./external/joulescope_driver ...`) in CI.  That needs a C
   compiler, `libusb-1.0-0-dev`/`libudev-dev` and Cython (build-time
@@ -361,7 +363,7 @@ joulescope_docs/
 ├── README.md                    # quick start: clone, build, serve
 ├── pyproject.toml               # tooling package + pytest config
 ├── requirements.in              # direct deps (unpinned intent)
-├── requirements.txt             # uv pip compile --generate-hashes output
+├── requirements.txt             # uv pip compile --universal output
 ├── projects.toml                # mounted projects: prefix, doc dir, package, breathe
 ├── archives.toml                # archived (project, tag, python) entries
 ├── .gitmodules
@@ -441,7 +443,7 @@ title = "pyjoulescope"
 
 ```
 git clone --recurse-submodules <joulescope_docs>
-python -m venv .venv && .venv/bin/pip install --require-hashes -r requirements.txt
+python -m venv .venv && .venv/bin/pip install -r requirements.txt
 python -m joulescope_docs deps          # pip install ./external/* (or --pypi)
 python -m joulescope_docs html          # mount + doxygen + sphinx-build -W (baseline)
 python -m joulescope_docs pdf           # latexpdf (or via the pinned container)

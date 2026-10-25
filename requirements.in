@@ -1,5 +1,5 @@
 # Direct dependencies for the unified documentation build.
-# Lock with:  uv pip compile --universal --generate-hashes --python-version 3.13 \
+# Lock with:  uv pip compile --universal --python-version 3.13 \
 #                 requirements.in -o requirements.txt
 # See doc/build.md.
 
@@ -20,7 +20,7 @@ wheel
 psutil
 requests
 pymonocypher
-python-dateutil<3
+python-dateutil<4
 
 # Tests
 pytest

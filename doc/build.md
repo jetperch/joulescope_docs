@@ -28,7 +28,7 @@ git clone --recurse-submodules <joulescope_docs repository>
 cd joulescope_docs
 python3 -m venv .venv
 . .venv/bin/activate
-pip install --require-hashes -r requirements.txt
+pip install -r requirements.txt
 python -m joulescope_docs deps          # build the documented packages for autodoc
 ```
 
@@ -65,7 +65,7 @@ its newest compatible release:
 
 ```bash
 pip install uv
-uv pip compile --universal --generate-hashes --python-version 3.13 --upgrade \
+uv pip compile --universal --python-version 3.13 --upgrade \
     requirements.in -o requirements.txt
 ```
 
