@@ -1,0 +1,40 @@
+{
+  "CallerReference": "docs-joulescope-com-1",
+  "Comment": "docs.joulescope.com (joulescope_docs)",
+  "Enabled": true,
+  "Aliases": {"Quantity": 1, "Items": ["${DOMAIN}"]},
+  "DefaultRootObject": "index.html",
+  "HttpVersion": "http2and3",
+  "IsIPV6Enabled": true,
+  "PriceClass": "PriceClass_All",
+  "Origins": {
+    "Quantity": 1,
+    "Items": [
+      {
+        "Id": "s3-docs",
+        "DomainName": "${BUCKET}.s3.${AWS_REGION}.amazonaws.com",
+        "OriginAccessControlId": "${OAC_ID}",
+        "S3OriginConfig": {"OriginAccessIdentity": ""}
+      }
+    ]
+  },
+  "DefaultCacheBehavior": {
+    "TargetOriginId": "s3-docs",
+    "ViewerProtocolPolicy": "redirect-to-https",
+    "AllowedMethods": {
+      "Quantity": 2, "Items": ["GET", "HEAD"],
+      "CachedMethods": {"Quantity": 2, "Items": ["GET", "HEAD"]}
+    },
+    "Compress": true,
+    "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+    "FunctionAssociations": {
+      "Quantity": 1,
+      "Items": [{"FunctionARN": "${FUNCTION_ARN}", "EventType": "viewer-request"}]
+    }
+  },
+  "ViewerCertificate": {
+    "ACMCertificateArn": "${CERT_ARN}",
+    "SSLSupportMethod": "sni-only",
+    "MinimumProtocolVersion": "TLSv1.2_2021"
+  }
+}

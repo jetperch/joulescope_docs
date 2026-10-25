@@ -1,0 +1,74 @@
+# SPDX-FileCopyrightText: Copyright 2026 Jetperch LLC
+# SPDX-License-Identifier: Apache-2.0
+#
+# Build and test the documentation.  No AWS access; see deploy.yml.
+# The software projects are git submodules under external/.
+
+name: ci
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  PYTHON_VERSION: "3.14"
+
+jobs:
+  html:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0  # SOURCE_DATE_EPOCH comes from the last commit
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install system packages
+        run: sudo apt-get update && sudo apt-get install -y libusb-1.0-0-dev libudev-dev
+      - name: Install Python packages
+        run: |
+          python -m pip install --require-hashes -r requirements.txt
+          python -m joulescope_docs deps
+          python -m joulescope_docs doxygen-install
+      - name: Build HTML (warnings are errors)
+        run: python -m joulescope_docs html
+      - name: Test
+        run: python -m pytest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: build/site/
+
+  pdf:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+      - name: Install system packages
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libusb-1.0-0-dev libudev-dev \
+              texlive-xetex texlive-latex-recommended texlive-latex-extra \
+              texlive-fonts-recommended tex-gyre fonts-freefont-otf fonts-dejavu \
+              fonts-noto-cjk latexmk librsvg2-bin
+      - name: Install Python packages
+        run: |
+          python -m pip install --require-hashes -r requirements.txt
+          python -m joulescope_docs deps
+          python -m joulescope_docs doxygen-install
+      - name: Build PDFs
+        run: python -m joulescope_docs pdf
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pdf
+          path: build/site/pdf/

@@ -1,0 +1,7 @@
+# Archived release documentation, newest first.  Each entry is a standalone
+# build of a project tag ("python -m joulescope_docs archive NAME TAG"),
+# published at /archive/NAME/TAG/.  The version switcher lists these.
+# Earlier releases remain on Read the Docs (plan decision D3).
+#
+# [jls]
+# versions = ["v0.20.0"]

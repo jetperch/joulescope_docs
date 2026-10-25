@@ -1,0 +1,4 @@
+{# Show the version switcher only on project pages, see conf.py _page_context. #}
+{%- if theme_switcher is mapping -%}
+{%- include "components/version-switcher.html" -%}
+{%- endif -%}

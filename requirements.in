@@ -1,0 +1,26 @@
+# Direct dependencies for the unified documentation build.
+# Lock with:  uv pip compile --universal --generate-hashes --python-version 3.13 \
+#                 requirements.in -o requirements.txt
+# See doc/build.md.
+
+# Sphinx toolchain
+sphinx==9.2.0
+myst-parser==5.1.0
+breathe==5.1.0
+pydata-sphinx-theme==0.23.0
+sphinxcontrib-svg2pdfconverter==2.0.0
+PyYAML
+
+# Build and runtime dependencies of the documented packages, which are
+# installed from external/ with --no-deps --no-build-isolation for autodoc.
+Cython>=3.0,<4
+numpy>=2.2.0,<3
+setuptools>=77
+wheel
+psutil
+requests
+pymonocypher
+python-dateutil<3
+
+# Tests
+pytest

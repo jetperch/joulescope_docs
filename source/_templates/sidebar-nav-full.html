@@ -1,0 +1,18 @@
+{# The whole site tree, from the root, on every page.  PyData's own
+   sidebar-nav-bs.html starts below the current top-level section
+   (startdepth=1), which leaves the home page and single-page sections
+   with no sidebar.  See doc/architecture.md, "Navigation". #}
+<nav class="bd-docs-nav bd-links" aria-label="{{ _('Site Navigation') }}">
+  <div class="bd-toc-item navbar-nav">
+    {{- generate_toctree_html(
+      "sidebar",
+      startdepth=0,
+      show_nav_level=theme_show_nav_level | int,
+      maxdepth=theme_navigation_depth | int,
+      collapse=theme_collapse_navigation | tobool,
+      includehidden=True,
+      titles_only=True
+      )
+    -}}
+  </div>
+</nav>

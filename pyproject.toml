@@ -1,0 +1,5 @@
+# Tooling only; this repository is not packaged.  See doc/build.md.
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = [".", "source/_ext"]

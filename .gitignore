@@ -1,0 +1,18 @@
+# Staged source documents (docx/pdf) used for the one-time guide import.
+/import/
+
+# Temporary project clones used while developing the unified docs.
+# See doc/plans/implementation.md (D5).
+
+# Build outputs and generated mounts
+/build/
+/source/software/joulescope_driver
+/source/software/jls
+/source/software/pyjoulescope
+/source/_include/
+
+# Python
+.venv/
+__pycache__/
+*.egg-info/
+.pytest_cache/

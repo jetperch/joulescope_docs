@@ -1,0 +1,100 @@
+# SPDX-FileCopyrightText: Copyright 2026 Jetperch LLC
+#
+# Joulescope JS220+ specifications: only the differences from js220.yaml.
+# Format: doc/datasheet_format.md in https://github.com/jetperch/joulescope_docs.
+# Values are as published in the JS220+ User's Guide.
+
+schema: joulescope-datasheet/1
+model: JS220+
+title: Joulescope JS220+ Precision Energy Analyzer with Enhanced Accuracy
+revision: "1.1"
+inherits: js220
+
+notes:
+  sustained_3a: >-
+    Max 3 A sustained.  See the recommended operating conditions for higher
+    current durations.
+  trim_offset: ±1.0 nA for ±5 °C over 24 hours with trim offset calibration.
+
+sections:
+  - id: current_ranges
+    rows:
+      - id: range_10a
+        range: {value: 10 A (> 2 A), notes: [sustained_3a]}
+        accuracy: {gain_pct: 0.25, offset: {value: 1.5, unit: mA}}
+        resolution: {value: 350, unit: µA}
+      - id: range_10a_low
+        range: 10 A (≤ 2 A)
+        accuracy: {gain_pct: 0.1, offset: {value: 300, unit: µA}}
+        resolution: {value: 75, unit: µA}
+        impedance: {value: 0.01, unit: Ω}
+        guaranteed: {value: 2.05, unit: A, symmetric: true}
+      # New rows append, so the remaining ranges are removed and added again
+      # to keep the published order after range_10a_low.
+      - {id: range_180ma, remove: true}
+      - {id: range_18ma, remove: true}
+      - {id: range_1800ua, remove: true}
+      - {id: range_180ua, remove: true}
+      - {id: range_18ua, remove: true}
+      - id: range_180ma
+        range: {value: 180, unit: mA}
+        accuracy: {gain_pct: 0.1, offset: {value: 30, unit: µA}}
+        resolution: {value: 6.5, unit: µA}
+        impedance: {value: 0.11, unit: Ω}
+        guaranteed: {value: 185, unit: mA, symmetric: true}
+      - id: range_18ma
+        range: {value: 18, unit: mA}
+        accuracy: {gain_pct: 0.1, offset: {value: "3.0", unit: µA}}
+        resolution: {value: 650, unit: nA}
+        impedance: {value: 1.11, unit: Ω}
+        guaranteed: {value: 18.5, unit: mA, symmetric: true}
+      - id: range_1800ua
+        range: {value: 1.8, unit: mA}
+        accuracy: {gain_pct: 0.1, offset: {value: 300, unit: nA}}
+        resolution: {value: 65, unit: nA}
+        impedance: {value: 11.1, unit: Ω}
+        guaranteed: {value: 1.85, unit: mA, symmetric: true}
+      - id: range_180ua
+        range: {value: 180, unit: µA}
+        accuracy: {gain_pct: 0.1, offset: {value: 30, unit: nA}}
+        resolution: {value: 6.5, unit: nA}
+        impedance: {value: 111, unit: Ω}
+        guaranteed: {value: 185, unit: µA, symmetric: true}
+      - id: range_18ua
+        range: {value: 18, unit: µA}
+        accuracy: {gain_pct: 0.1, offset: {value: 3, unit: nA}, notes: [trim_offset]}
+        resolution: {value: 0.65, unit: nA}
+        impedance: {value: 1111, unit: Ω}
+        guaranteed: {value: 18.5, unit: µA, symmetric: true}
+
+  - id: voltage_ranges
+    rows:
+      # The published "Guaranteed" values have no unit; V added for clarity.
+      - id: range_15v
+        accuracy: {gain_pct: 0.1, offset: {value: 1, unit: mV}}
+        resolution: {value: 500, unit: µV}
+        guaranteed: {value: 14.5, unit: V, symmetric: true}
+      - id: range_2v
+        accuracy: {gain_pct: 0.1, offset: {value: 150, unit: µV}}
+        resolution: {value: 75, unit: µV}
+        guaranteed: {value: 2.2, unit: V, symmetric: true}
+
+  - id: parasitic
+    rows:
+      # null clears a JS220 value that the JS220+ table leaves empty.
+      - {id: voltage_leakage_3v3, typ: null, max: 200, unit: pA}
+      - {id: voltage_leakage_5v, typ: null, max: 200, unit: pA}
+      - {id: voltage_leakage_15v, condition: "25 °C, ±14V", typ: null, max: 300, unit: pA}
+      - {id: shunt_switching_time, typ: "1.0", max: 1.5}
+      - id: input_bias_voltage
+        name: Input bias current Voltage+ & -
+        condition: 25 °C
+        typ: {value: 5, symmetric: true}
+        max: {value: 20, symmetric: true}
+        unit: pA
+      - id: input_bias_current
+        name: Input bias current, Current + & -
+        condition: 25 °C, 18 µA current range
+        typ: {value: 60, symmetric: true}
+        max: {value: 600, symmetric: true}
+        unit: pA

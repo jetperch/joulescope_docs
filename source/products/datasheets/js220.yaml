@@ -1,0 +1,247 @@
+# SPDX-FileCopyrightText: Copyright 2026 Jetperch LLC
+#
+# Joulescope JS220 specifications.  Format: doc/datasheet_format.md in
+# https://github.com/jetperch/joulescope_docs.  Values are as published,
+# with the unit given in the "unit" column or in the value itself.
+
+schema: joulescope-datasheet/1
+model: JS220
+title: Joulescope JS220 Precision DC Energy Analyzer
+revision: "1.10"
+
+notes:
+  inrush: Suitable for handling inrush currents when connecting capacitive loads.
+  calibration_interval: >-
+    Recommended to comply with industry-standard practices, but the
+    Joulescope JS220 is designed not to need recalibration.
+  sustained_3a: >-
+    Joulescope is designed for 3 A sustained.  See the recommended operating
+    conditions for maximum durations for higher currents.
+  beta_voltage: Beta units are limited to ±13.6 V.
+
+sections:
+  - id: absolute_maximum_ratings
+    title: Absolute maximum ratings
+    columns: {name: "", min: Min, max: Max, unit: Unit}
+    rows:
+      - {id: usb_voltage, name: USB voltage, min: -0.3, max: 6, unit: V}
+      - id: port_voltage
+        name: Max voltage applied between any port (Current +, Current -, Voltage +, Voltage -)
+        min: -20
+        max: 20
+        unit: V
+      - id: port_to_usb_ground
+        name: >-
+          Max voltage to USB ground from any port (Current +, Current -,
+          Voltage +, Voltage -)
+        min: -48
+        max: 48
+        unit: V
+      - {id: current_burst, name: "Input current (powered, burst)", min: -10, max: 10, unit: A}
+      - {id: current_sustained, name: "Input current (powered, sustained)", min: -3, max: 3, unit: A}
+      - {id: current_unpowered, name: Input current (unpowered), min: N/A (off), max: N/A (off), unit: A}
+      - {id: storage_temperature, name: Storage temperature, min: -40, max: 80, unit: °C}
+      - {id: operating_temperature, name: Operating temperature, min: 0, max: 50, unit: °C}
+      - {id: humidity, name: Relative humidity (non-condensing), min: 0, max: 95, unit: "%"}
+      - {id: altitude, name: Altitude from sea level, min: -100, max: 2500, unit: m}
+      - {id: gpi_voltage, name: Max voltage applied to GPI relative to USB ground, min: -10, max: 10, unit: V}
+
+  - id: mechanical_instrument
+    title: Mechanical, instrument only
+    columns: {name: "", typ: Typical, unit: Unit}
+    rows:
+      - {id: weight, name: Weight, typ: 190, unit: grams}
+      - {id: width, name: Width, typ: 99, unit: mm}
+      - {id: length, name: Length (including binding posts and BNC connector), typ: 126, unit: mm}
+      - {id: height, name: Height, typ: 28, unit: mm}
+
+  - id: mechanical_kit
+    title: Mechanical, complete product kit
+    columns: {name: "", typ: Typical, unit: Unit}
+    rows:
+      - {id: weight, name: Weight, typ: 510, unit: grams}
+      - {id: width, name: Width, typ: 190, unit: mm}
+      - {id: length, name: Length, typ: 200, unit: mm}
+      - {id: height, name: Height, typ: 60, unit: mm}
+
+  - id: recommended_operating_conditions
+    title: Recommended operating conditions
+    columns: {name: "", condition: Test condition, min: Min, typ: Typical, max: Max, unit: Unit}
+    rows:
+      - {id: operating_temperature, name: Operating temperature, min: 10, max: 40, unit: °C}
+      - {id: usb_voltage, name: USB supply voltage, min: 4.5, typ: "5.0", max: 5.5, unit: V}
+      - {id: usb_current, name: USB supply current, max: 500, unit: mA}
+      - {id: voltage_input, name: Voltage applied across Voltage + and Voltage -, min: -14.5, max: 14.5, unit: V}
+      - id: current_input_voltage
+        name: Voltage applied across Current + and Current -
+        condition: Current range off
+        min: -15
+        max: 15
+        unit: V
+      - {id: current_continuous, name: Input current, condition: continuous, min: -3, max: 3, unit: A}
+      - id: current_pulse_50ms
+        name: Input current pulse
+        condition: < 50 milliseconds, < 3A average
+        min: {value: -10, notes: [inrush]}
+        max: {value: 10, notes: [inrush]}
+        unit: A
+      - id: current_pulse_250ms
+        name: Input current pulse
+        condition: < 250 milliseconds, < 3A average
+        min: {value: -5, notes: [inrush]}
+        max: {value: 5, notes: [inrush]}
+        unit: A
+
+  - id: specification_conditions
+    title: Specification conditions
+    columns: {name: "", value: ""}
+    rows:
+      - {id: temperature, name: Temperature, value: 23 °C ± 10 °C}
+      - {id: humidity, name: Humidity, value: "20% to 80% RH, non-condensing"}
+      - id: calibration_interval
+        name: Calibration interval
+        value: {value: 1, unit: year, notes: [calibration_interval]}
+
+  - id: current_ranges
+    title: Current measurement specifications
+    columns:
+      range: Range
+      accuracy: Accuracy
+      resolution: Resolution
+      impedance: Impedance
+      guaranteed: Guaranteed
+    rows:
+      - id: range_10a
+        range: {value: 10, unit: A, notes: [sustained_3a]}
+        accuracy: {gain_pct: 0.25, offset: {value: "1.50", unit: mA}}
+        resolution: {value: 175, unit: µA}
+        impedance: {value: 0.01, unit: Ω}
+        guaranteed: {value: 9.7, unit: A, symmetric: true}
+      - id: range_180ma
+        range: {value: 180, unit: mA}
+        accuracy: {gain_pct: 0.25, offset: {value: 150, unit: µA}}
+        resolution: {value: 15, unit: µA}
+        impedance: {value: 0.11, unit: Ω}
+        guaranteed: {value: 185, unit: mA, symmetric: true}
+      - id: range_18ma
+        range: {value: 18, unit: mA}
+        accuracy: {gain_pct: 0.25, offset: {value: 15, unit: µA}}
+        resolution: {value: 1.5, unit: µA}
+        impedance: {value: 1.11, unit: Ω}
+        guaranteed: {value: 18.5, unit: mA, symmetric: true}
+      - id: range_1800ua
+        range: {value: 1.8, unit: mA}
+        accuracy: {gain_pct: 0.25, offset: {value: 1.5, unit: µA}}
+        resolution: {value: 150, unit: nA}
+        impedance: {value: 11.1, unit: Ω}
+        guaranteed: {value: 1.85, unit: mA, symmetric: true}
+      - id: range_180ua
+        range: {value: 180, unit: µA}
+        accuracy: {gain_pct: 0.25, offset: {value: 150, unit: nA}}
+        resolution: {value: 15, unit: nA}
+        impedance: {value: 111, unit: Ω}
+        guaranteed: {value: 185, unit: µA, symmetric: true}
+      - id: range_18ua
+        range: {value: 18, unit: µA}
+        accuracy: {gain_pct: 0.25, offset: {value: 30, unit: nA}}
+        resolution: {value: 1.5, unit: nA}
+        impedance: {value: 1111, unit: Ω}
+        guaranteed: {value: 18.5, unit: µA, symmetric: true}
+
+  - id: voltage_ranges
+    title: Voltage measurement specifications
+    columns:
+      range: Range
+      accuracy: Accuracy
+      resolution: Resolution
+      guaranteed: Guaranteed
+    rows:
+      # The published "Guaranteed" values have no unit; V added for clarity.
+      - id: range_15v
+        range: {value: 15, unit: V}
+        accuracy: {gain_pct: 0.1, offset: {value: 10, unit: mV}}
+        resolution: {value: 1.2, unit: mV}
+        guaranteed: {value: 14.5, unit: V, symmetric: true, notes: [beta_voltage]}
+      - id: range_2v
+        range: {value: 2, unit: V}
+        accuracy: {gain_pct: 0.1, offset: {value: 2, unit: mV}}
+        resolution: {value: 180, unit: µV}
+        guaranteed: {value: 1.98, unit: V, symmetric: true}
+
+  - id: general
+    title: General specifications
+    columns: {name: "", condition: Test condition, min: Min, typ: Typical, max: Max, unit: Unit}
+    rows:
+      - {id: sampling_frequency, name: Sampling frequency, condition: 25 °C, typ: 2000000, unit: sps}
+      - {id: sampling_frequency_accuracy, name: Sampling frequency, condition: 25 °C, min: -25, max: 25, unit: ppm}
+      - {id: bandwidth, name: Measurement bandwidth, condition: -3 dB, min: 280, typ: 310, max: 350, unit: kHz}
+      - {id: front_panel_insertions, name: Front panel insertions, max: 100}
+
+  - id: parasitic
+    title: Parasitic effects specifications
+    columns: {name: "", condition: Test condition, min: Min, typ: Typical, max: Max, unit: Unit}
+    rows:
+      - {id: voltage_leakage_3v3, name: Current leakage (Voltage + to -), condition: "25 °C, ±3.3V", typ: 2, unit: nA}
+      - {id: voltage_leakage_5v, name: Current leakage (Voltage + to -), condition: "25 °C, ±5V", typ: 2, unit: nA}
+      - {id: voltage_leakage_15v, name: Current leakage (Voltage + to -), condition: "25 °C, ±15V", typ: 3, unit: nA}
+      - id: shunt_voltage_max
+        name: Shunt resistor voltage, max
+        condition: -2 to 2 A, static
+        typ: 20
+        max: 21
+        unit: mV
+      - id: burden_voltage
+        name: Burden voltage (Current + to -)
+        condition: 1 A, banana jacks
+        min: 0
+        typ: 25
+        max: 35
+        unit: mV
+      - id: burden_voltage_shunt
+        name: Burden voltage (Current + to -)
+        condition: Shunt resistor, < ±2 A
+        max: {value: 20, symmetric: true}
+        unit: mV
+      - id: shunt_switching_time
+        name: Shunt switching time
+        condition: Over-range, < 200 ns rise time
+        min: 0
+        typ: 0.8
+        max: 1.2
+        unit: µs
+      - {id: range_switch_gap, name: Measurement gap following a current range switch, max: 0, unit: µs}
+
+  - id: fuse
+    title: Software-controlled fuse specifications
+    columns: {name: "", condition: Test condition, min: Min, typ: Typical, max: Max, unit: Unit}
+    rows:
+      - {id: leakage_3v3, name: Current leakage (Current + to -), condition: "25 °C, 3.3V", typ: {value: 5, symmetric: true}, unit: nA}
+      - {id: leakage_5v, name: Current leakage (Current + to -), condition: "25 °C, 5V", typ: {value: 7, symmetric: true}, unit: nA}
+      - id: leakage_15v
+        name: Current leakage (Current + to -)
+        condition: "25 °C, 15V"
+        typ: {value: 28, symmetric: true}
+        max: {value: 5000, symmetric: true}
+        unit: nA
+      - {id: engage_5a, name: Max fuse engage, condition: 5 A, typ: 0.293, unit: s}
+      - {id: engage_10a, name: Max fuse engage, condition: 10 A, typ: "0.050", unit: s}
+
+  - id: gpio
+    title: General purpose inputs and outputs
+    columns: {name: "", condition: Test condition, min: Min, typ: Typical, max: Max, unit: Unit}
+    rows:
+      - {id: vref_internal, name: Internal 3.3V reference, min: 3.135, typ: 3.3, max: 3.465, unit: V}
+      - id: vref_external
+        name: External reference
+        condition: Vref < (VUSB - 0.5 V)
+        min: Vref - 0.1
+        typ: Vref
+        max: Vref + 0.1
+        unit: V
+      - {id: input_leakage_25c, name: Input leakage per pin, condition: 25 °C, max: {value: 10, symmetric: true}, unit: nA}
+      - {id: input_leakage, name: Input leakage per pin, max: {value: 100, symmetric: true}, unit: nA}
+      - {id: output_high, name: Output voltage high, condition: -100 µA, min: Vcco - 0.1, unit: V}
+      - {id: output_impedance, name: Output impedance, condition: 10 mA, min: 45, typ: 50, max: 80, unit: Ω}
+      - {id: gpi_sample_rate, name: GPI sample rate, typ: 2, unit: MSPS}
+      - {id: output_current, name: Continuous output current, condition: Per pin, max: {value: 50, symmetric: true}, unit: mA}
+      - {id: power_dissipation, name: Total power dissipation, condition: Over output impedance, max: 0.25, unit: W}

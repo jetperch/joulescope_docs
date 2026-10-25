@@ -1,0 +1,12 @@
+[submodule "external/joulescope_driver"]
+	path = external/joulescope_driver
+	url = https://github.com/jetperch/joulescope_driver
+[submodule "external/pyjoulescope"]
+	path = external/pyjoulescope
+	url = https://github.com/jetperch/pyjoulescope
+[submodule "external/jls"]
+	path = external/jls
+	url = https://github.com/jetperch/jls
+[submodule "external/pyjoulescope_ui"]
+	path = external/pyjoulescope_ui
+	url = https://github.com/jetperch/pyjoulescope_ui

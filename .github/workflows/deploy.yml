@@ -1,0 +1,79 @@
+# SPDX-FileCopyrightText: Copyright 2026 Jetperch LLC
+# SPDX-License-Identifier: Apache-2.0
+#
+# Publish to S3 + CloudFront.  Manual only, gated by the "production"
+# environment (required reviewers).  AWS access uses GitHub OIDC; no keys
+# are stored.  Setup: doc/deploy.md.
+
+name: deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      ci_run_id:
+        description: "ci.yml run id whose site and pdf artifacts to publish"
+        required: true
+      archive_run_id:
+        description: "Optional archive.yml run id to publish as well"
+        required: false
+
+permissions:
+  contents: read
+  id-token: write   # OIDC
+  actions: read     # download artifacts from other runs
+
+concurrency: deploy
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    environment: production
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: site
+          path: site
+          run-id: ${{ inputs.ci_run_id }}
+          github-token: ${{ github.token }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: pdf
+          path: site/pdf
+          run-id: ${{ inputs.ci_run_id }}
+          github-token: ${{ github.token }}
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Sync the current site (never touches published archives)
+        # Short browser cache: pages change with every deploy.  The CLI may
+        # guess .yaml as binary, so the datasheets get an explicit text type.
+        run: |
+          aws s3 sync site/ "s3://${{ vars.DOCS_BUCKET }}/" --delete \
+              --exclude "archive/*" --include "archive/*/versions.json" \
+              --cache-control "public, max-age=300"
+          aws s3 cp site/products/datasheets/ \
+              "s3://${{ vars.DOCS_BUCKET }}/products/datasheets/" --recursive \
+              --exclude "*" --include "*.yaml" \
+              --content-type "text/yaml; charset=utf-8" \
+              --cache-control "public, max-age=300" --metadata-directive REPLACE
+      - name: Publish an archive (refuses to overwrite)
+        if: inputs.archive_run_id != ''
+        run: |
+          gh run download "${{ inputs.archive_run_id }}" --repo "${{ github.repository }}" \
+              --pattern 'archive-*' --dir archives
+          for dir in archives/*/*/*/; do
+            prefix="archive/${dir#archives/*/}"
+            if [ -n "$(aws s3 ls "s3://${{ vars.DOCS_BUCKET }}/${prefix}")" ]; then
+              echo "::error::${prefix} already exists; archives are immutable"
+              exit 1
+            fi
+            aws s3 cp --recursive "$dir" "s3://${{ vars.DOCS_BUCKET }}/${prefix}" \
+                --cache-control "public, max-age=86400"
+          done
+        env:
+          GH_TOKEN: ${{ github.token }}
+      - name: Invalidate CloudFront
+        run: |
+          aws cloudfront create-invalidation \
+              --distribution-id "${{ vars.CLOUDFRONT_DISTRIBUTION_ID }}" --paths "/*"

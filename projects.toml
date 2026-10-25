@@ -1,0 +1,44 @@
+# Projects whose existing Sphinx sources are mounted into the unified build.
+#
+# Each table name is the URL prefix and the mount name under source/.
+#   title:    Navigation title.
+#   repo:     Public repository URL.
+#   doc_dir:  Sphinx source directory, relative to the checkout.
+#   package:  Python package documented with autodoc (installed by "deps").
+#   breathe:  Breathe project name.  When present, Doxygen XML is generated
+#             from the checkout's doc/doxygen/Doxyfile.in.
+#   rtd:      Read the Docs site, the historical reference (D3).
+#   include_dir: see [pyjoulescope_ui] below.
+#
+# Checkouts default to external/<name>.  Override with --source NAME=PATH.
+
+[joulescope_driver]
+title = "Joulescope Driver"
+repo = "https://github.com/jetperch/joulescope_driver"
+doc_dir = "doc/sphinx"
+package = "pyjoulescope_driver"
+breathe = "jsdrv"
+rtd = "https://joulescope-driver.readthedocs.io/"
+
+[pyjoulescope]
+title = "pyjoulescope"
+repo = "https://github.com/jetperch/pyjoulescope"
+doc_dir = "docs"
+package = "joulescope"
+rtd = "https://joulescope.readthedocs.io/"
+
+[jls]
+title = "JLS File Format"
+repo = "https://github.com/jetperch/jls"
+doc_dir = "doc/sphinx"
+package = "pyjls"
+breathe = "jls"
+rtd = "https://jls.readthedocs.io/"
+
+# Not a site section: the UI guide (source/software/joulescope_ui/) includes
+# documents that stay in this repository, such as docs/plugin.md.
+#   include_dir:  linked at source/_include/<name>, not built as pages.
+[pyjoulescope_ui]
+title = "Joulescope UI"
+repo = "https://github.com/jetperch/pyjoulescope_ui"
+include_dir = "docs"
