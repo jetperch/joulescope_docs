@@ -7,7 +7,8 @@ import pathlib
 
 import pytest
 
-from joulescope_docs import EXTERNAL, ROOT, SOURCE, load_archives, load_projects, mounted
+from joulescope_docs import (EXTERNAL, ROOT, SOURCE, load_archives, load_projects, load_urls,
+                             mounted, published_urls)
 from joulescope_docs import __main__ as cli
 
 
@@ -70,20 +71,20 @@ def test_conf_versions():
     project = {'rtd': 'https://jls.readthedocs.io/'}
     entries = conf.versions('jls', project, {'jls': ['v0.20.0']})
     assert [e['version'] for e in entries] == ['latest', 'v0.20.0', 'rtd']
-    assert entries[0] == {'name': 'latest', 'version': 'latest', 'url': '/software/jls/',
+    assert entries[0] == {'name': 'latest', 'version': 'latest', 'url': '/en/software/jls/',
                           'preferred': True}
-    assert entries[1]['url'] == '/archive/jls/v0.20.0/'
+    assert entries[1]['url'] == '/en/archive/jls/v0.20.0/'
     assert conf.versions('x', {}, {})[-1]['version'] == 'latest'
 
 
 def test_parser_commands():
     p = cli.parser()
-    for cmd in ['deps', 'doxygen-install', 'html', 'pdf', 'linkcheck', 'serve']:
+    for cmd in ['deps', 'doxygen-install', 'html', 'pdf', 'linkcheck', 'serve', 'urls']:
         assert p.parse_args([cmd]).command == cmd
     args = p.parse_args(['archive', 'jls', 'v0.19.1'])
-    assert (args.project, args.tag, args.all) == ('jls', 'v0.19.1', False)
-    args = p.parse_args(['archive', '--all'])
-    assert (args.project, args.all) == (None, True)
+    assert (args.project, args.tag, args.install) == ('jls', 'v0.19.1', False)
+    assert p.parse_args(['archive', 'jls', 'v0.19.1', '--install']).install
+    assert p.parse_args(['archive-list']).command == 'archive-list'
     assert pathlib.Path(ROOT, 'projects.toml').is_file()
 
 
@@ -94,17 +95,19 @@ def test_pdf_env_respects_source_date_epoch(monkeypatch):
     assert env['FORCE_SOURCE_DATE'] == '1'
 
 
-def test_clean_site_keeps_pdfs(tmp_path, monkeypatch):
-    site = tmp_path / 'site'
-    (site / 'pdf').mkdir(parents=True)
-    (site / 'pdf' / 'guide.pdf').write_text('')
-    (site / 'old').mkdir()
-    (site / 'old' / 'page.html').write_text('')
-    (site / 'index.html').write_text('')
+def test_clean_site_then_merge_pdfs(tmp_path, monkeypatch):
+    site, pdf_site = tmp_path / 'site', tmp_path / 'pdf'
+    (site / 'en' / 'old').mkdir(parents=True)
+    (site / 'en' / 'old' / 'page.html').write_text('')
+    (pdf_site / 'en' / 'products' / 'js320').mkdir(parents=True)
+    (pdf_site / 'en' / 'products' / 'js320' / 'js320_datasheet.pdf').write_text('')
     monkeypatch.setattr(cli, 'SITE', site)
+    monkeypatch.setattr(cli, 'PDF_SITE', pdf_site)
     cli._clean_site()
-    assert [p.name for p in site.iterdir()] == ['pdf']
-    assert (site / 'pdf' / 'guide.pdf').exists()
+    assert not site.exists()
+    site.mkdir()
+    cli._merge_pdfs()
+    assert (site / 'en' / 'products' / 'js320' / 'js320_datasheet.pdf').exists()
 
 
 def test_serve_host():
@@ -114,22 +117,28 @@ def test_serve_host():
     assert (args.host, args.port) == ('0.0.0.0', 8001)
 
 
-@pytest.mark.parametrize('argv', [['archive'], ['archive', 'jls'], ['archive', '--all', 'jls']])
-def test_archive_invalid_args(argv):
-    with pytest.raises(SystemExit):
-        cli.cmd_archive(cli.parser().parse_args(argv))
+
+def test_archive_list(monkeypatch, capsys):
+    monkeypatch.setattr(cli, 'load_archives', lambda: {'jls': ['v0.20.0', 'v0.19.1']})
+    cli.cmd_archive_list(None)
+    assert capsys.readouterr().out == 'jls v0.20.0\njls v0.19.1\n'
 
 
-def test_archive_all_skips_built_and_copies(tmp_path, monkeypatch):
-    archive, site = tmp_path / 'archive', tmp_path / 'site'
-    (archive / 'jls' / 'v0.19.1').mkdir(parents=True)
-    (archive / 'jls' / 'v0.19.1' / 'index.html').write_text('')
-    (site / 'archive' / 'jls').mkdir(parents=True)
-    (site / 'archive' / 'jls' / 'versions.json').write_text('[]')
-    monkeypatch.setattr(cli, 'ARCHIVE', archive)
-    monkeypatch.setattr(cli, 'SITE', site)
-    monkeypatch.setattr(cli, 'load_archives', lambda: {'jls': ['v0.19.1']})
-    monkeypatch.setattr(cli, '_run', lambda *a, **k: pytest.fail('nothing to build'))
-    cli.cmd_archive(cli.parser().parse_args(['archive', '--all']))
-    assert (site / 'archive' / 'jls' / 'v0.19.1' / 'index.html').exists()
-    assert (site / 'archive' / 'jls' / 'versions.json').exists()
+def test_urls_list_pdfs():
+    """The PDF names in urls.txt match conf.py, without building them."""
+    conf = _conf()
+    assert sorted(conf.PDF_PATHS) == sorted(doc[1] for doc in conf.latex_documents)
+    pdfs = sorted(f'en/{path}' for path in conf.PDF_PATHS.values())
+    assert pdfs == [u for u in load_urls() if u.endswith('.pdf')]
+
+
+def test_published_urls(tmp_path):
+    for name in ['index.html', 'a/b.html', 'a/b.md', 'pdf/x.pdf', '_static/s.css',
+                 '_images/i.html', 'archive/p/versions.json', 'searchindex.js', 'llms.txt']:
+        (tmp_path / name).parent.mkdir(parents=True, exist_ok=True)
+        (tmp_path / name).write_text('')
+    assert published_urls(tmp_path) == ['a/b.html', 'archive/p/versions.json', 'index.html',
+                                        'llms.txt', 'pdf/x.pdf']
+    path = tmp_path / 'urls.txt'
+    path.write_text('# comment\n\nb.html\na.html\n')
+    assert load_urls(path) == ['a.html', 'b.html']

@@ -36,14 +36,15 @@ sections:
 
 
 def write(tmp_path, name, text):
-    (tmp_path / f'{name}.yaml').write_text(textwrap.dedent(text))
+    (tmp_path / name).mkdir(exist_ok=True)
+    datasheet.path(name, tmp_path).write_text(textwrap.dedent(text))
 
 
 def test_load(tmp_path):
     write(tmp_path, 'base', BASE)
     data, paths = datasheet.load('base', tmp_path)
     assert [s['id'] for s in data['sections']] == ['ranges', 'limits']
-    assert paths == [tmp_path / 'base.yaml']
+    assert paths == [tmp_path / 'base' / 'base_datasheet.yaml']
 
 
 @pytest.mark.parametrize('old, new, match', [
@@ -93,7 +94,7 @@ def test_inherits(tmp_path):
     assert ranges['rows'][1]['range'] == {'value': 18, 'unit': 'mA'}  # kept from base
     assert ranges['rows'][1]['accuracy']['offset'] == {'value': 3, 'unit': 'nA'}
     assert set(data['notes']) == {'n1', 'n2', 'n3'}
-    assert paths == [tmp_path / 'child.yaml', tmp_path / 'base.yaml']
+    assert paths == [datasheet.path('child', tmp_path), datasheet.path('base', tmp_path)]
 
 
 def test_inherits_null_clears_value(tmp_path):
@@ -161,8 +162,8 @@ def test_section_table_without_header(tmp_path):
 
 
 def test_published_datasheets_are_valid():
-    models = sorted(p.stem for p in datasheet.DATASHEET_DIR.glob('*.yaml'))
-    assert 'js320' in models
+    models = datasheet.models()
+    assert models == ['js110', 'js220', 'js220plus', 'js320']
     for model in models:
         data, _ = datasheet.load(model)
         assert data['model'].lower().replace('+', 'plus') == model

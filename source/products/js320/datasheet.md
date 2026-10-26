@@ -7,12 +7,12 @@ and voltage, then computes power, energy and charge.  It measures current
 over ten orders of magnitude, from amps down to nanoamps, with fast
 autoranging and minimal voltage drop.
 
-```{include} ../js320/_key_features.md
+```{include} guide/_key_features.md
 ```
 
-The [Joulescope JS320 User's Guide](../js320/index.md) describes how to use
+The [Joulescope JS320 User's Guide](guide/index.md) describes how to use
 the instrument.  The specification values are also available as
-[js320.yaml](/products/datasheets/js320.yaml).
+[js320_datasheet.yaml](site:products/js320/js320_datasheet.yaml).
 
-```{include} _js320_specifications.md
+```{include} _specifications.md
 ```

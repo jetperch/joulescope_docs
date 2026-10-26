@@ -3,7 +3,7 @@
 # Specifications
 
 This section only gives the specification changes relative to the
-{doc}`Joulescope JS220 User's Guide </products/js220/index>`.  All other
+{doc}`Joulescope JS220 User's Guide </products/js220/guide/index>`.  All other
 specifications remain the same as the JS220.  The
 {ref}`JS220+ datasheet <datasheet-js220plus>` lists the complete
 specifications.

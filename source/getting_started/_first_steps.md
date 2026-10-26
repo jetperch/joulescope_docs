@@ -11,18 +11,18 @@ Install the Joulescope User Interface (UI) on your computer, as described in
 
 Start the Joulescope UI.
 
-![Joulescope UI with no instrument connected](../products/js320/media/js320_image11.png)
+![Joulescope UI with no instrument connected](../products/js320/guide/media/js320_image11.png)
 
 Connect the Joulescope USB port to the host computer using the provided USB
 cable.  The UI automatically detects the connected Joulescope and starts
 displaying statistics data.
 
-![Joulescope UI Multimeter view](../products/js320/media/js320_image5.png)
+![Joulescope UI Multimeter view](../products/js320/guide/media/js320_image5.png)
 
 The Joulescope JS320 front panel has the **Voltage** and **Current**
 binding posts.  The JS220 and JS220+ have the same connections.
 
-![JS320 front panel with the Voltage and Current binding posts](../products/js320/media/js320_image9.jpeg)
+![JS320 front panel with the Voltage and Current binding posts](../products/js320/guide/media/js320_image9.jpeg)
 
 To measure the current and charge, connect the Joulescope **Current** port
 inline between the positive output from your power source and your target
@@ -36,7 +36,7 @@ ports across your power source's positive and negative connections.
 Alternatively, you can connect the **Voltage** port across your target
 device's positive and negative connections.
 
-![JS320 measuring current in the + wire and voltage across the power source](../products/js320/media/js320_image17.png)
+![JS320 measuring current in the + wire and voltage across the power source](../products/js320/guide/media/js320_image17.png)
 
 The Joulescope can be used in a variety of measurement configurations.  For
 more common connection scenarios, see
@@ -46,7 +46,7 @@ Operate your device under test.  The **Multimeter** view shows current,
 voltage, power, charge, and energy.  When you want to see waveforms over
 time, use the **Oscilloscope** view.  Select **View** → **Oscilloscope**.
 
-![Joulescope UI Oscilloscope view](../products/js320/media/js320_image6.png)
+![Joulescope UI Oscilloscope view](../products/js320/guide/media/js320_image6.png)
 
 Have questions about a feature?  In many cases, you can hover the mouse over
 an area of interest to see a **Tooltip**.  Right-click (control-click on

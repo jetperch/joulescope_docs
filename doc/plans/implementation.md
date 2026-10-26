@@ -27,6 +27,15 @@ Done locally; nothing is committed or pushed.
 
 Changes from the plan below:
 
+* **URL structure (2026-10-26, Matt)**: everything under a `/en/` language
+  prefix, with `/` redirecting there, and one directory per product,
+  `/en/products/<model>/` with `guide/`, `datasheet.html`, the YAML and the
+  PDFs.  Replaces `/products/datasheets/` and `/pdf/`.
+* **Agent indexes and URL list (2026-10-26)**: `<page>.md`, `llms.txt`
+  with the full contents, `llms-full.txt`, `sitemap.xml`, `robots.txt`
+  (`source/_ext/site_index.py`).  `urls.txt` and a test make URL changes a
+  deliberate decision (`CLAUDE.md`).  Archives are built once by CI's
+  `archive` job and kept in S3, replacing the rebuild on every run.
 * **One workflow (2026-10-25, Matt)**: `ci.yml` builds and tests every push
   and pull request, and its `deploy` job publishes every green push to
   `main`.  There is no manual deploy, weekly run, or archive workflow.

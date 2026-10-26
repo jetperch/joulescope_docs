@@ -18,14 +18,14 @@ Joulescope displays instantaneous voltage, current, power, and energy, like a
 multimeter.  The multimeter provides a quick and easy summary of the present
 state of your device.
 
-![Joulescope UI Multimeter view](products/js320/media/js320_image5.png)
+![Joulescope UI Multimeter view](products/js320/guide/media/js320_image5.png)
 
 Joulescope also displays waveforms of voltage and current over time, like an
 oscilloscope.  This oscilloscope view allows you to identify and to
 troubleshoot dynamic behavior and short events, including inrush current,
 event handlers, and tasks.
 
-![Joulescope UI Oscilloscope view](products/js320/media/js320_image6.png)
+![Joulescope UI Oscilloscope view](products/js320/guide/media/js320_image6.png)
 
 
 ## Applications

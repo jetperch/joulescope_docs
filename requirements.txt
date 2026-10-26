@@ -27,6 +27,7 @@ docutils==0.22.4
     #   myst-parser
     #   pydata-sphinx-theme
     #   sphinx
+    #   sphinx-markdown-builder
 idna==3.20
     # via requests
 imagesize==2.0.1
@@ -100,8 +101,11 @@ sphinx==9.2.0
     #   breathe
     #   myst-parser
     #   pydata-sphinx-theme
+    #   sphinx-markdown-builder
     #   sphinx-notfound-page
     #   sphinxcontrib-svg2pdfconverter
+sphinx-markdown-builder==0.6.11
+    # via -r requirements.in
 sphinx-notfound-page==1.1.0
     # via -r requirements.in
 sphinxcontrib-applehelp==2.0.0
@@ -118,6 +122,8 @@ sphinxcontrib-serializinghtml==2.0.0
     # via sphinx
 sphinxcontrib-svg2pdfconverter==2.1.0
     # via -r requirements.in
+tabulate==0.10.0
+    # via sphinx-markdown-builder
 typing-extensions==4.16.0
     # via beautifulsoup4
 tzdata==2026.5

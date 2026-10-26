@@ -316,17 +316,18 @@ approval.
 2. Check the site on the CloudFront domain:
 
    ```bash
-   for p in / /products/ /products/js320 /products/js320/fuse.html \
-            /software/joulescope_driver/h_jsdrv.html /llms.txt \
-            /products/datasheets/js320.yaml /pdf/js320_users_guide.pdf \
-            /no/such/page.html; do
+   for p in / /en/ /en/products/js320 /en/products/js320/guide/fuse.html \
+            /en/software/joulescope_driver/h_jsdrv.html /llms.txt \
+            /en/products/js320/js320_datasheet.yaml \
+            /en/products/js320/js320_users_guide.pdf /no/such/page.html; do
      printf '%-45s ' "$p"
      curl -s -o /dev/null -w '%{http_code} %{content_type}\n' "https://$DIST_DOMAIN$p"
    done
    ```
 
-   Expect 200 for every path except `/products/js320` (301 to the
-   directory) and the last one (404).  The YAML must be `text/yaml`.
+   Expect 200 for every path except `/` (302 to `/en/`),
+   `/en/products/js320` (301 to the directory) and the last one (404).
+   The YAML must be `text/yaml`.
 3. Point DNS at CloudFront (separate approval):
    * Route 53: alias A and AAAA records `docs.joulescope.com` → the
      distribution.
@@ -336,10 +337,12 @@ approval.
 
 ## Updating the site
 
-Push or merge to `main`.  When `ci` passes, its `deploy` job syncs the site,
-the PDFs, and the release archives listed in `archives.toml` with
-`--delete`, then invalidates CloudFront.  Pull requests and other branches
-build and test but never deploy.  Browsers cache pages for 5 minutes.
+Push or merge to `main`.  When `ci` passes, its `deploy` job syncs the site
+and the PDFs with `--delete`, then invalidates CloudFront.  The `archive`
+job first uploads any release archive in `archives.toml` that S3 lacks;
+published archives are never rebuilt, and the sync never deletes them.
+Pull requests and other branches build and test but never deploy.  Browsers
+cache pages for 5 minutes and archives for a day.
 
 
 ## Troubleshooting

@@ -10,7 +10,7 @@ current range measurement as the standard JS220.
 This limited document only describes the JS220+ improvements over the JS220.
 The JS220+ is operationally identical to the JS220. For instructions on how to
 operate your JS220+, see the
-{doc}`Joulescope JS220 User's Guide </products/js220/index>` and the
+{doc}`Joulescope JS220 User's Guide </products/js220/guide/index>` and the
 {doc}`Joulescope UI User's Guide </software/joulescope_ui/index>`.
 
 Some modern semiconductors now have sleep currents measured in nanoamps (1e-9

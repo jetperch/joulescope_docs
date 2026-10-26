@@ -8,12 +8,12 @@ and rapid dynamic current range switching to provide accurate and seamless
 current and energy measurements, even for devices with rapidly varying
 current consumption.
 
-```{include} ../js110/_key_features.md
+```{include} guide/_key_features.md
 ```
 
-The [Joulescope JS110 User's Guide](../js110/index.md) describes how to use
+The [Joulescope JS110 User's Guide](guide/index.md) describes how to use
 the instrument.  The specification values are also available as
-[js110.yaml](/products/datasheets/js110.yaml).
+[js110_datasheet.yaml](site:products/js110/js110_datasheet.yaml).
 
-```{include} _js110_specifications.md
+```{include} _specifications.md
 ```

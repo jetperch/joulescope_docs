@@ -46,9 +46,6 @@ jobs:
         run: python -m joulescope_docs html
       - name: Test
         run: python -m pytest
-      - name: Build release archives (archives.toml)
-        # Last: it installs older package releases.
-        run: python -m joulescope_docs archive --all
       - uses: actions/upload-artifact@v7
         with:
           name: site
@@ -85,11 +82,72 @@ jobs:
       - uses: actions/upload-artifact@v7
         with:
           name: pdf
-          path: build/site/pdf/
+          path: build/pdf/  # en/products/<model>/*.pdf, ...
+
+  archive:
+    # Release archives are built once and kept: build and upload only the
+    # archives.toml entries missing from S3.  See doc/build.md.
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    environment: production
+    concurrency: archive
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      BUCKET: ${{ vars.DOCS_BUCKET }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          submodules: true
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+          cache-dependency-path: requirements.txt
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Find missing archives
+        id: missing
+        # index.html is uploaded last, so it marks a complete archive.
+        run: |
+          missing=""
+          while read -r project tag; do
+            if ! aws s3api head-object --bucket "$BUCKET" \
+                --key "en/archive/$project/$tag/index.html" > /dev/null 2>&1; then
+              missing="$missing $project:$tag"
+            fi
+          done < <(python -m joulescope_docs archive-list)
+          echo "Missing:${missing:- none}"
+          echo "list=${missing# }" >> "$GITHUB_OUTPUT"
+      - name: Install
+        if: steps.missing.outputs.list != ''
+        run: |
+          python -m pip install -r requirements.txt
+          python -m joulescope_docs doxygen-install
+      - name: Build and upload
+        if: steps.missing.outputs.list != ''
+        env:
+          LIST: ${{ steps.missing.outputs.list }}
+        run: |
+          for item in $LIST; do
+            project="${item%%:*}"
+            tag="${item#*:}"
+            python -m joulescope_docs archive "$project" "$tag" --install
+            dir="build/archive/$project/$tag"
+            dst="s3://$BUCKET/en/archive/$project/$tag"
+            aws s3 cp "$dir" "$dst/" --recursive --exclude index.html \
+                --cache-control "public, max-age=86400"
+            aws s3 cp "$dir/index.html" "$dst/index.html" \
+                --cache-control "public, max-age=86400"
+          done
 
   deploy:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [html, pdf]
+    needs: [html, pdf, archive]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     environment: production  # the AWS role trusts only this environment
@@ -105,22 +163,25 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           name: pdf
-          path: site/pdf
+          path: site
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.AWS_DEPLOY_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION }}
       - name: Sync to S3
-        # Short browser cache: pages change with every deploy.  The CLI may
-        # guess .yaml as binary, so the datasheets get an explicit text type.
+        # Short browser cache: pages change with every deploy.  The archive
+        # job owns archive/ except the version lists.  The CLI may guess
+        # .yaml and .md as binary, so they get explicit text types.
         run: |
           aws s3 sync site/ "s3://${{ vars.DOCS_BUCKET }}/" --delete \
+              --exclude "en/archive/*" --include "en/archive/*/versions.json" \
               --cache-control "public, max-age=300"
-          aws s3 cp site/products/datasheets/ \
-              "s3://${{ vars.DOCS_BUCKET }}/products/datasheets/" --recursive \
-              --exclude "*" --include "*.yaml" \
-              --content-type "text/yaml; charset=utf-8" \
-              --cache-control "public, max-age=300" --metadata-directive REPLACE
+          for t in "yaml:text/yaml" "md:text/markdown"; do
+            aws s3 cp site/ "s3://${{ vars.DOCS_BUCKET }}/" --recursive \
+                --exclude "*" --include "*.${t%%:*}" --exclude "en/archive/*" \
+                --content-type "${t#*:}; charset=utf-8" \
+                --cache-control "public, max-age=300" --metadata-directive REPLACE
+          done
       - name: Invalidate CloudFront
         run: |
           aws cloudfront create-invalidation \

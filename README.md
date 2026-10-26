@@ -4,7 +4,7 @@ Source and build tooling for https://docs.joulescope.com:
 
 * User's guides for the Joulescope JS320, JS220, JS220+ and JS110, and
   for the Joulescope UI (`source/`).
-* Datasheets generated from YAML (`source/products/datasheets/`).
+* Datasheets generated from YAML (`source/products/<model>/`).
 * The documentation of
   [joulescope_driver](https://github.com/jetperch/joulescope_driver),
   [pyjoulescope](https://github.com/jetperch/pyjoulescope) and

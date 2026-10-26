@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: Copyright 2026 Jetperch LLC
 # SPDX-License-Identifier: Apache-2.0
 
-"""Render datasheet tables from source/products/datasheets/<model>.yaml.
+"""Render datasheet tables from source/products/<model>/<model>_datasheet.yaml.
 
 The YAML format is described in doc/datasheet_format.md.  Usage::
 
@@ -10,7 +10,7 @@ The YAML format is described in doc/datasheet_format.md.  Usage::
     ```
 
 Without :section:, every section renders with its title as a rubric.
-The YAML files are also published unchanged at /products/datasheets/<model>.yaml.
+The YAML files are also published unchanged at the same path.
 """
 
 import copy
@@ -23,7 +23,7 @@ from docutils.parsers.rst import directives
 from sphinx.util.docutils import SphinxDirective
 
 SCHEMA = 'joulescope-datasheet/1'
-DATASHEET_DIR = pathlib.Path(__file__).resolve().parent.parent / 'products' / 'datasheets'
+PRODUCTS_DIR = pathlib.Path(__file__).resolve().parent.parent / 'products'
 _TOP_KEYS = {'schema', 'model', 'title', 'revision', 'inherits', 'notes', 'sections'}
 _SECTION_KEYS = {'id', 'title', 'columns', 'rows', 'notes', 'remove'}
 _CELL_KEYS = {'value', 'unit', 'symmetric', 'notes'}
@@ -114,22 +114,32 @@ def _validate(data, where):
             fail(f'{sid}: undefined notes {sorted(missing)}')
 
 
-def load(model, directory=DATASHEET_DIR, _seen=()):
+def path(model, directory=PRODUCTS_DIR):
+    """The YAML file of one model."""
+    return pathlib.Path(directory) / model / f'{model}_datasheet.yaml'
+
+
+def models(directory=PRODUCTS_DIR):
+    """The models that have a datasheet, sorted."""
+    return sorted(p.parent.name for p in pathlib.Path(directory).glob('*/*_datasheet.yaml'))
+
+
+def load(model, directory=PRODUCTS_DIR, _seen=()):
     """Load, merge inherited data and validate one datasheet.
 
     :return: (data, [paths read]).
     """
-    path = pathlib.Path(directory) / f'{model}.yaml'
+    yaml_path = path(model, directory)
     if model in _seen:
-        raise DatasheetError(f'{path}: inheritance cycle {_seen + (model,)}')
-    with open(path, encoding='utf-8') as f:
+        raise DatasheetError(f'{yaml_path}: inheritance cycle {_seen + (model,)}')
+    with open(yaml_path, encoding='utf-8') as f:
         data = yaml.safe_load(f)
-    paths = [path]
+    paths = [yaml_path]
     if parent := data.get('inherits'):
         base, base_paths = load(parent, directory, _seen + (model,))
         data = _merge(base, data)
         paths += base_paths
-    _validate(data, path)
+    _validate(data, yaml_path)
     return data, paths
 
 
@@ -234,14 +244,14 @@ class DatasheetDirective(SphinxDirective):
 def _publish(app, exception):
     if exception or app.builder.format != 'html':
         return
-    rel = DATASHEET_DIR.relative_to(DATASHEET_DIR.parent.parent)
-    if not (pathlib.Path(app.srcdir) / rel).is_dir():  # archive builds
+    if not (pathlib.Path(app.srcdir) / 'products').is_dir():  # archive builds
         return
-    out = pathlib.Path(app.outdir) / rel
-    out.mkdir(parents=True, exist_ok=True)
-    for path in sorted(DATASHEET_DIR.glob('*.yaml')):
-        load(path.stem)  # never publish an invalid file
-        shutil.copyfile(path, out / path.name)
+    for model in models():
+        load(model)  # never publish an invalid file
+        src = path(model)
+        dst = pathlib.Path(app.outdir) / src.relative_to(PRODUCTS_DIR.parent)
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(src, dst)
 
 
 def setup(app):

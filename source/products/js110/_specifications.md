@@ -1,6 +1,6 @@
 <!--
 Include-only fragment: the JS110 specifications.  Included by
-js110/specifications.md and datasheets/js110.md.  No labels here, since
+guide/specifications.md and datasheet.md.  No labels here, since
 each label would be defined twice.  Table values: js110.yaml.
 -->
 

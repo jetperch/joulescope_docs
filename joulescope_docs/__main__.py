@@ -7,6 +7,7 @@ import argparse
 import functools
 import http.server
 import importlib.metadata
+import json
 import os
 import pathlib
 import shutil
@@ -15,12 +16,27 @@ import subprocess
 import sys
 
 from . import BUILD, EXTERNAL, INCLUDE, MOUNT, ROOT, SITE, SOURCE, DOXYGEN_XML
-from . import load_archives, load_projects
+from . import LANGUAGE, PDF_SITE, SITE_LANGUAGE
+from . import URLS, load_archives, load_projects, published_urls
 from . import doxygen, mount
 
 TOOLS = BUILD / 'tools'
 ARCHIVE = BUILD / 'archive'
 ARCHIVE_ENV = 'JOULESCOPE_DOCS_ARCHIVE'
+# Built per language, served once from the site root.
+ROOT_FILES = ['404.html', 'llms.txt', 'llms-full.txt', 'robots.txt', 'sitemap.xml']
+# / redirects to the English site; CloudFront redirects first (infra/).
+ROOT_INDEX = f'''<!DOCTYPE html>
+<html lang="{LANGUAGE}">
+<head>
+<meta charset="utf-8">
+<title>Joulescope Documentation</title>
+<link rel="canonical" href="https://docs.joulescope.com/{LANGUAGE}/">
+<meta http-equiv="refresh" content="0; url={LANGUAGE}/">
+</head>
+<body><p><a href="{LANGUAGE}/">Joulescope Documentation</a></p></body>
+</html>
+'''
 
 
 def _env(**kwargs):
@@ -76,12 +92,14 @@ def _sphinx(builder, srcdir, outdir, env, strict=True, doctrees=None):
 
 
 def _clean_site():
-    """Remove the previous HTML output so moved or deleted pages cannot be
-    deployed.  The PDFs, built separately by "pdf", are kept."""
-    if SITE.exists():
-        for path in SITE.iterdir():
-            if path.name != 'pdf':
-                shutil.rmtree(path) if path.is_dir() and not path.is_symlink() else path.unlink()
+    """Remove the previous output so moved or deleted pages cannot be deployed."""
+    shutil.rmtree(SITE, ignore_errors=True)
+
+
+def _merge_pdfs():
+    """Add the PDFs from the last "pdf" build, at their published paths."""
+    if PDF_SITE.is_dir() and SITE.is_dir():
+        shutil.copytree(PDF_SITE, SITE, dirs_exist_ok=True)
 
 
 def cmd_deps(args):
@@ -106,7 +124,21 @@ def cmd_html(args):
     _mount(projects, checkouts)
     _doxygen(projects, checkouts, DOXYGEN_XML)
     _clean_site()
-    _sphinx('html', SOURCE, SITE, _env(), strict=not args.no_strict)
+    _sphinx('html', SOURCE, SITE_LANGUAGE, _env(), strict=not args.no_strict)
+    # <page>.md and llms-full.txt for agents, next to the HTML pages.  See
+    # source/_ext/site_index.py.
+    md = BUILD / 'markdown'
+    shutil.rmtree(md, ignore_errors=True)
+    _sphinx('markdown', SOURCE, md, _env(), strict=not args.no_strict)
+    for path in md.rglob('*'):
+        if path.suffix in ('.md', '.txt') and '_downloads' not in path.parts:
+            dst = SITE_LANGUAGE / path.relative_to(md)
+            dst.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(path, dst)
+    for name in ROOT_FILES:
+        shutil.move(SITE_LANGUAGE / name, SITE / name)
+    (SITE / 'index.html').write_text(ROOT_INDEX, encoding='utf-8')
+    _merge_pdfs()
 
 
 def _pdf_env():
@@ -130,12 +162,14 @@ def cmd_pdf(args):
     _sphinx('latex', SOURCE, latex, env)
     _run(['latexmk', '-xelatex', '-interaction=nonstopmode', '-halt-on-error'] +
          sorted(p.name for p in latex.glob('*.tex')), cwd=latex, env=env)
-    out = SITE / 'pdf'
-    out.mkdir(parents=True, exist_ok=True)
-    for tex in sorted(latex.glob('*.tex')):  # skip the converted SVG images
-        pdf = tex.with_suffix('.pdf')
-        shutil.copy2(pdf, out / pdf.name)
-        print(out / pdf.name)
+    shutil.rmtree(PDF_SITE, ignore_errors=True)
+    pdf_paths = json.loads((latex / 'pdf_paths.json').read_text())  # from conf.py
+    for tex, rel in sorted(pdf_paths.items()):
+        dst = PDF_SITE / LANGUAGE / rel
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2((latex / tex).with_suffix('.pdf'), dst)
+        print(dst)
+    _merge_pdfs()
 
 
 def cmd_linkcheck(args):
@@ -144,63 +178,58 @@ def cmd_linkcheck(args):
     _sphinx('linkcheck', SOURCE, BUILD / 'linkcheck', _env(), strict=False)
 
 
-def _archive(projects, checkouts, project, tag):
+def cmd_archive(args):
     """Build one project at one tag into build/archive/<project>/<tag>."""
-    p = projects.get(project)
+    projects = load_projects()
+    p = projects.get(args.project)
     if p is None or 'doc_dir' not in p:
-        raise SystemExit(f'unknown project or no Sphinx docs: {project}')
-    checkout = checkouts[project]
-    version = tag.removeprefix('v')
+        raise SystemExit(f'unknown project or no Sphinx docs: {args.project}')
+    checkout = _checkouts(args, projects)[args.project]
+    version = args.tag.removeprefix('v')
+    if args.install:  # autodoc documents the released package that matches the tag
+        _run([sys.executable, '-m', 'pip', 'install', f'{p["package"]}=={version}'], env=_env())
     installed = _version(p['package'])
     if installed != version:
         raise SystemExit(f'autodoc needs {p["package"]}=={version}, found {installed}.\n'
-                         f'Install it first, for example: pip install {p["package"]}=={version}')
-    outdir = ARCHIVE / project / tag
+                         f'Install it first, or use --install.')
+    outdir = ARCHIVE / args.project / args.tag
     if outdir.exists():
         raise SystemExit(f'{outdir} exists; delete it to rebuild')
     # CI checks out submodules without their tags.
-    if subprocess.run(['git', '-C', checkout, 'rev-parse', '-q', '--verify', f'refs/tags/{tag}'],
-                      capture_output=True).returncode:
+    if subprocess.run(['git', '-C', checkout, 'rev-parse', '-q', '--verify',
+                       f'refs/tags/{args.tag}'], capture_output=True).returncode:
         _run(['git', '-C', checkout, 'fetch', '--tags', 'origin'])
-    worktree = BUILD / 'worktrees' / f'{project}-{tag}'
+    worktree = BUILD / 'worktrees' / f'{args.project}-{args.tag}'
     if worktree.exists():
         _run(['git', '-C', checkout, 'worktree', 'remove', '--force', worktree])
-    _run(['git', '-C', checkout, 'worktree', 'add', '--detach', worktree, tag])
+    _run(['git', '-C', checkout, 'worktree', 'add', '--detach', worktree, args.tag])
     try:
         if 'breathe' in p:
-            out = BUILD / 'doxygen-archive' / project
+            out = BUILD / 'doxygen-archive' / args.project
             doxygen.generate(doxygen.find(TOOLS), worktree, out, version)
-        env = _env(**{ARCHIVE_ENV: f'{project}:{tag}'})
+        env = _env(**{ARCHIVE_ENV: f'{args.project}:{args.tag}'})
         _sphinx('html', worktree / p['doc_dir'], outdir, env, strict=False,
-                doctrees=BUILD / 'doctrees' / 'archive' / project / tag)
+                doctrees=BUILD / 'doctrees' / 'archive' / args.project / args.tag)
     finally:
         _run(['git', '-C', checkout, 'worktree', 'remove', '--force', worktree])
-    return outdir
+    print(f'Archive: {outdir}')
 
 
-def cmd_archive(args):
-    """Build one project tag, or with --all every archives.toml entry."""
-    projects = load_projects()
-    checkouts = _checkouts(args, projects)
-    if not args.all:
-        if not args.tag:
-            raise SystemExit('archive needs PROJECT TAG, or --all')
-        outdir = _archive(projects, checkouts, args.project, args.tag)
-        print(f'Archive: {outdir}\nAdd "{args.tag}" to archives.toml [{args.project}] versions.')
-        return
-    if args.project:
-        raise SystemExit('archive --all takes no PROJECT TAG')
+def cmd_archive_list(args):
+    """Print "project tag" for every archives.toml entry, for CI."""
     for project, tags in load_archives().items():
-        package = projects[project]['package']
         for tag in tags:
-            if (ARCHIVE / project / tag).exists():
-                continue
-            # autodoc documents the released package that matches the tag.
-            _run([sys.executable, '-m', 'pip', 'install',
-                  f'{package}=={tag.removeprefix("v")}'], env=_env())
-            _archive(projects, checkouts, project, tag)
-    if ARCHIVE.exists():  # next to versions.json from "html", as deployed
-        shutil.copytree(ARCHIVE, SITE / 'archive', dirs_exist_ok=True)
+            print(project, tag)
+
+
+def cmd_urls(args):
+    """Rewrite urls.txt from build/site.  Review the diff: see CLAUDE.md."""
+    if not (SITE_LANGUAGE / 'index.html').exists() or not PDF_SITE.is_dir():
+        raise SystemExit('build the site first: python -m joulescope_docs html, then pdf')
+    header = [line for line in URLS.read_text(encoding='utf-8').splitlines()
+              if line.startswith('#')] if URLS.exists() else []
+    URLS.write_text('\n'.join(header + [''] + published_urls(SITE)) + '\n', encoding='utf-8')
+    print(f'Wrote {URLS}; review "git diff urls.txt".')
 
 
 def cmd_serve(args):
@@ -229,14 +258,15 @@ def parser():
     add('doxygen-install', cmd_doxygen_install, 'Install the pinned Doxygen (Linux x86_64).')
     add('html', cmd_html, 'Build the HTML site into build/site.').add_argument(
         '--no-strict', action='store_true', help='Do not treat warnings as errors.')
-    add('pdf', cmd_pdf, 'Build the PDF guides into build/site/pdf.')
+    add('pdf', cmd_pdf, 'Build the PDFs into build/pdf, merged into build/site.')
     add('linkcheck', cmd_linkcheck, 'Check external links (report only).')
-    s = add('archive', cmd_archive, 'Build standalone archives of project tags.')
-    s.add_argument('project', nargs='?')
-    s.add_argument('tag', nargs='?')
-    s.add_argument('--all', action='store_true',
-                   help='Build every archives.toml entry, installing each released '
-                        'package version, and copy the results into build/site/archive.')
+    s = add('archive', cmd_archive, 'Build a standalone archive of one project tag.')
+    s.add_argument('project')
+    s.add_argument('tag')
+    s.add_argument('--install', action='store_true',
+                   help='First pip install the released package version for autodoc.')
+    add('archive-list', cmd_archive_list, 'List the archives.toml entries.')
+    add('urls', cmd_urls, 'Rewrite urls.txt from the built site.')
     s = add('serve', cmd_serve, 'Serve the built site locally.')
     s.add_argument('--port', type=int, default=8000)
     s.add_argument('--host', default='localhost',

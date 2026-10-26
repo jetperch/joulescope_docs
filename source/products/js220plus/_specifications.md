@@ -1,6 +1,6 @@
 <!--
 Include-only fragment: the JS220+ specifications.  Included by
-js220plus/specifications.md and datasheets/js220plus.md.  No labels here, since
+guide/specifications.md and datasheet.md.  No labels here, since
 each label would be defined twice.  Table values: js220plus.yaml.
 -->
 

@@ -5,7 +5,7 @@
 This page describes the Joulescope JS320.  For another instrument, see
 {ref}`getting-started-other-devices`.
 
-```{include} ../products/js320/_in_the_box.md
+```{include} ../products/js320/guide/_in_the_box.md
 :relative-images:
 ```
 

@@ -1,41 +1,18 @@
----
-revision: "1.3"
-date: 2026-06-25
----
+(product-js320)=
 
-(js320)=
+# Joulescope JS320
 
-# Joulescope JS320 User's Guide
+Joulescope JS320 Precision DC Energy Analyzer.
 
-![Joulescope JS320](media/js320_image3.png)
-
-**Precision DC Energy Analyzer**
-
-Revision 1.3, last revised 2026 June 25.
-
-![Joulescope JS320 in use](media/js320_image4.jpeg)
+- {doc}`User's guide <guide/index>`
+  ([PDF](site:products/js320/js320_users_guide.pdf))
+- {doc}`Datasheet <datasheet>`
+  ([PDF](site:products/js320/js320_datasheet.pdf),
+  [YAML](site:products/js320/js320_datasheet.yaml))
 
 ```{toctree}
-:numbered:
-:maxdepth: 2
+:hidden:
 
-overview
-meet
-quick_start
-specifications
-host_software
-connect
-theory
-front_panel
-gpio
-fuse
-isolation
-filters
-typical_behavior
-maintenance
-ordering
-compliance
-warranty
-intellectual_property
-changelog
+User's guide <guide/index>
+Datasheet <datasheet>
 ```

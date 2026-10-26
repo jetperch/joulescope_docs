@@ -26,25 +26,37 @@ source/
 ├── getting_started/          # unboxing, install_ui, first_steps
 ├── products/
 │   ├── index.md              # product table: datasheet and user's guide
-│   ├── js320/ js220/ js220plus/ js110/    # instrument user's guides
-│   └── datasheets/           # <model>.yaml, <model>.md, fragments
+│   ├── datasheet_format.md   # the datasheet YAML format
+│   └── js320/ js220/ js220plus/ js110/    # one directory per product
 └── software/
     ├── index.md
     ├── joulescope_ui/        # UI user's guide
     └── joulescope_driver, pyjoulescope, jls   # mounted, see architecture.md
 ```
 
-Each guide lives in its own directory:
+Everything about one product lives in its directory, published at
+`/en/products/<model>/`.  Add new kinds of product material, such as
+application notes, as siblings of `guide/`:
 
 ```
 source/products/js320/
-├── index.md          # label, title, revision, cover image, numbered toctree
-├── overview.md       # one page per chapter, short snake_case names
-├── ...
-├── _key_features.md  # include-only fragments (excluded from the build)
-├── _in_the_box.md
-└── media/            # images used by this guide only
+├── index.md              # product page: links the guide, datasheet, PDFs
+├── datasheet.md          # datasheet page
+├── js320_datasheet.yaml  # specification values (published as is)
+├── _specifications.md    # include-only: headings + {datasheet} directives
+└── guide/                # the user's guide
+    ├── index.md          # label, title, revision, cover image, numbered toctree
+    ├── overview.md       # one page per chapter, short snake_case names
+    ├── ...
+    ├── _key_features.md  # include-only fragments (excluded from the build)
+    ├── _in_the_box.md
+    └── media/            # images used by this guide only
 ```
+
+The PDFs are published next to the product page:
+`/en/products/js320/js320_users_guide.pdf` and `js320_datasheet.pdf`.  Link
+published files that are not pages with the `site:` scheme, which adds the
+language prefix: `[PDF](site:products/js320/js320_datasheet.pdf)`.
 
 Pages common to all guides exist once, at the top level: `glossary.md`,
 `contact.md` and `disclaimers.md`.  Guides link to them instead of having
@@ -55,8 +67,9 @@ Text needed in more than one place lives once, in an include-only fragment
 named `_*.md`, and the pages `{include}` it.  For example, the Getting
 Started pages include `_in_the_box.md` from each guide and `_installation.md`
 from the UI guide, and the JS320 and JS220 Quick start chapters include
-`getting_started/_first_steps.md`.  Fragments contain no labels.  To include a fragment with
-images from another directory, add `:relative-images:`.
+`getting_started/_first_steps.md`.  Fragments contain no labels.  To
+include a fragment with images from another directory, add
+`:relative-images:`.
 
 `index.md` starts with front matter that records the guide revision:
 
@@ -119,16 +132,17 @@ their historical versions.
 
 ## Specifications and datasheets
 
-Specification values live only in `source/products/datasheets/<model>.yaml`
+Specification values live only in
+`source/products/<model>/<model>_datasheet.yaml`
 ([datasheet_format.md](datasheet_format.md)).  Do not type specification
 values into Markdown tables.
 
-* `source/products/datasheets/_<model>_specifications.md` is an
-  include-only fragment with the specification headings, the `{datasheet}`
-  directives and the explanatory prose.  It contains no labels.
-* The guide chapter `source/products/<model>/specifications.md` holds the
-  chapter label and title, then includes the fragment.
-* The datasheet page `source/products/datasheets/<model>.md` holds a short
+* `source/products/<model>/_specifications.md` is an include-only fragment
+  with the specification headings, the `{datasheet}` directives and the
+  explanatory prose.  It contains no labels.
+* The guide chapter `source/products/<model>/guide/specifications.md` holds
+  the chapter label and title, then includes the fragment.
+* The datasheet page `source/products/<model>/datasheet.md` holds a short
   product summary, then includes the key-features fragment and the
   specifications fragment.
 
@@ -137,7 +151,7 @@ values into Markdown tables.
 
 # Specifications
 
-```{include} ../datasheets/_js320_specifications.md
+```{include} ../_specifications.md
 ```
 ```
 

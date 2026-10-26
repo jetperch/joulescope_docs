@@ -1,10 +1,11 @@
 # Datasheet YAML format
 
-Each instrument's specifications live in `source/products/datasheets/<model>.yaml`.
-The `{datasheet}` directive (`source/_ext/datasheet.py`) renders the tables
-for HTML and PDF.  The YAML files are also published unchanged at
-`https://docs.joulescope.com/products/datasheets/<model>.yaml`, so tools and LLMs can
-read the specifications directly.
+Each instrument's specifications live in
+`source/products/<model>/<model>_datasheet.yaml`.  The `{datasheet}`
+directive (`source/_ext/datasheet.py`) renders the tables for HTML and PDF.
+The YAML files are also published unchanged at
+`https://docs.joulescope.com/en/products/<model>/<model>_datasheet.yaml`, so
+tools and LLMs can read the specifications directly.
 
 Values are stored exactly as published, with their published unit, so the
 generated tables match the PDF datasheets.  Numbers are YAML numbers where

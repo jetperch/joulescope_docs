@@ -10,14 +10,18 @@ import pytest
 from joulescope_docs import ROOT
 
 CASES = {
-    '/': '/index.html',
-    '/js320/': '/js320/index.html',
-    '/js320': '301 /js320/',
-    '/js320/fuse.html': '/js320/fuse.html',
-    '/datasheets/js320.yaml': '/datasheets/js320.yaml',
-    '/archive/jls/v0.19.1': '301 /archive/jls/v0.19.1/',
-    '/archive/jls/v0.19.1/': '/archive/jls/v0.19.1/index.html',
-    '/_static/font.woff2': '/_static/font.woff2',
+    '/': '302 /en/',
+    '/index.html': '302 /en/',
+    '/en/': '/en/index.html',
+    '/en': '301 /en/',
+    '/en/products/js320/': '/en/products/js320/index.html',
+    '/en/products/js320': '301 /en/products/js320/',
+    '/en/products/js320/guide/fuse.html': '/en/products/js320/guide/fuse.html',
+    '/en/products/js320/js320_datasheet.yaml': '/en/products/js320/js320_datasheet.yaml',
+    '/en/archive/jls/v0.19.1': '301 /en/archive/jls/v0.19.1/',
+    '/en/archive/jls/v0.19.1/': '/en/archive/jls/v0.19.1/index.html',
+    '/en/_static/font.woff2': '/en/_static/font.woff2',
+    '/llms.txt': '/llms.txt',
 }
 
 

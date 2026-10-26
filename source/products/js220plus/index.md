@@ -1,28 +1,20 @@
----
-revision: "1.1"
-date: 2024-04-26
----
+(product-js220plus)=
 
-(js220plus)=
+# Joulescope JS220+
 
-# Joulescope JS220+ User's Guide
+Joulescope JS220+ Precision Energy Analyzer with Enhanced Accuracy: a
+limited-edition, performance-enhanced version of the JS220 with ±1 nanoamp
+accuracy.
 
-![Joulescope JS220+](media/js220plus_image3.png)
-
-**Precision Energy Analyzer with Enhanced Accuracy**
-
-Revision 1.1, last revised 2024 Apr 26.
-
-![Joulescope JS220+ in use](media/js220plus_image4.jpeg)
+- {doc}`User's guide <guide/index>`
+  ([PDF](site:products/js220plus/js220plus_users_guide.pdf))
+- {doc}`Datasheet <datasheet>`
+  ([PDF](site:products/js220plus/js220plus_datasheet.pdf),
+  [YAML](site:products/js220plus/js220plus_datasheet.yaml))
 
 ```{toctree}
-:numbered:
-:maxdepth: 2
+:hidden:
 
-introduction
-specifications
-trim_calibration
-technology
-ordering
-changelog
+User's guide <guide/index>
+Datasheet <datasheet>
 ```

@@ -41,10 +41,11 @@ is faster but may not match unreleased sources.
 | Command | Result |
 |---|---|
 | `python -m joulescope_docs html` | `build/site/`; warnings are errors |
-| `python -m joulescope_docs pdf` | `build/site/pdf/*.pdf` |
+| `python -m joulescope_docs pdf` | `build/pdf/`, merged into `build/site/` |
 | `python -m joulescope_docs serve` | http://localhost:8000/ serving `build/site/`; add `--host 0.0.0.0` to serve to the LAN |
 | `python -m joulescope_docs linkcheck` | `build/linkcheck/output.txt` (external links, not in CI) |
 | `python -m pytest` | Tooling tests, plus site checks when `build/site/` exists |
+| `python -m joulescope_docs urls` | Rewrite `urls.txt` after adding pages (see `CLAUDE.md`) |
 
 To preview changes to a project's documentation, mount another checkout:
 
@@ -85,20 +86,22 @@ Breathe release fixes that.
 ## Release archives
 
 To keep the documentation of a project release online, add its tag to
-`archives.toml` (newest first).  CI builds every listed archive into
-`/archive/<project>/<tag>/`, and the version switcher lists it.  Removing a
-tag removes the archive at the next deploy.
+`archives.toml` (newest first) and push to `main`.  CI's `archive` job builds
+each entry that is not yet in S3, uploads it to `/en/archive/<project>/<tag>/`
+once, and never rebuilds it.  The version switcher lists it after the
+deploy.  Removing a tag only hides it from the switcher; delete it from S3
+by hand to unpublish it.
 
 To preview one locally:
 
 ```bash
-pip install pyjls==0.19.1          # autodoc must import the released package
-python -m joulescope_docs archive jls v0.19.1
+python -m joulescope_docs archive jls v0.19.1 --install
 ```
 
-The archive is written to `build/archive/<project>/<tag>/`.  `archive --all`
-builds every `archives.toml` entry the way CI does: it installs each released
-package version into the current environment, so use a separate venv.
+`--install` first installs the released package (`pyjls==0.19.1`) for
+autodoc, so use a separate venv.  The archive is written to
+`build/archive/<project>/<tag>/`.  To rebuild a published archive, delete
+it from S3 first; the next push to `main` rebuilds it.
 
 
 ## Importing a Word guide
@@ -114,5 +117,5 @@ committed).  For another document:
    from the PDF text (`pdftotext -layout`).
 4. Convert EMF/WMF images to PNG, for example by cropping the rendered PDF
    page (`pdftoppm -x -y -W -H`).
-5. Move specification tables to `source/products/datasheets/<model>.yaml`, then
+5. Move specification tables to `source/products/<model>/<model>_datasheet.yaml`, then
    compare every rendered value with the PDF.

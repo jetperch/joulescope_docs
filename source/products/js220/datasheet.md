@@ -7,12 +7,12 @@ and voltage, then computes power and energy.  It measures current over ten
 orders of magnitude, from amps down to nanoamps, with rapid current range
 switching and low voltage drop.
 
-```{include} ../js220/_key_features.md
+```{include} guide/_key_features.md
 ```
 
-The [Joulescope JS220 User's Guide](../js220/index.md) describes how to use
+The [Joulescope JS220 User's Guide](guide/index.md) describes how to use
 the instrument.  The specification values are also available as
-[js220.yaml](/products/datasheets/js220.yaml).
+[js220_datasheet.yaml](site:products/js220/js220_datasheet.yaml).
 
-```{include} _js220_specifications.md
+```{include} _specifications.md
 ```

@@ -1,13 +1,23 @@
 // SPDX-FileCopyrightText: Copyright 2026 Jetperch LLC
 // SPDX-License-Identifier: Apache-2.0
 //
-// CloudFront Function (viewer request): serve index.html for directory URLs.
-// The S3 REST origin behind Origin Access Control has no index documents, so
-// /js320/ must become /js320/index.html.  See doc/deploy.md.
+// CloudFront Function (viewer request): redirect / to the English site, and
+// serve index.html for directory URLs.  The S3 REST origin behind Origin
+// Access Control has no index documents, so /en/products/ must become
+// /en/products/index.html.  See doc/deploy.md.
 
 function handler(event) {
     var request = event.request;
     var uri = request.uri;
+    if (uri === '/' || uri === '/index.html') {
+        // Each language has its own tree.  302, not 301, so that browsers do
+        // not cache it and a future language choice can take its place.
+        return {
+            statusCode: 302,
+            statusDescription: 'Found',
+            headers: {location: {value: '/en/'}},
+        };
+    }
     if (uri.endsWith('/')) {
         request.uri = uri + 'index.html';
     } else if (!/\.[A-Za-z][A-Za-z0-9]*$/.test(uri.substring(uri.lastIndexOf('/')))) {
