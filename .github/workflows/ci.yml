@@ -64,14 +64,26 @@ jobs:
           python-version: ${{ env.PYTHON_VERSION }}
           cache: pip
           cache-dependency-path: requirements.txt
+      # The TeX packages are large and the runners' Ubuntu mirror is sometimes
+      # very slow, so keep the downloaded .deb files between runs.
+      - uses: actions/cache@v4
+        with:
+          path: ~/apt-archives
+          key: apt-pdf-${{ hashFiles('.github/workflows/ci.yml') }}
+          restore-keys: apt-pdf-
       - name: Install system packages
         run: |
           sudo rm -f /var/lib/man-db/auto-update
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends libusb-1.0-0-dev libudev-dev \
+          mkdir -p ~/apt-archives/partial
+          sudo apt-get install -y --no-install-recommends \
+              -o Dir::Cache::Archives="$HOME/apt-archives" -o Acquire::Retries=3 \
+              libusb-1.0-0-dev libudev-dev \
               texlive-xetex texlive-latex-recommended texlive-latex-extra \
               texlive-fonts-recommended tex-gyre fonts-freefont-otf fonts-dejavu \
               fonts-noto-cjk latexmk librsvg2-bin
+          sudo rm -rf ~/apt-archives/partial ~/apt-archives/lock
+          sudo chown -R "$USER" ~/apt-archives
       - name: Install Python packages
         run: |
           python -m pip install -r requirements.txt
