@@ -199,6 +199,8 @@ insulated **V+** and **V-** wires together and the **I+** and **I-** wires
 together to further reduce noise pickup. For less accuracy and perhaps a
 quicker setup time, connect **V+** to **I+** and **V-** to **PS-**.
 
+(js220-measure-higher-voltages)=
+
 ## Measure higher voltages
 
 If your system can tolerate additional leakage current on the supply side,

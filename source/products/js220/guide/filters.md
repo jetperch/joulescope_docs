@@ -38,7 +38,9 @@ moving average, also called a boxcar filter or sinc1 filter.
 
 ![Moving average filter frequency and step response](media/js220_image37.png)
 
-##  Downsampling
+(js220-downsampling)=
+
+## Downsampling
 
 You may configure the JS220 for downsampling, which reduces the sample rate
 for measurements that do not need the full 300 kHz bandwidth. For example, 1

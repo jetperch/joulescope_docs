@@ -44,6 +44,7 @@ def load_archives(path=None):
 
 
 URLS = ROOT / 'urls.txt'
+ANCHORS = ROOT / 'anchors.txt'
 # Published files whose URLs are a commitment.  The .md copies mirror the
 # .html pages; _* directories hold theme assets and generated detail.
 _URL_SUFFIXES = {'.html', '.pdf', '.yaml', '.txt', '.xml', '.json', '.inv'}
@@ -57,7 +58,7 @@ def published_urls(site):
 
 
 def load_urls(path=None):
-    """Load urls.txt as a sorted list, skipping comments."""
+    """Load urls.txt (or anchors.txt) as a sorted list, skipping comments."""
     path = URLS if path is None else pathlib.Path(path)
     lines = path.read_text(encoding='utf-8').splitlines()
     return sorted(line for line in lines if line and not line.startswith('#'))

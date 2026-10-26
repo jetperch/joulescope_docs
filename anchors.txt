@@ -1,0 +1,27 @@
+# Section anchors that other sites and documents link to, relative to
+# https://docs.joulescope.com/.  tests/test_site.py fails when one is missing.
+# Add a line whenever www.joulescope.com, a repository README or a printed
+# document links to a section; never remove one without approval (CLAUDE.md).
+# Prefer the permanent labels, such as #js320-measure-higher-voltages.  The
+# heading-text anchors, such as #measure-higher-voltages, change if the
+# heading is renamed.
+
+# www.joulescope.com/pages/support (FAQ), 2026-10-26
+en/products/js320/guide/connect.html#measure-higher-voltages
+en/products/js320/guide/connect.html#js320-measure-only-voltage-voltmeter
+en/products/js320/guide/connect.html#js320-measure-only-current-ammeter
+en/products/js320/guide/filters.html#downsampling
+en/products/js320/guide/specifications.html#js320-specifications
+en/products/js320/guide/maintenance.html#verification-procedure
+en/products/js220/guide/maintenance.html#verification-procedure
+en/products/js110/guide/maintenance.html#verification-procedure
+en/getting_started/install_ui.html#supported-platforms
+
+# Permanent labels for the sections above, for new links
+en/products/js320/guide/connect.html#js320-measure-higher-voltages
+en/products/js220/guide/connect.html#js220-measure-higher-voltages
+en/products/js320/guide/filters.html#js320-downsampling
+en/products/js220/guide/filters.html#js220-downsampling
+en/products/js320/guide/maintenance.html#js320-verification-procedure
+en/products/js220/guide/maintenance.html#js220-verification-procedure
+en/products/js110/guide/maintenance.html#js110-verification-procedure

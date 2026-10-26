@@ -41,8 +41,12 @@ What counts as a URL:
 * `/en/archive/<project>/versions.json`, which archived releases read at
   run time, and `/en/archive/<project>/<tag>/`, which is never rebuilt or
   deleted.
-* Section anchors that other pages or documents cite, such as
-  `#js320-fuse`.  Keep a `(label)=` when you rename its heading.
+* Section anchors that other sites or documents cite, listed in
+  `anchors.txt` and checked by `tests/test_site.py`.  Keep each `(label)=`
+  when you rename or move its heading, and never rename a heading whose
+  text-derived anchor (such as `#measure-higher-voltages`) is listed there.
+  When a new external link cites a section, add a permanent label if the
+  section has none, and add the anchor to `anchors.txt`.
 
 Not covered: `_static/`, `_images/`, `_downloads/` and `_modules/`.  The
 theme and Sphinx may rename these.

@@ -19,6 +19,8 @@ submit your request at:
 Recalibrating Joulescope requires custom equipment and trained personnel. Only
 Jetperch LLC and Tra‑Cal are authorized to perform recalibration.
 
+(js110-verification-procedure)=
+
 ## Verification Procedure
 
 Calibration should normally find that the Joulescope instrument still operates

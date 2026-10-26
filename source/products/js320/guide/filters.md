@@ -14,6 +14,8 @@ total analog bandwidth down to 377 kHz:
 
 ![Analog filter frequency response](media/js320_image35.png)
 
+(js320-downsampling)=
+
 ## Downsampling
 
 You may configure the JS320 for downsampling, which reduces the sample rate

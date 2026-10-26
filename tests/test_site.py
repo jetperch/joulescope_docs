@@ -7,8 +7,8 @@ import json
 
 import pytest
 
-from joulescope_docs import (EXTERNAL, SITE, SITE_LANGUAGE, SOURCE, load_projects, load_urls,
-                             mounted, published_urls)
+from joulescope_docs import (ANCHORS, EXTERNAL, SITE, SITE_LANGUAGE, SOURCE, load_projects,
+                             load_urls, mounted, published_urls)
 
 EN = SITE_LANGUAGE
 
@@ -135,3 +135,15 @@ def test_product_layout():
         for name in ['index.html', 'datasheet.html', f'{model}_datasheet.yaml',
                      'guide/index.html']:
             assert (d / name).exists(), (model, name)
+
+
+@_needs_site
+def test_cited_anchors_exist():
+    """Other sites link to these sections (anchors.txt, CLAUDE.md)."""
+    missing = []
+    for url in load_urls(ANCHORS):
+        path, _, fragment = url.partition('#')
+        page = SITE / path
+        if not page.exists() or f'id="{fragment}"' not in page.read_text(encoding='utf-8'):
+            missing.append(url)
+    assert not missing, f'Cited anchors missing: {missing}'
