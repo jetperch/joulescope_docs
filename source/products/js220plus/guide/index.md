@@ -1,6 +1,6 @@
 ---
-revision: "1.1"
-date: 2024-04-26
+revision: "2.0"
+date: 2026-10-26
 ---
 
 (js220plus)=
@@ -11,7 +11,7 @@ date: 2024-04-26
 
 **Precision Energy Analyzer with Enhanced Accuracy**
 
-Revision 1.1, last revised 2024 Apr 26.
+Revision 2.0, last revised 2026 Oct 26.
 
 ![Joulescope JS220+ in use](media/js220plus_image4.jpeg)
 

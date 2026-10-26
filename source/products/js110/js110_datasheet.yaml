@@ -7,7 +7,7 @@
 schema: joulescope-datasheet/1
 model: JS110
 title: Joulescope JS110 Precision DC Energy Analyzer
-revision: "1.3"
+revision: "2.0"
 
 notes:
   inrush: Suitable for handling inrush currents when connecting capacitive loads.

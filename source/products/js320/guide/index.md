@@ -1,6 +1,6 @@
 ---
-revision: "1.3"
-date: 2026-06-25
+revision: "2.0"
+date: 2026-10-26
 ---
 
 (js320)=
@@ -11,7 +11,7 @@ date: 2026-06-25
 
 **Precision DC Energy Analyzer**
 
-Revision 1.3, last revised 2026 June 25.
+Revision 2.0, last revised 2026 October 26.
 
 ![Joulescope JS320 in use](media/js320_image4.jpeg)
 

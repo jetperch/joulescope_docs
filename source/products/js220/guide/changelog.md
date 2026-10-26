@@ -8,6 +8,14 @@
 * - Revision
   - Date
   - Description
+* - 2.0
+  - 2026 Oct 26
+  - Moved to https://docs.joulescope.com, with web, Markdown and PDF
+    editions built from one source.  Specification tables are generated from
+    the datasheet values, also published as YAML.  The glossary, contact
+    information and disclaimers are shared by all guides.  Supported
+    operating systems and Python versions are listed once, in Getting
+    Started.
 * - 1.10
   - 2025 Jan 27
   - Added protection diodes to "Measure Higher Voltages" section.

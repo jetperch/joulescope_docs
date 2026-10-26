@@ -1,6 +1,6 @@
 ---
-revision: "1.3"
-date: 2023-10-03
+revision: "2.0"
+date: 2026-10-26
 ---
 
 (js110)=
@@ -11,7 +11,7 @@ date: 2023-10-03
 
 **Precision DC Energy Analyzer**
 
-Revision 1.3, last revised 2023 October 3.
+Revision 2.0, last revised 2026 October 26.
 
 ![Joulescope JS110 instrument](media/js110_image4.jpeg)
 

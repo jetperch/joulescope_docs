@@ -7,7 +7,7 @@
 schema: joulescope-datasheet/1
 model: JS220+
 title: Joulescope JS220+ Precision Energy Analyzer with Enhanced Accuracy
-revision: "1.1"
+revision: "2.0"
 inherits: js220
 
 notes:
