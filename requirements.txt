@@ -100,7 +100,10 @@ sphinx==9.2.0
     #   breathe
     #   myst-parser
     #   pydata-sphinx-theme
+    #   sphinx-notfound-page
     #   sphinxcontrib-svg2pdfconverter
+sphinx-notfound-page==1.1.0
+    # via -r requirements.in
 sphinxcontrib-applehelp==2.0.0
     # via sphinx
 sphinxcontrib-devhelp==2.0.0

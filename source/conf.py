@@ -38,6 +38,10 @@ extensions = [
     'breathe',
     'datasheet',
 ]
+if not _ARCHIVE:
+    # 404.html for CloudFront, with absolute links (source/404.md).
+    extensions.append('notfound.extension')
+    notfound_urls_prefix = '/'
 
 root_doc = 'index'
 source_suffix = {'.rst': 'restructuredtext', '.md': 'markdown'}

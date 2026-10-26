@@ -185,8 +185,10 @@ export OAC_ID=$(aws cloudfront create-origin-access-control \
 ## 5. CloudFront distribution
 
 `infra/distribution-config.json` uses the managed **CachingOptimized** cache
-policy, redirects HTTP to HTTPS, compresses, and attaches the function from
-step 3.
+policy, redirects HTTP to HTTPS, compresses, attaches the function from
+step 3, and serves `/404.html` (`source/404.md`) for missing pages.  S3
+answers 403 instead of 404 when the bucket policy lacks `s3:ListBucket`, so
+both map to the 404 page.
 
 ```bash
 envsubst < infra/distribution-config.json > build/aws/distribution-config.json
@@ -349,6 +351,7 @@ build and test but never deploy.  Browsers cache pages for 5 minutes.
 | `AccessDenied` on `ListObjectsV2` during `s3 sync` | `s3:ListBucket` must be on the bucket ARN (`arn:aws:s3:::bucket`), not `bucket/*`. |
 | `AccessDenied` on `PutObject` or `DeleteObject` | The object statement must use `arn:aws:s3:::bucket/*`, and `DOCS_BUCKET` must match the real bucket. |
 | `AccessDenied` on `CreateInvalidation` | CloudFront ARNs have no region: `arn:aws:cloudfront::ACCOUNT:distribution/ID`. |
+| Missing pages show a plain XML error | The distribution has no custom error responses.  Add the `CustomErrorResponses` from `infra/distribution-config.json`, as for the function association: `get-distribution-config`, edit with `jq`, `update-distribution --if-match`. |
 | 403 for every page | The bucket policy's `AWS:SourceArn` does not name this distribution, or the origin has no OAC attached. |
 | 403 instead of 404 for missing pages | The bucket policy lacks the `s3:ListBucket` statement. |
 | `/products/` fails but `/products/index.html` works | The CloudFront Function is not published (`--stage LIVE`) or not attached to the default cache behavior. |

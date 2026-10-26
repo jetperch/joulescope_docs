@@ -73,3 +73,12 @@ def test_image_names_are_unique():
                 '_static' not in path.parts and '_include' not in path.parts:
             names.setdefault(path.name, []).append(str(path.relative_to(SOURCE)))
     assert not {k: v for k, v in names.items() if len(v) > 1}
+
+
+@_needs_site
+def test_404_page_uses_absolute_links():
+    """CloudFront serves 404.html at any depth, so relative links would break."""
+    html = (SITE / '404.html').read_text()
+    assert 'href="/_static/' in html
+    assert 'href="/"' in html
+    assert 'href="_static/' not in html and 'src="_static/' not in html
