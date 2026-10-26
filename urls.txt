@@ -117,6 +117,7 @@ en/software/jls/h_time.html
 en/software/jls/index.html
 en/software/jls/py_api.html
 en/software/jls/readme.html
+en/software/jls/recovery.html
 en/software/joulescope_driver/c_api.html
 en/software/joulescope_driver/changelog.html
 en/software/joulescope_driver/device_selection.html

@@ -102,7 +102,10 @@ def _llms_txt(app, pages):
     pdfs = [(pdf_paths[tex], title) for _, tex, title, *_ in app.config.latex_documents
             if tex in pdf_paths]
     if pdfs:
-        lines += ['## PDFs', '']
+        lines += ['## PDFs', '',
+                  'Each PDF is a print edition of a guide or datasheet whose pages are',
+                  'listed under Contents.  It holds no other content, so read the',
+                  'Markdown pages instead.', '']
         lines += [f'- [{title}]({base}{path})' for path, title in pdfs]
         lines.append('')
     lines += ['## Contents', '']
