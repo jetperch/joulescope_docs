@@ -255,6 +255,32 @@ Select these values:
   cover the frequent peaks and the maximum current range to cover the
   largest peak.  This analysis is well suited to automated testing.
 
+(js320-isolating-events)=
+
+### Isolating Events
+
+When you investigate brief or intermittent events in your target, it can be
+hard to tell an event in the target from the effect of Joulescope
+autoranging.  The easiest way to separate them is to select a fixed, manual
+current range: the most sensitive range that is greater than the maximum
+current of your target.  The JS320 then measures with the precision of that
+range at the full 1 MHz sample rate, without any autoranging.  Any event that
+you observe is not caused by autoranging, and autoranging cannot affect your
+target device in any way.
+
+You give up dynamic range, but investigations like this rarely need it.
+When you finish the investigation, return to autoranging for the best
+accuracy over the full range that your target may need.
+
+In the Joulescope UI, select the range in the **Current range** setting of
+the Device Control widget.  Select `auto` to resume autoranging.  From a
+script, select the range, then the manual mode:
+
+```python
+d.publish(f'{device}/s/i/range/select', '18 mA')
+d.publish(f'{device}/s/i/range/mode', 'manual')
+```
+
 ### Enable current measurement
 
 When unpowered, the JS320 disconnects **Current +** from **Current -** using
