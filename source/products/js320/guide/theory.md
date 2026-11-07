@@ -59,21 +59,46 @@ case. Most target systems have larger capacitance and less dramatic step
 current changes. In all cases, the shunt resistor selection is always
 make-before-break to ensure uninterrupted connectivity to the target device.
 
-### Optimizing for Accuracy
+(js320-current-ranges)=
 
-For many applications, the JS320 performs sufficiently without any additional
-configuration. However, additional configuration can improve accuracy for
-measuring lower-current systems, such as Bluetooth devices. Any system that
-never consumes more than 180 mA can benefit from additional configuration.
+### Current ranges
 
-When the JS320 switches current ranges, the JS320 activates a MOSFET to select
-the new shunt resistor and deactivates the MOSFET for the previous shunt
-resistor. All MOSFETs are effectively capacitors between their gate and the
-source/drain. Activating and deactivating a MOSFET results in charge
-injection. While we have carefully selected these MOSFETs to minimize charge
-injection, it is not zero. You may observe a brief spike on the order of 300
-ns. The JS320 may also measure this spike, but it will be spread in time due
-to the JS320’s measurement bandwidth.
+Embedded devices span a very wide current range.  A wireless sensor may sleep
+at tens to hundreds of nA, then wake and transmit at tens to hundreds of mA.
+Other targets draw several amperes.  Joulescope covers nA to 10 A,
+approximately 10 decades, which no single shunt resistor and ADC can resolve
+with adequate accuracy.
+
+The JS320 has six current ranges.  The settings below identify each range by
+its index:
+
+| Index | Range  |
+|-------|--------|
+| 0     | 10 A   |
+| 1     | 180 mA |
+| 2     | 18 mA  |
+| 3     | 1.8 mA |
+| 4     | 180 µA |
+| 5     | 18 µA  |
+
+Autoranging selects the most sensitive range that does not overflow.  When the
+current exceeds the active range, the instrument must switch to a less
+sensitive range within microseconds, or the measurement clips.
+
+### Autoranging errors
+
+Autoranging introduces two errors: measurement error during the transition,
+and a real current disturbance.
+
+The instrument must measure correctly while the range is changing.  When the
+JS320 switches current ranges, the JS320 activates a MOSFET to select the new
+shunt resistor and deactivates the MOSFET for the previous shunt resistor. All
+MOSFETs are effectively capacitors between their gate and the source/drain.
+Activating and deactivating a MOSFET results in charge injection. While we
+have carefully selected these MOSFETs to minimize charge injection, it is not
+zero. You may observe a brief spike on the order of 300 ns. The JS320 may also
+measure this spike, but it will be spread in time due to the JS320’s
+measurement bandwidth.
 
 The second effect is that the impedance from **Current +** to **Current -**
 changes very quickly. Many targets have large bypass capacitors. Since
@@ -81,28 +106,199 @@ capacitors resist instantaneous voltage changes, the result is that a real
 current may flow over the shunt resistor to charge or discharge the capacitor
 to account for the new JS320 impedance. This current is real, and it cancels
 out over time. However, it’s often not what we want to measure, so it can be
-distracting for some systems.
+distracting for some systems.  The disturbance is inherent to any
+autoranging shunt ammeter.  Joulescope minimizes it, but it cannot be
+eliminated.  Larger range jumps cause larger impedance changes and larger
+disturbances.
 
-When the JS320 autoranges on over-current, it always autoranges up to the
-maximum configured range, which is 10 A by default. It will then downrange as
-needed to the optimal range. While this behavior guarantees the 1 μs
-transition time for all support loads, it may result in increased error due to
-the 10 A current range error rating. You can limit this maximum range for
-lower current targets to improve performance:
+### Autoranging in each Joulescope model
 
-![Joulescope UI Device Control with the maximum current range setting](media/js320_image25.png)
+The JS110 (2019) has seven current ranges.  It does not measure through
+current range changes.  It is blind for approximately 5 µs during each range
+change, and it interpolates over the missing data.
 
-When setting the current limit, ensure that the waveform never exceeds the
-current range value when viewed at the full 1 MHz sample rate. Otherwise, the
-JS320’s measurement will saturate, causing significantly increased
-inaccuracies. The JS320 does contain a soft-fuse feature for each current
-range to help prevent damage to the instrument if you select too low of a
-maximum current range.
+The JS220 (2022) has six current ranges.  It measures through range changes,
+but only with the accuracy of the 10 A range.  On overflow, the JS220 jumps
+directly to the maximum current range, 10 A by default, then settles back
+down to the appropriate range.  All samples during the transition have the
+accuracy of the maximum current range, and the large range jump produces a
+large impedance change with visible ringing.  For most applications, the
+error is small.  Bluetooth, backscatter RF, and energy harvesting products
+continue to push peak currents lower, which increases the relative error
+from this brief time in the 10 A range.  For some applications, this error
+is significant.
 
-You can also increase the minimum current range that may be affected by the
-higher input impedance. The most common reason to use this feature is when
-connected to a DC-DC switching converter with inadequate upstream bulk
-capacitance.
+The JS320 (2026) improves accuracy across all ranges.  It measures through
+range transitions with the accuracy of any range, not just 10 A.  The JS320
+measures across three ranges simultaneously and synthesizes a single current
+measurement.  The JS320 also adds the predicted current range.
+
+(js320-predicted-current-range)=
+
+### Predicted current range
+
+On overflow, the JS320 autoranger first switches to the predicted current
+range rather than to the maximum current range.  If the current fits in the
+predicted range, the instrument stays there.  Otherwise, it continues to the
+maximum current range.  In rare cases, such as when the instrument has not
+yet settled after a previous range change, the autoranger skips the
+prediction and switches directly to the maximum current range.
+
+Prediction provides:
+
+* Accuracy of the predicted range during the transition, not of the 10 A
+  range.
+* Smaller range jumps and therefore a smaller real current disturbance.
+* No clipping risk, since current above the prediction still reaches the
+  maximum current range.
+
+With prediction off and the maximum current range at 10 A, the JS320 behaves
+like a JS220.
+
+(js320-optimizing-for-accuracy)=
+
+### Optimizing for Accuracy
+
+For many applications, the JS320 performs sufficiently without any additional
+configuration. However, additional configuration can improve accuracy for
+measuring lower-current systems, such as Bluetooth devices. Any system that
+never consumes more than 180 mA can benefit from additional configuration.
+
+In the Joulescope UI, configure autoranging in the Device Control widget:
+
+![Joulescope UI Device Control with the current range limits and prediction settings](media/js320_ui_current_range.png)
+
+* **Current range** selects `auto` for autoranging.
+* The slider below sets the current range limits: the most sensitive range
+  on the left and the maximum current range on the right.
+* **Current range prediction** sets the predicted current range.
+
+Scripts use these settings:
+
+| Topic               | Meaning                                       | Default   |
+|---------------------|-----------------------------------------------|-----------|
+| `s/i/range/mode`    | Current range mode: `off`, `auto`, `manual`.  | `off`     |
+| `s/i/range/min`     | Maximum current range (least sensitive).      | 0 (10 A)  |
+| `s/i/range/predict` | Predicted current range on overflow, 0 = off. | 0 (off)   |
+| `s/i/range/max`     | Minimum current range (most sensitive).       | 5 (18 µA) |
+
+All range values use the index from {numref}`js320-current-ranges`.  Note that
+`min` and `max` refer to the range index, not to current.  `s/i/range/min` is
+the *least* sensitive range and therefore sets the *maximum* current.
+
+#### Maximum current range
+
+The maximum current range, `s/i/range/min`, limits the least sensitive range
+that the autoranger may select.  Set it to the smallest range that still
+covers the true peak current of the target.
+
+* Too high: no measurement error, but overflow transitions jump further than
+  needed.
+* Too low: currents that exceed five times the range clip, which causes
+  significantly increased inaccuracies.
+
+When the target peak current is unknown, leave it at 10 A.
+
+When the maximum current range is set to anything other than 10 A, the JS320
+can measure currents up to five times the range.  The JS320 measures
+the maximum current range with a dedicated ADC input that omits the 5×
+gain stage of the other current inputs.  However, burden voltage increases
+beyond the specified value.  The actual burden voltage is approximately:
+
+```{math}
+V_{burden} \approx \frac{I}{I_{range}} \times 20\ \mathrm{mV}
+```
+
+When setting the maximum current range, ensure that the waveform never
+exceeds five times the range when viewed at the full 1 MHz sample rate.
+The JS320 does contain a soft-fuse feature for each current range to help
+prevent damage to the instrument if you select too low of a maximum current
+range.  See {numref}`js320-fuse`.
+
+#### Minimum current range
+
+Leave the minimum current range, `s/i/range/max`, at the default 18 µA.
+Change it only when the target is affected by the higher input impedance
+of the most sensitive ranges, or when the autoranger repeatedly bounces out
+of the most sensitive range.  The most common reason is a connection to a
+DC-DC switching converter with inadequate upstream bulk capacitance.
+
+#### Predicted current range setting
+
+Set the predicted current range, `s/i/range/predict`, to the range that
+covers the typical short current peaks of the target, such as radio transmit
+or receive events.  Larger excursions, such as motor or inrush current, still
+reach the maximum current range without clipping.  0 turns prediction off.
+
+#### Selecting values
+
+Consider a Bluetooth product that wakes to measure a sensor at 100 µA and
+less frequently communicates over RF at 1 mA.  If the current never exceeds
+9 mA, five times the 1.8 mA range, use:
+
+* Maximum current range `s/i/range/min = 3` (1.8 mA).
+* Predicted current range `s/i/range/predict = 4` (180 µA).
+
+At 9 mA, the burden voltage is approximately 100 mV.  If the RF instead
+takes 10 mA, use:
+
+* Maximum current range `s/i/range/min = 2` (18 mA).
+* Predicted current range `s/i/range/predict = 4` (180 µA).
+
+Select these values:
+
+* **Statically** from the target's known current profile.  For test
+  systems, configure a default for the test bench with per-test or
+  per-capture overrides.
+* **Adaptively** by capturing with the default settings, analyzing the peak
+  current distribution, and then selecting the predicted current range to
+  cover the frequent peaks and the maximum current range to cover the
+  largest peak.  This analysis is well suited to automated testing.
+
+### Enable current measurement
+
+When unpowered, the JS320 disconnects **Current +** from **Current -** using
+a MOSFET, as does the JS220.  The Joulescope UI enables current flow when it
+opens the JS320.  The host driver does not, so scripts must publish
+`s/i/range/mode = auto`.
+
+Two open modes determine the initial instrument state:
+
+* `defaults`: Reset the instrument to power-on defaults.  This disconnects
+  the current path.  Use this mode with explicit configuration for repeatable
+  automated tests.
+* `restore`: Adopt the existing instrument state.  Use this mode to keep the
+  target powered across multiple open and close cycles.
+
+An overcurrent soft fuse event also disconnects the current path.
+
+### Configure autoranging from a script
+
+Using `pyjoulescope_driver`, see the
+{doc}`Joulescope Driver documentation </software/joulescope_driver/index>`:
+
+```python
+from pyjoulescope_driver import Driver
+
+with Driver() as d:
+    device = d.device_paths()[0]
+    d.open(device, mode='defaults')
+    d.publish(f'{device}/s/i/range/min', 2)        # maximum current range: 18 mA
+    d.publish(f'{device}/s/i/range/predict', 4)    # predicted range: 180 µA
+    d.publish(f'{device}/s/i/range/mode', 'auto')  # connect & autorange
+    # ... capture ...
+    d.close(device)
+```
+
+The JS320 advertises its full parameter set, including descriptions,
+defaults, and options:
+
+```
+pip install pyjoulescope_driver
+python -m pyjoulescope_driver metadata --out js320.html
+```
+
+The `--out` extension selects the format: `.html`, `.json`, or `.yaml`.
 
 ## Voltmeter
 

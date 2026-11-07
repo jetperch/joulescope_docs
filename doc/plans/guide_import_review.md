@@ -42,7 +42,8 @@ published text was preserved; "Changed" means the conversion changed it.
   Over-range, < 200 ns rise time".
 * Changed (typos): "do not active the device" → "activate" (`meet.md`);
   "coloumb" → "coulomb" ×2 (`glossary.md`); "**View **→" bold markup.
-* Kept: `theory.md` image25 is a JS220 screenshot (device JS220-000027).
+* RESOLVED (2026-11-07): `theory.md` image25 was a JS220 screenshot; replaced
+  by `media/js320_ui_current_range.png` with the autoranging rewrite.
 * Changed: the two validation spreadsheets were EMF images; they are now PNG
   crops of the PDF pages (`media/js320_*_validation.png`).  Consider
   replacing them with tables or a downloadable spreadsheet.
