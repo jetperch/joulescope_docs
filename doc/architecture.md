@@ -185,3 +185,12 @@ Control, like download.joulescope.com.  A CloudFront Function
 are no servers, external search services, or hosting subscriptions.
 Deployment is a manual GitHub Actions workflow that needs a reviewer's
 approval: [deploy.md](deploy.md).
+
+### Analytics
+
+Every HTML page loads [Fathom](https://usefathom.com) (`html_js_files` in
+`conf.py`), which counts page views without cookies, so the site needs no
+consent banner.  Added 2026-11-07.  It does not count the PDFs, the
+Markdown copies, `llms.txt` or `llms-full.txt`, or visitors who block the
+script.  Archived releases built before that date have no tracking, because
+archives are never rebuilt.

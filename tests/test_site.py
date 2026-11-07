@@ -147,3 +147,13 @@ def test_cited_anchors_exist():
         if not page.exists() or f'id="{fragment}"' not in page.read_text(encoding='utf-8'):
             missing.append(url)
     assert not missing, f'Cited anchors missing: {missing}'
+
+
+@_needs_site
+@pytest.mark.parametrize('page', ['index.html', 'products/js320/guide/theory.html', '404.html'])
+def test_fathom_analytics(page):
+    """Every HTML page, including the 404 page served at any depth, loads Fathom."""
+    root = SITE if page == '404.html' else EN
+    html = (root / page).read_text()
+    assert 'src="https://cdn.usefathom.com/script.js"' in html
+    assert 'data-site="ZFIEENIU"' in html

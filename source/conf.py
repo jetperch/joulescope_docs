@@ -87,6 +87,8 @@ html_title = 'Joulescope Documentation'
 html_static_path = ['_static']
 html_logo = '_static/icon_128x128.png'
 html_favicon = '_static/favicon.ico'
+# Fathom analytics: cookieless, so no consent banner.  See doc/architecture.md.
+html_js_files = [('https://cdn.usefathom.com/script.js', {'data-site': 'ZFIEENIU', 'defer': 'defer'})]
 # Full site tree in the left sidebar on every page; see the template.
 html_sidebars = {'**': ['sidebar-nav-full']}
 html_theme_options = {
