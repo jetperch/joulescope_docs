@@ -9,6 +9,11 @@ Accuracy
 Ammeter
 : A device that measures electrical current.
 
+{ref}`Bandwidth <theory-bandwidth>`
+: The frequency at which a measurement's gain falls to −3 dB, about 71 % of
+  the input amplitude.  Lower bandwidth spreads short events out in time and
+  lowers their peaks, but does not change their charge or energy.
+
 Burden Voltage
 : The voltage drop that occurs through the test equipment device. For shunt
   ammeters, the burden voltage includes the voltage across the shunt
@@ -24,10 +29,20 @@ Energy
 : The total power exerted over time, measured in joules (J). Energy is the
   time integral of power.
 
+{ref}`Ground Loop <theory-ground-loops>`
+: A closed path formed by ground connections, such as a computer connected
+  by USB to both a Joulescope and a debugger that share the target's ground.
+  Ground loops cause noise and can let current bypass the current meter.
+
 Insertion Loss
 : The loss in signal power due to a device in the signal path, most commonly
   used in reference to radio frequency (RF) or telecommunications. See
   **Burden Voltage**.
+
+{ref}`Leakage Current <theory-leakage>`
+: Current that flows through equipment connected to the target, such as a
+  debugger, logic analyzer or oscilloscope, rather than through the target
+  itself.  Leakage adds error to low-current measurements.
 
 Multimeter
 : A multifunction device that usually incorporates a voltmeter and shunt
