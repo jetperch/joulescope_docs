@@ -98,37 +98,53 @@ instrument's user's guide, for example {ref}`the JS320 User's Guide
 
 (theory-bandwidth-example)=
 
-## Example: one pulse, three views
+## Example: one pulse, multiple views
 
-{numref}`theory-bandwidth-pulse-figure` shows a simulated 10 µs, 30 mA current pulse
-measured three ways.
+{numref}`theory-bandwidth-pulse-figure` shows a simulated 10 µs, 30 mA current
+pulse on a 1 mA baseline, measured at 1 Msps and at 50 ksps, 10 ksps and
+1 ksps with sinc1 and sinc3 filters.
 
 ```{figure} media/theory_bandwidth_pulse.svg
 :name: theory-bandwidth-pulse-figure
-:alt: A 10 µs, 30 mA pulse at 1 Msps peaks at 30 mA, at 50 ksps sinc1 at 15.5 mA and at sinc3 at 11.3 mA; all reach the same 290 nC charge
+:alt: A 10 µs, 30 mA pulse peaks at 30 mA at 1 Msps, but much lower at 50, 10 and 1 ksps; every view reaches the same 290 nC charge
 
-Top: the same pulse at 1 Msps, and at 50 ksps with sinc1 and sinc3
-filters.  Bottom: the charge of the pulse, which reaches 290 nC in every
-case.
+Top three plots: the same pulse at 1 Msps, and at 50 ksps, 10 ksps and
+1 ksps with sinc1 and sinc3 filters.  Note the different time scales.
+Bottom: the charge of the pulse, which reaches 290 nC in every case.
 ```
+
+| Sample rate | Filter | Peak shown | Peak range | Charge |
+|---|---|---|---|---|
+| 1 Msps | none | 30 mA | 30 mA | 290 nC |
+| 50 ksps | sinc1 | 15.5 mA | 8.4 to 15.5 mA | 290 nC |
+| 50 ksps | sinc3 | 11.2 mA | 8.2 to 11.6 mA | 290 nC |
+| 10 ksps | sinc1 | 3.9 mA | 2.5 to 3.9 mA | 290 nC |
+| 10 ksps | sinc3 | 2.6 mA | 2.5 to 3.2 mA | 290 nC |
+| 1 ksps | sinc1 | 1.29 mA | 1.15 to 1.29 mA | 290 nC |
+| 1 ksps | sinc3 | 1.15 mA | 1.15 to 1.22 mA | 290 nC |
 
 * At 1 Msps, the pulse is wider than the measurement rise time, so the
   measurement shows its full 30 mA peak.
-* At 50 ksps with sinc1, the pulse lands inside one 20 µs output sample.  That
-  sample reports the average current over 20 µs: 15.5 mA.
-* At 50 ksps with sinc3, the pulse spreads over three output samples and
-  peaks at 11.3 mA.
+* A sinc1 filter reports the average current over each output sample.  When
+  the pulse lands inside one sample, that sample shows the baseline plus the
+  pulse averaged over the sample period: 15.5 mA over 20 µs at 50 ksps,
+  3.9 mA over 100 µs at 10 ksps, and 1.29 mA over 1 ms at 1 ksps.
+* A sinc3 filter spreads the pulse over three output samples, so its peak is
+  lower still.
+* At 1 ksps, the pulse barely rises above the 1 mA baseline.  The pulse is
+  still there: its charge is in the measurement, spread over a few
+  milliseconds.
 
-The charge of the pulse, the lower plot, is 290 nC in all three views.  The
-1 Msps view shows when the charge flowed in more detail.  The 50 ksps views
-only show that it flowed within a few tens of microseconds.
+The charge of the pulse, the lower plot, is 290 nC in every view.  The
+1 Msps view shows when the charge flowed in more detail.  The lower rates
+only show that it flowed within one to three output samples.
 
 The reduced peak also depends on where the pulse falls relative to the
-output sample boundaries.  For this pulse, sinc3 at 50 ksps reports a peak
-anywhere from about 8 mA to 12 mA.  Repeated captures of identical events
-can therefore show different peaks at a low sample rate.  At 1 Msps the
-peak stays at 30 mA, because the pulse is wider than the measurement rise
-time.
+output sample boundaries, shown as the peak range in the table.  The plots
+show the alignment with the highest sinc1 peak.  Repeated captures of
+identical events can therefore show different peaks at a low sample rate.
+At 1 Msps the peak stays at 30 mA, because the pulse is wider than the
+measurement rise time.
 
 The same effect applies at the full sample rate to pulses that are shorter
 than the instrument's rise time.  A 300 ns spike appears at full rate as a

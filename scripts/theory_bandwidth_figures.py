@@ -37,9 +37,9 @@ plt.rcParams.update({
 })
 
 
-def load_current(t):
+def load_current(t, t_start=T_START):
     x = np.full(len(t), I_BASE)
-    x[(t >= T_START) & (t < T_START + T_PULSE)] = I_PULSE
+    x[(t >= t_start) & (t < t_start + T_PULSE)] = I_PULSE
     return x
 
 
@@ -52,48 +52,68 @@ def instrument(x):
     return signal.lfilter(bz, az, x, zi=zi)[0][::OVERSAMPLE]
 
 
-def sinc_downsample(x, order, phase):
-    """sincN downsample by DECIMATE, keeping outputs at the given phase."""
-    h = np.ones(DECIMATE)
+def sinc_downsample(x, order, phase, decimate=DECIMATE):
+    """sincN downsample by decimate, keeping outputs at the given phase."""
+    h = np.ones(decimate)
     k = h
     for _ in range(order - 1):
         k = np.convolve(k, h)
     k = k / k.sum()
     pad = np.full(len(k) - 1, x[0])
     y = np.convolve(np.concatenate([pad, x]), k, mode='valid')
-    idx = np.arange(phase, len(x), DECIMATE)
+    idx = np.arange(phase, len(x), decimate)
     return idx, y[idx]
 
 
+# (output rate, plot window before and after the pulse start in seconds)
+PULSE_RATES = [(50_000, 50e-6, 150e-6), (10_000, 0.2e-3, 0.8e-3), (1_000, 2e-3, 8e-3)]
+PULSE_T_START = 3e-3
+PULSE_T_END = 12e-3
+
+
 def fig_pulse():
-    t = np.arange(int(T_END * FS * OVERSAMPLE)) / (FS * OVERSAMPLE)
-    y = instrument(load_current(t))
-    t1 = np.arange(len(y)) / FS
-    phase = 7
-    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(7, 5.2), sharex=True,
-                                   gridspec_kw={'height_ratios': [3, 2]})
-    ax1.plot(t1 * 1e6, y * 1e3, color=COLORS[0], label='1 Msps (full bandwidth)')
-    q_base = I_BASE / FS
-    q = [(t1, np.cumsum(y / FS - q_base))]
-    for color, order in zip(COLORS[1:], [1, 3]):
-        idx, z = sinc_downsample(y, order, phase)
-        ax1.step(t1[idx] * 1e6, z * 1e3, where='post', color=color,
-                 marker='o', markersize=3, label=f'50 ksps, sinc{order}')
-        q.append((t1[idx], np.cumsum((z - I_BASE) * DECIMATE / FS)))
-        print(f'sinc{order} peak = {z.max() * 1e3:.1f} mA')
+    t = np.arange(int(PULSE_T_END * FS * OVERSAMPLE)) / (FS * OVERSAMPLE)
+    y = instrument(load_current(t, PULSE_T_START))
+    t1 = np.arange(len(y)) / FS - PULSE_T_START  # time relative to the pulse
+    rate_colors = ['#d1495b', '#2a9d5c', '#8a5cc2']
+    q = [('1 Msps', COLORS[0], '-', t1, np.cumsum((y - I_BASE) / FS))]
     print(f'1 Msps peak = {y.max() * 1e3:.1f} mA')
-    ax1.set_ylabel('Current (mA)')
-    ax1.set_ylim(0, 35)
-    ax1.legend(frameon=False, loc='upper right')
-    ax1.set_title('Same 10 µs, 30 mA pulse at two sample rates')
-    labels = ['1 Msps', '50 ksps, sinc1', '50 ksps, sinc3']
-    for color, (tq, qi), label in zip(COLORS, q, labels):
-        ax2.step(tq * 1e6, qi * 1e9, where='post', color=color, label=label)
+    fig, axes = plt.subplots(len(PULSE_RATES) + 1, 1, figsize=(7, 9.5))
+    for ax, rate_color, (rate, before, after) in zip(axes, rate_colors, PULSE_RATES):
+        decimate = FS // rate
+        # Show the alignment that gives the highest sinc1 peak.
+        phase = max(range(decimate),
+                    key=lambda p: sinc_downsample(y, 1, p, decimate)[1].max())
+        k = 1e6 if rate >= 10_000 else 1e3
+        unit = 'µs' if k == 1e6 else 'ms'
+        ax.plot(t1 * k, y * 1e3, color=COLORS[0], label='1 Msps (full bandwidth)')
+        for color, order, linestyle in zip(COLORS[1:], [1, 3], ['-', '--']):
+            idx, z = sinc_downsample(y, order, phase, decimate)
+            label = f'{rate // 1000} ksps, sinc{order}'
+            ax.step(t1[idx] * k, z * 1e3, where='post', color=color, marker='o',
+                    markersize=3, label=f'{label}: peak {z.max() * 1e3:.3g} mA')
+            q.append((label, rate_color, linestyle, t1[idx],
+                      np.cumsum((z - I_BASE) * decimate / FS)))
+            peaks = [sinc_downsample(y, order, p, decimate)[1].max() * 1e3
+                     for p in range(decimate)]
+            print(f'{label} peak = {z.max() * 1e3:.2f} mA, '
+                  f'range {min(peaks):.2f} to {max(peaks):.2f} mA')
+        ax.set_xlim(-before * k, after * k)
+        ax.set_ylim(0, 35)
+        ax.set_ylabel('Current (mA)')
+        ax.set_xlabel(f'Time ({unit})')
+        ax.legend(frameon=False, loc='upper right')
+    axes[0].set_title('Same 10 µs, 30 mA pulse at several sample rates')
+    ax = axes[-1]
+    for label, color, linestyle, tq, qi in q:
+        ax.step(tq * 1e3, qi * 1e9, where='post', color=color, linestyle=linestyle,
+                label=label)
         print(f'{label} charge = {qi[-1] * 1e9:.1f} nC')
-    ax2.set_ylabel('Pulse charge (nC)')
-    ax2.set_xlabel('Time (µs)')
-    ax2.set_xlim(100, 300)
-    ax2.legend(frameon=False, loc='lower right')
+    ax.set_xlim(-0.5, 3.5)
+    ax.set_ylim(0, 320)
+    ax.set_ylabel('Pulse charge (nC)')
+    ax.set_xlabel('Time (ms)')
+    ax.legend(frameon=False, loc='lower right', ncol=2, fontsize=8)
     fig.tight_layout()
     fig.savefig(os.path.join(MEDIA, 'theory_bandwidth_pulse.svg'))
     plt.close(fig)
