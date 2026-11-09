@@ -128,6 +128,7 @@ them and a test compares every build with it.  The structure, decided
 | `/` | Redirects (302) to `/en/` |
 | `/en/`, `/en/introduction.html`, ... | Site-wide pages |
 | `/en/getting_started/<page>.html` | Getting Started |
+| `/en/theory/<topic>.html` | Theory pages common to all instruments |
 | `/en/products/<model>/` | Product page |
 | `/en/products/<model>/guide/<chapter>.html` | User's guide |
 | `/en/products/<model>/datasheet.html` | Datasheet |

@@ -15,6 +15,9 @@ Documentation for Joulescope precision energy analyzers and their software.
 {doc}`software/index`
 : The Joulescope UI, the driver, the Python API and the JLS file format.
 
+{doc}`theory/index`
+: Measurement concepts common to all instruments, such as bandwidth.
+
 {doc}`glossary`, {doc}`contact`, {doc}`disclaimers`
 : Terms, how to reach Jetperch, and the notices for these documents.
 
@@ -25,6 +28,7 @@ Introduction <introduction>
 Getting Started <getting_started/index>
 Products <products/index>
 Software <software/index>
+Theory <theory/index>
 Glossary <glossary>
 Contact <contact>
 Disclaimers <disclaimers>

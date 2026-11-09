@@ -171,6 +171,8 @@ en/software/pyjoulescope/user/install.html
 en/software/pyjoulescope/user/intro.html
 en/software/pyjoulescope/user/license.html
 en/software/pyjoulescope/user/quickstart.html
+en/theory/bandwidth.html
+en/theory/index.html
 index.html
 llms-full.txt
 llms.txt
