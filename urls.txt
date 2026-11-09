@@ -172,7 +172,9 @@ en/software/pyjoulescope/user/intro.html
 en/software/pyjoulescope/user/license.html
 en/software/pyjoulescope/user/quickstart.html
 en/theory/bandwidth.html
+en/theory/ground_loops.html
 en/theory/index.html
+en/theory/leakage.html
 index.html
 llms-full.txt
 llms.txt
