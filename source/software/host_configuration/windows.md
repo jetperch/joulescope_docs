@@ -44,31 +44,45 @@ accuracy, use a local NTP time server.
 
 ## Power settings
 
+These settings matter even when you log at a low sample rate.  The JS110
+always streams its full 2 million samples per second to the computer, which
+does the downsampling, so a low sample rate in the Joulescope UI does not
+reduce the computer's processing load.  The JS220 and JS320 downsample on
+the instrument.
+
 1. Plug a laptop into its power adapter.
 2. Open **Settings** → **System** → **Power & battery**.
    1. Set **Power mode** to **Best performance**.
-   2. Under **Screen, sleep, & hibernate timeouts**, set the **sleep** and
-      **hibernate** timeouts for when plugged in to **Never**.  The screen
-      may turn off.
-3. Press Windows+R, type `powercfg.cpl` and select **OK** to open the
+   2. Under **Screen, sleep, & hibernate timeouts**, set the **screen**,
+      **sleep** and **hibernate** timeouts for when plugged in to **Never**.
+3. Open **Settings** → **Accounts** → **Sign-in options**.  Set **If
+   you've been away, when should Windows require you to sign in again?** to
+   **Never**, and turn off **Dynamic lock**.
+4. Press Windows+R, type `powercfg.cpl` and select **OK** to open the
    Control Panel Power Options.  Select **High performance** if it is
    listed.  Then select **Change plan settings** → **Change advanced power
    settings** and set:
    * **USB settings** → **USB selective suspend setting** = Disabled
    * **PCI Express** → **Link State Power Management** = Off
    * **Processor power management** → **Minimum processor state** = 100%
-4. In Power Options, select **Choose what the power buttons do** →
+5. In Power Options, select **Choose what the power buttons do** →
    **Change settings that are currently unavailable**, then clear
    **Turn on fast startup**.
-5. Open **Device Manager**.  Under **Universal Serial Bus controllers**,
+6. Open **Device Manager**.  Under **Universal Serial Bus controllers**,
    open each **USB Root Hub** and **Generic USB Hub**.  On the
    **Power Management** tab, clear **Allow the computer to turn off this
    device to save power**.  Not all devices have this tab.
 
-Some computers hide settings in Power Options.  Instead of steps 2 to 4, you
+Keeping the screen on and unlocked is a precaution for unattended captures
+with the Joulescope UI open.  We have reports of the Joulescope UI stopping
+responding during multi-day captures after the computer was idle for a long
+time with the screen off, but have not confirmed the cause.
+
+Some computers hide settings in Power Options.  Instead of steps 2, 4 and 5, you
 can open a terminal as administrator and type:
 
 ```
+powercfg /change monitor-timeout-ac 0
 powercfg /change standby-timeout-ac 0
 powercfg /change hibernate-timeout-ac 0
 powercfg /setacvalueindex scheme_current 2a737441-1930-4402-8d77-b2bebba308a3 48e6b7a6-50f5-4782-a5d4-53bb8f07e226 0
@@ -78,7 +92,8 @@ powercfg /setactive scheme_current
 powercfg /hibernate off
 ```
 
-The `setacvalueindex` lines turn off USB selective suspend and PCI Express
+The `/change` lines set the screen, sleep and hibernate timeouts to never
+when plugged in.  The `setacvalueindex` lines turn off USB selective suspend and PCI Express
 link state power management, and set the minimum processor state to 100 %,
 when plugged in.  The last line turns off hibernate and fast startup.
 
@@ -112,6 +127,9 @@ BIOS from the computer manufacturer.
 
 ## Background tasks
 
+* Save recordings to a local folder that is not synced by OneDrive,
+  Dropbox or similar, for example `C:\joulescope`.  Windows often puts
+  your Documents folder in OneDrive by default.
 * Quit applications you do not need, such as Teams and Outlook.  Pause
   OneDrive and other cloud sync.
 * Turn off or reschedule backups.
