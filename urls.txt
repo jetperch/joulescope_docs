@@ -106,6 +106,10 @@ en/products/js320/js320_datasheet.yaml
 en/products/js320/js320_users_guide.pdf
 en/py-modindex.html
 en/search.html
+en/software/host_configuration/index.html
+en/software/host_configuration/linux.html
+en/software/host_configuration/macos.html
+en/software/host_configuration/windows.html
 en/software/index.html
 en/software/jls/c_api.html
 en/software/jls/changelog.html

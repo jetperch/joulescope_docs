@@ -8,6 +8,7 @@
 | {doc}`Joulescope Driver <joulescope_driver/index>` | The C and Python driver (`joulescope_driver`, `pyjoulescope_driver`). |
 | {doc}`pyjoulescope <pyjoulescope/index>` | The original Python API (`joulescope`). |
 | {doc}`JLS File Format <jls/index>` | The Joulescope file format and libraries (`jls`, `pyjls`). |
+| {doc}`Host configuration <host_configuration/index>` | Configure Windows, macOS and Linux for reliable long captures. |
 
 Documentation for earlier software releases remains available on Read the
 Docs for the [driver](https://joulescope-driver.readthedocs.io/),
@@ -21,4 +22,5 @@ UI <joulescope_ui/index>
 Driver <joulescope_driver/index>
 pyjoulescope <pyjoulescope/index>
 JLS <jls/index>
+Host configuration <host_configuration/index>
 ```

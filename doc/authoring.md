@@ -35,6 +35,7 @@ source/
 └── software/
     ├── index.md
     ├── joulescope_ui/        # UI user's guide
+    ├── host_configuration/   # index (general) + windows, macos, linux
     └── joulescope_driver, pyjoulescope, jls   # mounted, see architecture.md
 ```
 

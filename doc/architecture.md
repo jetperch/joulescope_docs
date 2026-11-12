@@ -134,6 +134,7 @@ them and a test compares every build with it.  The structure, decided
 | `/en/products/<model>/datasheet.html` | Datasheet |
 | `/en/products/<model>/<model>_datasheet.yaml` | Datasheet values |
 | `/en/products/<model>/<model>_users_guide.pdf`, `<model>_datasheet.pdf` | PDFs |
+| `/en/software/host_configuration/<os>.html` | Host computer configuration, added 2026-11-12 |
 | `/en/software/<project>/<path>.html` | UI guide and project docs; `<path>` is the page's path in the project's own docs, so Read the Docs URLs map by prefix |
 | `/en/archive/<project>/<tag>/` | Release archives, never rebuilt |
 | `/llms.txt`, `/llms-full.txt`, `/sitemap.xml`, `/robots.txt`, `/404.html` | Site-wide files |

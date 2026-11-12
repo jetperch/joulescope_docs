@@ -14,27 +14,18 @@ please manually report the issue when you next start the Joulescope UI. Select
 **Help** → **Report Issue**. Please include your email so that we can work
 with you to solve the issue.
 
+## Lost samples and long captures
+
+If the waveform shows gaps, or a long capture stops, configure your host
+computer as described in
+{ref}`Host configuration <host-config>`, which covers sleep, power
+management, updates and background tasks.
+
 ## Windows memory compression
 
-Microsoft Windows includes memory compression by default. While this is
-normally not an issue, it can slow down performance on Windows, especially if
-you increase the Joulescope memory buffer size on computers with large RAM.
-
-To check if memory compression is enabled, launch PowerShell as Administrator
-and type:
-
-```
-Get-MMAgent
-```
-
-If MemoryCompression is True, then memory compression is enabled on your
-computer.
-
-To disable memory compression, launch PowerShell as Administrator and type:
-
-```
-Disable-MMAgent -mc
-```
+Windows memory compression can reduce performance.  See
+{ref}`Memory compression <host-config-windows-memory-compression>` in Host
+configuration.
 
 ## Virtual Machines
 
