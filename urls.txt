@@ -146,6 +146,7 @@ en/software/joulescope_driver/record.html
 en/software/joulescope_driver/streaming_topics.html
 en/software/joulescope_driver/time64.html
 en/software/joulescope_ui/changelog.html
+en/software/joulescope_ui/efficiency.html
 en/software/joulescope_ui/graphics.html
 en/software/joulescope_ui/i18n.html
 en/software/joulescope_ui/index.html
@@ -176,6 +177,7 @@ en/software/pyjoulescope/user/intro.html
 en/software/pyjoulescope/user/license.html
 en/software/pyjoulescope/user/quickstart.html
 en/theory/bandwidth.html
+en/theory/efficiency.html
 en/theory/ground_loops.html
 en/theory/index.html
 en/theory/leakage.html

@@ -20,10 +20,15 @@ the Theory of operation chapter in its user's guide, available from
 : How ground connections between equipment cause noise, ground voltage
   differences and current that bypasses the Joulescope.
 
+{doc}`efficiency`
+: How to measure power converter efficiency with two Joulescopes, without
+  the instruments' burden voltage affecting the result.
+
 ```{toctree}
 :hidden:
 
 bandwidth
 leakage
 ground_loops
+efficiency
 ```

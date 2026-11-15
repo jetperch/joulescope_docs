@@ -1,6 +1,6 @@
 ---
-revision: "1.7"
-date: 2024-10-01
+revision: "1.8"
+date: 2026-11-15
 ---
 
 (ui)=
@@ -9,9 +9,9 @@ date: 2024-10-01
 
 ![Joulescope logo](media/ui_image3.png)
 
-Revision 1.7
+Revision 1.8
 
-Last revised 2024 Oct 1
+Last revised 2026 Nov 15
 
 ![Joulescope UI Multimeter view](media/ui_image4.png)
 
@@ -28,6 +28,7 @@ key_benefits
 installation
 meet_ui
 multiple_instruments
+efficiency
 graphics
 i18n
 source_code

@@ -8,6 +8,9 @@
 * - Revision
   - Date
   - Description
+* - 1.8
+  - 2026 Nov 15
+  - Added the Efficiency chapter for the Joulescope UI 1.8.1 Efficiency widget.
 * - 1.7
   - 2024 Oct 1
   - Updated i18n to describe new Help → Language
