@@ -5,6 +5,19 @@ https://docs.joulescope.com.  Read `doc/architecture.md` first, and
 `doc/authoring.md` before editing content.
 
 
+## This repository is the live site
+
+docs.joulescope.com is in production.  Every push to `main` that passes CI
+deploys to it automatically (`.github/workflows/ci.yml`, `deploy` job; setup
+in `doc/deploy.md`).  There is no staging site and no manual approval step.
+
+* Work on a feature branch.  Commit locally as needed, but never push to
+  `main`, and never merge into `main`, unless the user asks for that push.
+* A push to any other branch runs CI (build and tests) without deploying.
+* `external/` holds git submodules of the published projects.  Updating a
+  submodule changes the live pages for that project on the next deploy.
+
+
 ## URLs are permanent
 
 Printed guides, product labels, forum posts, search engines and LLM agents

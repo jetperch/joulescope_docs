@@ -1,7 +1,8 @@
 # Joulescope Unified Documentation: Implementation Plan
 
-Status: IN PROGRESS.  M1-M6 implemented locally, uncommitted (2026-10-24).
-M7-M8 (AWS, DNS, cutover) wait for approval.  See section 0.
+Status: DEPLOYED.  docs.joulescope.com is live, and every green push to
+`main` deploys to it (`doc/deploy.md`).  Section 0 below is the status as of
+2026-10-24, before the first commit, and is kept as history.
 
 Target: `https://docs.joulescope.com`, built by this repository (`joulescope_docs`).
 
@@ -11,7 +12,8 @@ The repository was `joulescope_doc` until 2026-10-25, when it was renamed
 
 ## 0. Implementation status and changes from this plan
 
-Done locally; nothing is committed or pushed.
+As of 2026-10-24 (historical; the repository has since been committed,
+pushed and deployed, and `external/` now holds git submodules):
 
 * **M1-M2**: `joulescope_docs` tooling (`mount`, `doxygen`, CLI), the unified
   `source/conf.py`, tests (57), CI workflows (`ci`, `weekly`, `archive`,
