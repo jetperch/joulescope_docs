@@ -8,6 +8,12 @@
 * - Revision
   - Date
   - Description
+* - 1.9
+  - 2026 Nov 16
+  - Added the Settings chapter: defaults and instances, the Settings widget,
+    changing Waveform colors for one widget or all of them, resetting
+    settings to their defaults, configuration export, import and clear, the
+    separate configuration for recordings opened directly, and safe mode.
 * - 1.8
   - 2026 Nov 15
   - Added the Widgets chapter with Multimeter, Waveform, Trigger, Spectrum and

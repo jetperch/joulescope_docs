@@ -156,6 +156,7 @@ en/software/joulescope_ui/key_benefits.html
 en/software/joulescope_ui/meet_ui.html
 en/software/joulescope_ui/multiple_instruments.html
 en/software/joulescope_ui/plugins.html
+en/software/joulescope_ui/settings.html
 en/software/joulescope_ui/source_code.html
 en/software/joulescope_ui/troubleshooting.html
 en/software/joulescope_ui/widgets/efficiency.html

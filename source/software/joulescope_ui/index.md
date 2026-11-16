@@ -1,6 +1,6 @@
 ---
-revision: "1.8"
-date: 2026-11-15
+revision: "1.9"
+date: 2026-11-16
 ---
 
 (ui)=
@@ -9,9 +9,9 @@ date: 2026-11-15
 
 ![Joulescope logo](media/ui_image3.png)
 
-Revision 1.8
+Revision 1.9
 
-Last revised 2026 Nov 15
+Last revised 2026 Nov 16
 
 ![Joulescope UI Multimeter view](media/ui_image4.png)
 
@@ -33,6 +33,7 @@ graphics
 i18n
 source_code
 plugins
+settings
 troubleshooting
 changelog
 ```

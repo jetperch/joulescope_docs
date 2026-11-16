@@ -25,3 +25,6 @@ en/products/js220/guide/filters.html#js220-downsampling
 en/products/js320/guide/maintenance.html#js320-verification-procedure
 en/products/js220/guide/maintenance.html#js220-verification-procedure
 en/products/js110/guide/maintenance.html#js110-verification-procedure
+
+# forum.joulescope.com/t/1153 (default Waveform colors), 2026-11-16
+en/software/joulescope_ui/settings.html#ui-settings-colors

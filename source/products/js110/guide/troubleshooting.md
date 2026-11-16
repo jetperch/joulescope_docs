@@ -11,8 +11,9 @@ select **Help** → **Report Issue**. Fill in your name and email so that we can
 reply to you, then enter a description. Click **Submit**.
 
 In many cases, you can resolve the issue by clearing the Joulescope UI
-configuration to revert to default settings. Select **File** → **Clear config
-and exit**, and then restart the Joulescope UI.
+configuration to revert to default settings. Select **File** → **Config** →
+**Clear and restart**.  See the
+{ref}`Joulescope UI User's Guide <ui-settings-config>`.
 
 If the Joulescope UI 1.0 or newer does not start correctly, you should see an
 error window:

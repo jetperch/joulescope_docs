@@ -32,7 +32,7 @@ The **Side Bar** allows quick access to commonly used features and settings:
 | ![Statistics record](media/ui_image20.svg) | Statistics recording | Enable/disable statistics stream recording. |
 | ![Device control](media/ui_image22.svg) | Device control | Show device control settings for every connected instrument. |
 | ![Memory buffer](media/ui_image24.svg) | Memory buffer settings | Show memory buffering settings. |
-| ![Settings](media/ui_image26.svg) | Application settings | Show all application settings. |
+| ![Settings](media/ui_image26.svg) | Settings | Show all settings for the application, views, devices and widgets.  See {ref}`ui-settings`. |
 | ![Help](media/ui_image28.svg) | Get help | Show a number of ways to get help with links. |
 | ![Menu](media/ui_image30.svg) | Additional settings and actions | Additional settings and actions. |
 

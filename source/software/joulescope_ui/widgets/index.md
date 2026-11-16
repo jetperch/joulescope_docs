@@ -17,7 +17,8 @@ Most widgets share these conventions:
 * Right-click (control-click on macOS) on a widget for a context menu.  The
   menu depends on where you click.
 * Select **Settings** from the context menu to see and change all of the
-  widget's settings.
+  widget's settings.  New widgets start from the widget defaults.  See
+  {ref}`ui-settings`.
 * Hover over a control to show its tooltip.
 * Widgets that display one instrument have a source selection.  **default**
   follows the default device, which you set in the **Device Control**
