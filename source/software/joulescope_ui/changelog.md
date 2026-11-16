@@ -13,6 +13,9 @@
   - Added the Widgets chapter with Multimeter, Waveform, Trigger, Spectrum and
     Efficiency widget reference sections.
 
+    Replaced the Triggers section of Meet the Joulescope UI with a Widgets
+    section that points to the new chapter.
+
     Renamed Accumulate to Accrue in Meet the Joulescope UI, to match the UI.
 * - 1.7
   - 2024 Oct 1

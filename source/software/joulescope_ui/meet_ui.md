@@ -220,7 +220,12 @@ record:
 Recording more signals requires more storage space. To keep your storage space
 to a minimum, only select the signals you need.
 
-## Triggers
+## Widgets
 
-The **Trigger** widget detects start and stop conditions, such as a current
-threshold, and performs actions such as recording.  See {ref}`ui-trigger`.
+The Multimeter and Oscilloscope views are built from widgets, and you can
+add more from the **Widgets** menu.  Additional widgets include the
+**Trigger**, which detects conditions such as a current threshold and then
+performs actions such as recording, the **Spectrum**, which shows the live
+frequency spectrum, and the **Efficiency** widget, which measures power
+converter efficiency with two Joulescopes.  See {ref}`ui-widgets` for
+detailed information on each widget.
