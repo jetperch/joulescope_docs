@@ -66,7 +66,7 @@ jobs:
           cache-dependency-path: requirements.txt
       # The TeX packages are large and the runners' Ubuntu mirror is sometimes
       # very slow, so keep the downloaded .deb files between runs.
-      - uses: actions/cache@v4
+      - uses: actions/cache@v6
         with:
           path: ~/apt-archives
           key: apt-pdf-${{ hashFiles('.github/workflows/ci.yml') }}
