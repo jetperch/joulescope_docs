@@ -151,12 +151,13 @@ Changing a curve setting clears the curve.
 |---|---|
 | Select the input and output instruments | Connect two Joulescopes, then select them in the control bar. |
 | Select different input and output instruments | The input and output are the same instrument. |
+| Input ... is not connected, Output ... is not connected | The selected instrument disconnected.  When it reconnects, the widget resumes and keeps its history, and the outage shows as an invalid window. |
 | Disabled: ... | A signal the widget needs is disabled.  Click **Enable signals**. |
 | No data from ... | One instrument stopped sending data while the other continues. |
 | JS110 input includes its burden voltage | The JS110 measures voltage before its current shunt, so use it as the output instrument (see {ref}`Theory: Efficiency <theory-efficiency-instruments>`). |
 | Efficiency above 100%: swap input and output? | Several windows in a row measured more than 105%.  The instruments are probably swapped. |
 | Hold, Paused, Curve hold | The display is frozen by Hold, by the paused signal stream, or the curve by Hold the efficiency curve. |
-| n invalid | Windows that could not be measured, such as when an instrument lost samples. |
+| n invalid | Windows that could not be measured, such as when an instrument lost samples or disconnected. |
 | n unsteady | Windows the curve excluded because the load changed. |
 
 
