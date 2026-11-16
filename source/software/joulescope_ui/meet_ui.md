@@ -98,10 +98,12 @@ accumulators will continue to run properly in the background. You can press
 the Statistics Display ![Statistics display](media/ui_image18.svg) button, which
 holds all widgets that display these statistics.
 
-Press the **Accumulate** button to compute the statistics indefinitely until
-you press the button again. While **Accumulate** is active, the software
+Press the **Accrue** button to compute the statistics indefinitely until
+you press the button again. While **Accrue** is active, the software
 extends the statistics to combine each new window without discarding results
 from previous windows.
+
+See {ref}`ui-multimeter` for all Multimeter features.
 
 ## Oscilloscope View
 
@@ -177,6 +179,9 @@ of the dual markers and select **Analysis** for the available options:
 
 ![Dual marker context menu with the Analysis submenu](media/ui_image32.png)
 
+See {ref}`ui-waveform` for all Waveform features, including keyboard
+shortcuts, markers and the analysis tools.
+
 ## Energy and Charge
 
 Joulescopes measure current and voltage at 2,000,000 samples per second. It
@@ -217,17 +222,5 @@ to a minimum, only select the signals you need.
 
 ## Triggers
 
-Joulescope UI 1.1 and newer include a **Trigger** widget. The **Trigger**
-widget can detect start and stop conditions, and perform start and stop
-actions. The Trigger can run in either **Single** or **Continuous** mode.
-After configuring the desired operation, click the button at the top right to
-start the Trigger operation.
-
-![Trigger widget](media/ui_image36.png)
-
-Joulescope UI 1.1 performs the trigger condition detection on the host. This
-detection includes communication latency from the Joulescope to the host
-computer. The **Set output** operation may have a significant delay (on the
-order of 100 milliseconds) between the actual condition and the output change.
-We do plan to move the condition detection to the JS220’s FPGA for
-significantly reduced latency.
+The **Trigger** widget detects start and stop conditions, such as a current
+threshold, and performs actions such as recording.  See {ref}`ui-trigger`.

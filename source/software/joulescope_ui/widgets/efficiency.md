@@ -14,7 +14,7 @@ Connect the instruments as described in
 That page also explains the measurement, how to check your setup, and what
 limits the accuracy.
 
-![Efficiency widget with an example converter](media/ui_efficiency_widget.png)
+![Efficiency widget with an example converter](../media/ui_efficiency_widget.png)
 
 
 ## Add the widget

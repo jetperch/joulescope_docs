@@ -28,7 +28,7 @@ key_benefits
 installation
 meet_ui
 multiple_instruments
-efficiency
+widgets/index
 graphics
 i18n
 source_code

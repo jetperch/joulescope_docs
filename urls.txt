@@ -146,7 +146,6 @@ en/software/joulescope_driver/record.html
 en/software/joulescope_driver/streaming_topics.html
 en/software/joulescope_driver/time64.html
 en/software/joulescope_ui/changelog.html
-en/software/joulescope_ui/efficiency.html
 en/software/joulescope_ui/graphics.html
 en/software/joulescope_ui/i18n.html
 en/software/joulescope_ui/index.html
@@ -159,6 +158,12 @@ en/software/joulescope_ui/multiple_instruments.html
 en/software/joulescope_ui/plugins.html
 en/software/joulescope_ui/source_code.html
 en/software/joulescope_ui/troubleshooting.html
+en/software/joulescope_ui/widgets/efficiency.html
+en/software/joulescope_ui/widgets/index.html
+en/software/joulescope_ui/widgets/multimeter.html
+en/software/joulescope_ui/widgets/spectrum.html
+en/software/joulescope_ui/widgets/trigger.html
+en/software/joulescope_ui/widgets/waveform.html
 en/software/pyjoulescope/api/data_recorder.html
 en/software/pyjoulescope/api/datafile.html
 en/software/pyjoulescope/api/device.html
