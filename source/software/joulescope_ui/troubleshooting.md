@@ -112,6 +112,31 @@ Windows memory compression can reduce performance.  See
 {ref}`Memory compression <host-config-windows-memory-compression>` in Host
 configuration.
 
+(ui-troubleshooting-windows-antivirus)=
+
+## Windows antivirus and anti-malware scans
+
+Antivirus and anti-malware software scans files as they are written.  A JLS
+recording grows continuously and can reach many gigabytes, so real-time
+scanning can slow the recording, lose samples or stop a long capture.  We
+recommend that you exclude the folder where you save JLS recordings from all
+antivirus and anti-malware scanning, including scheduled scans.  By default,
+the Joulescope UI saves recordings in `Documents\joulescope`.
+
+For Microsoft Defender:
+
+1. Open **Windows Security** → **Virus & threat protection**.
+2. Under **Virus & threat protection settings**, select **Manage settings**.
+3. Under **Exclusions**, select **Add or remove exclusions**.
+4. Select **Add an exclusion** → **Folder**, and choose your recording
+   folder.
+
+For other antivirus or endpoint security software, see its documentation.
+On company computers, your IT department may need to add the exclusion.
+For more ways to keep background tasks from interrupting a capture, see
+{ref}`Background tasks <host-config-windows-background>` in Host
+configuration.
+
 ## Virtual Machines
 
 We do not support running the Joulescope UI in virtual machines. The
