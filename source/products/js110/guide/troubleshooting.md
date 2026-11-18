@@ -37,6 +37,9 @@ For Linux machines, ensure that you have appropriate permissions. You will
 usually need to add the [udev
 rules](https://raw.githubusercontent.com/jetperch/pyjoulescope/master/99-joulescope.rules).
 
+On Windows, if the JS110 appears in Device Manager but not in the Joulescope
+UI, see {ref}`ui-troubleshooting-windows-usb-driver`.
+
 ## Offset error
 
 The JS110 is designed to never need recalibration, but it can become damaged.
