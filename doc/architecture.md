@@ -4,7 +4,7 @@
 Joulescope instrument user's guides, the datasheets, the Joulescope UI user's
 guide, and the documentation of the software projects.  The implementation
 plan with the audit behind these decisions is in
-[plans/implementation.md](plans/implementation.md).
+[plans/completed/implementation.md](plans/completed/implementation.md).
 
 
 ## Overview

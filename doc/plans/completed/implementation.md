@@ -1,8 +1,16 @@
 # Joulescope Unified Documentation: Implementation Plan
 
-Status: DEPLOYED.  docs.joulescope.com is live, and every green push to
-`main` deploys to it (`doc/deploy.md`).  Section 0 below is the status as of
-2026-10-24, before the first commit, and is kept as history.
+Status: COMPLETE (2026-11-19).  docs.joulescope.com is live, and every green
+push to `main` deploys to it (`doc/deploy.md`).  Section 0 below is the status
+as of 2026-10-24, before the first commit, and is kept as history.
+
+Cutover checklist (`doc/deploy.md`) as of 2026-11-19:
+
+* Item 2 done: `download.joulescope.com/products/joulescope_ui/users_guide/`
+  serves a meta refresh to `https://docs.joulescope.com/en/software/joulescope_ui/`.
+* Item 3 open: `project_urls` in the joulescope_driver, jls and pyjoulescope
+  `setup.py` still have no docs.joulescope.com entry.  Add it in each
+  project's next release.
 
 Target: `https://docs.joulescope.com`, built by this repository (`joulescope_docs`).
 
@@ -22,7 +30,7 @@ pushed and deployed, and `external/` now holds git submodules):
 * **M3-M4**: all five guides imported to MyST; datasheet YAML for the JS110,
   JS220, JS220+ (inherits JS220) and JS320, checked cell by cell against the
   PDFs; datasheet pages; `/llms.txt`.  Open review items:
-  [guide_import_review.md](guide_import_review.md).
+  [guide_import_review.md](../guide_import_review.md).
 * **M5**: nine PDFs (five guides, four datasheets) with no LaTeX warnings.
 * **M6**: archive mode tested with `jls v0.19.1`, including the switcher and
   the archive's own search.  `archives.toml` is empty.

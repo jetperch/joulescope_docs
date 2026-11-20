@@ -2,7 +2,7 @@
 /import/
 
 # Temporary project clones used while developing the unified docs.
-# See doc/plans/implementation.md (D5).
+# See doc/plans/completed/implementation.md (D5).
 
 # Build outputs and generated mounts
 /build/

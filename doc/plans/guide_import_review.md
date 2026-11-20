@@ -4,6 +4,16 @@ Status: OPEN.  Items found while converting the Word guides in `import/` to
 MyST (2026-10-24).  Each needs a maintainer decision.  "Kept" means the
 published text was preserved; "Changed" means the conversion changed it.
 
+Re-checked against `source/` on 2026-11-19.  Still open, in priority order:
+
+1. Decide the content and YAML license, and whether online guides start a
+   new revision.
+2. UI guide: no JS320 mention; "2,000,000 samples per second"; UI 1.1 and
+   1.1.11 references in `i18n.md`.
+3. CREDITS links use htmlpreview and the `master` branch in the UI, JS320,
+   JS220 and JS110 guides.
+4. The JS220, JS220+ and JS110 prose errata review was never done.
+
 
 ## Decisions needed across all guides
 
@@ -15,8 +25,8 @@ published text was preserved; "Changed" means the conversion changed it.
 * **Publisher address.**  RESOLVED: the shared Contact and Disclaimers pages
   use Rockville (JS320 2026 and JS220 2025 guides); the Olney address in the
   JS110, JS220+ and UI guides was stale.
-* **"Most up-to-date version" link.**  The guides point to
-  `http://www.joulescope.com/`; it could now be `https://docs.joulescope.com/`.
+* **"Most up-to-date version" link.**  RESOLVED: `disclaimers.md` points to
+  `https://docs.joulescope.com/`.
 * **Section numbers.**  The Word "Table of contents" chapter is gone, so
   every chapter number is lower than in the PDF.  The JS320 overview
   chapters (1-3 in the PDF) are merged into one "Overview" chapter.
@@ -53,18 +63,16 @@ published text was preserved; "Changed" means the conversion changed it.
 
 ## Joulescope UI (`source/joulescope_ui/`)
 
-* **Personal information:** `media/image39.png` and `media/image40.png`
-  (Windows Settings screenshots) show a personal name and email address.
-  They are in the published PDF, but consider redacting them for the web.
-* Kept: `guide_info.md` copyright says "this Joulescope JS220 User's Guide".
-* Kept: `plugins.md` link text "doc/plugin.md", but the URL is
-  `docs/plugin.md`.
-* Kept: `meet_ui.md` says **Accumulate**, the screenshots say "Accrue".
-* Stale (kept): only JS110 and JS220 are mentioned, no JS320
+* RESOLVED: the `guide_info.md` copyright naming the JS220 guide; the shared
+  Disclaimers page replaced it.
+* RESOLVED: `plugins.md` now includes `docs/plugin.md` from
+  pyjoulescope_ui.
+* RESOLVED: `meet_ui.md` now says **Accrue**, matching the screenshots.
+* Stale (kept, still open): only JS110 and JS220 are mentioned, no JS320
   (`introduction.md`, `key_benefits.md`, `source_code.md`).
 * Stale (kept): "2,000,000 samples per second" for all Joulescopes
   (`meet_ui.md`).
-* Stale (kept): Windows 10 & 11, macOS 12-15, "only Ubuntu 22.04 LTS",
+* RESOLVED (2026-10-24, see below): Windows 10 & 11, macOS 12-15, "only Ubuntu 22.04 LTS",
   Python 3.10+ (`key_benefits.md`, `installation.md`, `source_code.md`).
   The JS320 guide says Ubuntu 26.04 LTS and Python 3.11+.
 * Stale (kept): UI 1.1 / 1.1.11 references (`meet_ui.md` triggers, `i18n.md`,
