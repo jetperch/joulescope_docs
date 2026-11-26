@@ -54,6 +54,38 @@ defaults write com.jetperch.joulescope NSAppSleepDisabled -bool YES
 Then restart the Joulescope UI.
 
 
+(host-config-macos-background)=
+
+## Spotlight and Apple Intelligence
+
+macOS runs background work in bursts.  Spotlight indexes files, and Apple
+Intelligence and Photos analyze content and load machine learning models.
+When a burst starts many tasks at once, the Mac can briefly stop servicing
+USB.  During long full-rate captures on a test Mac, these bursts delayed
+the Joulescope software by up to tens of milliseconds and occasionally lost
+samples.
+
+1. Exclude the recording folder from Spotlight.  Open **System Settings** →
+   **Spotlight** and select **Search Privacy…**.  Select **+** and add the
+   folder or drive you record to.  Spotlight then does not index large
+   recordings while they are written.
+2. For critical captures, turn off Apple Intelligence.  Open **System
+   Settings** → **Apple Intelligence & Siri** and turn off **Apple
+   Intelligence**.  Turn it back on after the capture if you use it.
+3. After you install macOS or a major update, Spotlight and Photos may
+   index and analyze for some time.  Leave the Mac on and idle until this
+   background work finishes before you start a long capture.
+
+On a computer dedicated to measurements, you can turn off Spotlight
+indexing for all drives.  Open Terminal and type:
+
+```
+sudo mdutil -a -i off
+```
+
+To turn indexing back on, type `sudo mdutil -a -i on`.
+
+
 (host-config-macos-updates)=
 
 ## Updates and background tasks

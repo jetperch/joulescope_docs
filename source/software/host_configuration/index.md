@@ -61,7 +61,8 @@ Then follow the steps for your operating system:
   accuracy time.
 
 {doc}`macos`
-: Sleep settings, `caffeinate`, App Nap and software updates.
+: Sleep settings, `caffeinate`, App Nap, Spotlight, Apple Intelligence
+  and software updates.
 
 {doc}`linux`
 : Automatic suspend, `systemd-inhibit`, lid switch and unattended upgrades.
