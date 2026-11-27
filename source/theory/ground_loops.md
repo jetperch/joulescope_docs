@@ -1,3 +1,9 @@
+---
+description: >-
+  What a ground loop is, why ground loops cause noisy measurements and
+  alternate current paths, and how to avoid them.
+---
+
 (theory-ground-loops)=
 
 # Ground loops

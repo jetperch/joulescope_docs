@@ -1,6 +1,10 @@
 ---
 revision: "1.9"
 date: 2026-11-16
+description: >-
+  The user's guide for the Joulescope UI, the desktop application for
+  Windows, macOS and Linux that displays, records and analyzes Joulescope
+  measurements.
 ---
 
 (ui)=

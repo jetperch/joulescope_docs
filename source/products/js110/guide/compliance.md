@@ -1,3 +1,9 @@
+---
+description: >-
+  Joulescope JS110 regulatory compliance: FCC, Canada, Europe, safety, RoHS
+  and country of origin.
+---
+
 (js110-compliance)=
 
 # Compliance

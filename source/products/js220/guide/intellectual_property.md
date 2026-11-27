@@ -1,3 +1,8 @@
+---
+description: >-
+  The patents and trademarks that cover the Joulescope JS220.
+---
+
 (js220-intellectual-property)=
 
 # Intellectual Property

@@ -99,6 +99,30 @@ The toctree in `index.md` uses `:numbered:` so chapters and sections are
 numbered as in the PDF guides.
 
 
+## Front matter for agents
+
+Give each new page a `description` in its front matter: one or two
+sentences, at most 240 characters, that say what the page covers and for
+which instrument.  It becomes the HTML meta description, the page's entry in
+`/llms.txt` and the front matter of its Markdown copy.  Without one, the
+build uses the first sentences of the page, which often start a list
+("Applications include:") or a scenario and summarize the page poorly.
+
+```markdown
+---
+description: >-
+  The Joulescope JS320 fuse: the range, maximum and user fuses, and how to
+  configure them.
+---
+```
+
+Each product's `index.md` also records `status: active` or
+`status: obsolete`, which agents see as `product_status`.  Keep it in step
+with the table in `products/index.md`; a test compares them.  Pages from
+the mounted projects take their description from `site_index_descriptions`
+in `conf.py`.  See `doc/architecture.md`, "Indexes for agents".
+
+
 ## Labels and cross-references
 
 * Labels are prefixed with the guide: `js110-`, `js220-`, `js220plus-`,

@@ -1,3 +1,8 @@
+---
+description: >-
+  The patents and trademarks that cover the Joulescope JS320.
+---
+
 (js320-intellectual-property)=
 
 # Intellectual Property

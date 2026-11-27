@@ -1,6 +1,10 @@
 ---
 revision: "2.1"
 date: 2026-11-07
+description: >-
+  The user's guide for the Joulescope JS320 precision DC energy analyzer:
+  setup, connections, specifications, theory of operation, GPIO, fuse,
+  filters and maintenance.
 ---
 
 (js320)=

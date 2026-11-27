@@ -1,6 +1,10 @@
 ---
 revision: "2.0"
 date: 2026-10-26
+description: >-
+  The user's guide for the Joulescope JS220+, a limited-edition JS220 with
+  ±1 nA accuracy.  It gives only the differences from the JS220 User's
+  Guide.
 ---
 
 (js220plus)=

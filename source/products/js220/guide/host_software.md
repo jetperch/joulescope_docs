@@ -34,10 +34,13 @@ For more detail, visit the GitHub repositories for each project:
 | [joulescope_driver](https://github.com/jetperch/joulescope_driver) | pyjoulescope_driver | Native JS220 and JS110 user-space driver with Python and Node.js bindings |
 | [jls](https://github.com/jetperch/jls) | pyjls | High performance file storage for Joulescope data |
 
-You can find examples of how to use Joulescope in your Python application at:
+The [pyjoulescope_examples](https://github.com/jetperch/pyjoulescope_examples)
+repository on GitHub holds runnable Python examples.
+{doc}`Python examples </software/pyjoulescope_examples/index>` lists them by
+task.  For new scripts, use `pyjoulescope_driver` and its examples: see
+{ref}`python-package`.
 
-<https://github.com/jetperch/pyjoulescope_examples>
-
+The command-line tools of `pyjoulescope_driver` are also examples:
 <https://github.com/jetperch/joulescope_driver/tree/main/pyjoulescope_driver/entry_points>
 
 Also see the documentation for {doc}`pyjoulescope </software/pyjoulescope/index>` and

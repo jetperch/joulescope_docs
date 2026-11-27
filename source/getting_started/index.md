@@ -1,3 +1,9 @@
+---
+description: >-
+  Three steps from a new Joulescope to a first measurement: unboxing,
+  installing the Joulescope UI, and connecting the instrument.
+---
+
 (getting-started)=
 
 # Getting Started

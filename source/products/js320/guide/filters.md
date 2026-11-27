@@ -7,7 +7,7 @@ second.
 
 ## Analog Filter
 
-The JS320 includes a 2^(th) order analog linear phase Bessel filter with
+The JS320 includes a 2nd order analog linear phase Bessel filter with
 constant group delay for exceptional time domain clarity. The filters has a
 446 kHz bandwidth. The signal chain has additional RC poles that bring the
 total analog bandwidth down to 377 kHz:

@@ -1,3 +1,9 @@
+---
+description: >-
+  The Joulescope JS220 in its carry case: the accessories, the front-panel
+  connectors and how to connect a power source and target device.
+---
+
 (js220-meet-your-joulescope-js220)=
 
 # Meet Your Joulescope JS220

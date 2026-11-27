@@ -1,3 +1,10 @@
+---
+description: >-
+  Measure power converter efficiency with two Joulescopes: wiring, setup
+  checks, accuracy, clock differences, energy storage and efficiency versus
+  load.
+---
+
 (theory-efficiency)=
 
 # Efficiency

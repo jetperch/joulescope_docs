@@ -1,3 +1,8 @@
+---
+description: >-
+  The revision history of the Joulescope JS320 User's Guide.
+---
+
 (js320-change-log)=
 
 # Change log

@@ -183,12 +183,13 @@ jobs:
       - name: Sync to S3
         # Short browser cache: pages change with every deploy.  The archive
         # job owns archive/ except the version lists.  The CLI may guess
-        # .yaml and .md as binary, so they get explicit text types.
+        # .yaml and .md as binary, and gives .txt (llms.txt, llms-full.txt,
+        # robots.txt) no charset, so they get explicit UTF-8 text types.
         run: |
           aws s3 sync site/ "s3://${{ vars.DOCS_BUCKET }}/" --delete \
               --exclude "en/archive/*" --include "en/archive/*/versions.json" \
               --cache-control "public, max-age=300"
-          for t in "yaml:text/yaml" "md:text/markdown"; do
+          for t in "yaml:text/yaml" "md:text/markdown" "txt:text/plain"; do
             aws s3 cp site/ "s3://${{ vars.DOCS_BUCKET }}/" --recursive \
                 --exclude "*" --include "*.${t%%:*}" --exclude "en/archive/*" \
                 --content-type "${t#*:}; charset=utf-8" \

@@ -1,3 +1,7 @@
+---
+status: active  # active or obsolete; also in products/index.md
+---
+
 (product-js320)=
 
 # Joulescope JS320

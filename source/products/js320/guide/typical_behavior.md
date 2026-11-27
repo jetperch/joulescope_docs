@@ -1,3 +1,9 @@
+---
+description: >-
+  Typical Joulescope JS320 behavior.  This chapter will be expanded in a
+  future release.
+---
+
 (js320-typical-behavior)=
 
 # Typical Behavior

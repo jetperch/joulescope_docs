@@ -1,3 +1,9 @@
+---
+description: >-
+  What comes in the Joulescope JS320 box and what you need to provide, with
+  links for the other instruments.
+---
+
 (getting-started-unboxing)=
 
 # Unboxing

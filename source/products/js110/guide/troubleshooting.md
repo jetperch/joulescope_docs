@@ -1,3 +1,9 @@
+---
+description: >-
+  Fix JS110 problems: host not recognizing the instrument, offset error,
+  limited voltage range, the UI not opening the device, and strong RF.
+---
+
 (js110-troubleshooting)=
 
 # Troubleshooting

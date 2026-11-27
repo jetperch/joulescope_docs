@@ -1,3 +1,9 @@
+---
+description: >-
+  Definitions of the measurement terms used in the Joulescope guides, such
+  as accuracy, bandwidth and burden voltage.
+---
+
 (glossary)=
 
 # Glossary

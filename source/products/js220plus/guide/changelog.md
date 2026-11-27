@@ -1,3 +1,8 @@
+---
+description: >-
+  The revision history of the Joulescope JS220+ User's Guide.
+---
+
 (js220plus-change-log)=
 
 # Change log

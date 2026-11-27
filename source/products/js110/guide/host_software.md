@@ -234,9 +234,11 @@ See the GitHub repositories for the latest details.
 >
 > <https://github.com/jetperch/pyjoulescope>
 
-You can find examples for how to use Joulescope in your Python application at:
-
-<https://github.com/jetperch/pyjoulescope_examples>
+The [pyjoulescope_examples](https://github.com/jetperch/pyjoulescope_examples)
+repository on GitHub holds runnable Python examples.
+{doc}`Python examples </software/pyjoulescope_examples/index>` lists them by
+task.  For new scripts, use `pyjoulescope_driver` and its examples: see
+{ref}`python-package`.
 
 Also see the {doc}`pyjoulescope documentation </software/pyjoulescope/index>`.
 

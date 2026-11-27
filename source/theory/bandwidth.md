@@ -1,3 +1,10 @@
+---
+description: >-
+  How sample rate, filtering and bandwidth change what a current pulse looks
+  like, how to choose a sample rate, and the bandwidth of the whole
+  measurement system.
+---
+
 (theory-bandwidth)=
 
 # Bandwidth

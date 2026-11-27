@@ -1,3 +1,8 @@
+---
+description: >-
+  The revision history of the Joulescope UI User's Guide.
+---
+
 (ui-change-log)=
 
 # Change log

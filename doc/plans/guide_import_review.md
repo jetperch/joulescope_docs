@@ -59,6 +59,9 @@ Re-checked against `source/` on 2026-11-19.  Still open, in priority order:
   replacing them with tables or a downloadable spreadsheet.
 * Changed: the isolation component table and the host software repository
   table were rebuilt from the PDF (pandoc could not convert them).
+* Changed (2026-11-27): `filters.md` "2^(th) order analog linear phase
+  Bessel filter", a pandoc superscript, is now "2nd order".  Please confirm
+  the filter order; the JS220 guide's "6^(th)" is now "6th".
 
 
 ## Joulescope UI (`source/joulescope_ui/`)

@@ -1,3 +1,9 @@
+---
+description: >-
+  Joulescope JS220 regulatory compliance: FCC, Canada, Europe, safety, RoHS
+  and country of origin.
+---
+
 (js220-compliance)=
 
 # Compliance

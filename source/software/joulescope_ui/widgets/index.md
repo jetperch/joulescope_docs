@@ -1,3 +1,9 @@
+---
+description: >-
+  The widgets that make up the Joulescope UI views, with a reference page
+  for each: Multimeter, Waveform, Trigger, Spectrum and Efficiency.
+---
+
 (ui-widgets)=
 
 # Widgets

@@ -1,3 +1,9 @@
+---
+description: >-
+  What the Joulescope UI does: live statistics and waveforms, analysis
+  tools, long recordings to JLS files, and multiple instruments.
+---
+
 (ui-key-benefits)=
 
 # Key benefits

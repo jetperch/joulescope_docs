@@ -1,3 +1,9 @@
+---
+description: >-
+  The JS110 connectors and indicators, and how to connect a power source and
+  target device.
+---
+
 (js110-meet-your-joulescope)=
 
 # Meet Your Joulescope

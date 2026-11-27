@@ -43,6 +43,7 @@ en/products/js110/index.html
 en/products/js110/js110_datasheet.pdf
 en/products/js110/js110_datasheet.yaml
 en/products/js110/js110_users_guide.pdf
+en/products/js110/llms-full.txt
 en/products/js220/datasheet.html
 en/products/js220/guide/changelog.html
 en/products/js220/guide/compliance.html
@@ -67,6 +68,7 @@ en/products/js220/index.html
 en/products/js220/js220_datasheet.pdf
 en/products/js220/js220_datasheet.yaml
 en/products/js220/js220_users_guide.pdf
+en/products/js220/llms-full.txt
 en/products/js220plus/datasheet.html
 en/products/js220plus/guide/changelog.html
 en/products/js220plus/guide/index.html
@@ -79,6 +81,7 @@ en/products/js220plus/index.html
 en/products/js220plus/js220plus_datasheet.pdf
 en/products/js220plus/js220plus_datasheet.yaml
 en/products/js220plus/js220plus_users_guide.pdf
+en/products/js220plus/llms-full.txt
 en/products/js320/datasheet.html
 en/products/js320/guide/changelog.html
 en/products/js320/guide/compliance.html
@@ -104,10 +107,12 @@ en/products/js320/index.html
 en/products/js320/js320_datasheet.pdf
 en/products/js320/js320_datasheet.yaml
 en/products/js320/js320_users_guide.pdf
+en/products/js320/llms-full.txt
 en/py-modindex.html
 en/search.html
 en/software/host_configuration/index.html
 en/software/host_configuration/linux.html
+en/software/host_configuration/llms-full.txt
 en/software/host_configuration/macos.html
 en/software/host_configuration/windows.html
 en/software/index.html
@@ -119,6 +124,7 @@ en/software/jls/h_reader.html
 en/software/jls/h_threaded_writer.html
 en/software/jls/h_time.html
 en/software/jls/index.html
+en/software/jls/llms-full.txt
 en/software/jls/py_api.html
 en/software/jls/readme.html
 en/software/jls/recovery.html
@@ -139,6 +145,7 @@ en/software/joulescope_driver/js220_topics.html
 en/software/joulescope_driver/js320_cal.html
 en/software/joulescope_driver/js320_fwup.html
 en/software/joulescope_driver/js320_topics.html
+en/software/joulescope_driver/llms-full.txt
 en/software/joulescope_driver/program.html
 en/software/joulescope_driver/py_api.html
 en/software/joulescope_driver/readme.html
@@ -153,6 +160,7 @@ en/software/joulescope_ui/installation.html
 en/software/joulescope_ui/introduction.html
 en/software/joulescope_ui/joulescope_ui_users_guide.pdf
 en/software/joulescope_ui/key_benefits.html
+en/software/joulescope_ui/llms-full.txt
 en/software/joulescope_ui/meet_ui.html
 en/software/joulescope_ui/multiple_instruments.html
 en/software/joulescope_ui/plugins.html
@@ -176,12 +184,15 @@ en/software/pyjoulescope/api/streaming.html
 en/software/pyjoulescope/api/transition_to_v1.html
 en/software/pyjoulescope/api/view.html
 en/software/pyjoulescope/index.html
+en/software/pyjoulescope/llms-full.txt
 en/software/pyjoulescope/user/changelog.html
 en/software/pyjoulescope/user/index.html
 en/software/pyjoulescope/user/install.html
 en/software/pyjoulescope/user/intro.html
 en/software/pyjoulescope/user/license.html
 en/software/pyjoulescope/user/quickstart.html
+en/software/pyjoulescope_examples/index.html
+en/software/pyjoulescope_examples/llms-full.txt
 en/theory/bandwidth.html
 en/theory/efficiency.html
 en/theory/ground_loops.html

@@ -1,3 +1,9 @@
+---
+description: >-
+  The JS110 electrical isolation between USB and the IN/OUT sensor: the ±48
+  V rating and the isolation components.
+---
+
 (js110-electrical-isolation)=
 
 # Electrical Isolation

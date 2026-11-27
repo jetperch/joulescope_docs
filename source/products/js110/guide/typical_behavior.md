@@ -1,3 +1,9 @@
+---
+description: >-
+  Typical Joulescope JS110 behavior, such as autoranging through large
+  current steps.
+---
+
 (js110-typical-behavior)=
 
 # Typical Behavior

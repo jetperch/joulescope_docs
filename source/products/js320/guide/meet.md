@@ -1,3 +1,9 @@
+---
+description: >-
+  The Joulescope JS320 in its carry case: the accessories, the front-panel
+  connectors and how to connect a power source and target device.
+---
+
 (js320-meet-your-joulescope-js320)=
 
 # Meet Your Joulescope JS320

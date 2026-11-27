@@ -104,6 +104,55 @@ def test_agent_indexes():
 
 
 @_needs_site
+def test_markdown_front_matter():
+    """Each Markdown page names what it is when an agent reads it alone."""
+    pages = list(EN.rglob('*.md'))
+    for path in pages:
+        text = path.read_text()
+        assert text.startswith('---\ntitle: '), path
+        assert '\nurl: "https://docs.joulescope.com/en/' in text.split('\n---\n', 1)[0], path
+    fuse = (EN / 'products/js320/guide/fuse.md').read_text().split('\n---\n', 1)[0]
+    for line in ['product: "Joulescope JS320"', 'product_status: "active"',
+                 'document: "Joulescope JS320 User’s Guide, revision', 'last_updated: "20',
+                 'description: "']:
+        assert line in fuse
+    driver = (EN / 'software/joulescope_driver/driver.md').read_text()
+    assert '\nsoftware: "pyjoulescope_driver ' in driver
+    assert '<meta name="description" content="' in (EN / 'products/js320/guide/fuse.html').read_text()
+
+
+@_needs_site
+def test_markdown_has_no_authoring_noise():
+    full = (SITE / 'llms-full.txt').read_text()
+    for noise in ['Include-only fragment', 'SPDX-License-Identifier: Apache-2.0\n-->',
+                  'img.shields.io', 'sphinx-quickstart']:
+        assert noise not in full, noise
+    assert 'Version  (' not in (EN / 'software/pyjoulescope/index.md').read_text()
+
+
+@_needs_site
+def test_llms_txt_sections_and_bundles():
+    llms = (SITE / 'llms.txt').read_text()
+    for heading in ['## Start here', '## Bundles', '## Datasheets (YAML)', '## Optional']:
+        assert f'\n{heading}\n' in llms
+    assert 'pyjoulescope_driver' in llms.split('## ', 1)[0]  # the default package
+    for section in ['products/js320', 'software/joulescope_driver',
+                    'software/pyjoulescope_examples']:
+        bundle = EN / section / 'llms-full.txt'
+        assert f'/en/{section}/llms-full.txt)' in llms
+        assert bundle.read_text().startswith('---\ntitle: ')
+
+
+@_needs_site
+def test_product_status_matches_product_table():
+    table = (EN / 'products/index.md').read_text()
+    for model in ['js320', 'js220', 'js220plus', 'js110']:
+        status = (SOURCE / 'products' / model / 'index.md').read_text().split('status: ')[1].split()[0]
+        row = next(r for r in table.splitlines() if f'/en/products/{model}/index.md)' in r)
+        assert f'| {status.capitalize()} ' in row, model
+
+
+@_needs_site
 def test_urls_unchanged():
     """URLs are permanent: see CLAUDE.md.  CI builds the PDFs in another job,
     so they are compared only when built; test_cli checks their names."""

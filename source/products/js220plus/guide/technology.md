@@ -1,3 +1,9 @@
+---
+description: >-
+  The hardware changes that give the JS220+ nanoamp accuracy: guard traces,
+  a lower-leakage range MOSFET and a redesigned analog front end.
+---
+
 (js220plus-technology)=
 
 # Technology

@@ -136,6 +136,8 @@ them and a test compares every build with it.  The structure, decided
 | `/en/products/<model>/<model>_users_guide.pdf`, `<model>_datasheet.pdf` | PDFs |
 | `/en/software/host_configuration/<os>.html` | Host computer configuration, added 2026-11-12 |
 | `/en/software/<project>/<path>.html` | UI guide and project docs; `<path>` is the page's path in the project's own docs, so Read the Docs URLs map by prefix |
+| `/en/software/pyjoulescope_examples/index.html` | The Python examples, by task; owned here, links the GitHub repository; added 2026-11-27 |
+| `/en/products/<model>/llms-full.txt`, `/en/software/<project>/llms-full.txt` | Section bundles for agents, added 2026-11-27 |
 | `/en/archive/<project>/<tag>/` | Release archives, never rebuilt |
 | `/llms.txt`, `/llms-full.txt`, `/sitemap.xml`, `/robots.txt`, `/404.html` | Site-wide files |
 
@@ -159,14 +161,62 @@ them and a test compares every build with it.  The structure, decided
   (`sphinx-markdown-builder`), with includes and datasheet tables expanded
   and every link absolute.  Each HTML page names it with
   `<link rel="alternate" type="text/markdown">`.
-* `/llms.txt` ([llmstxt.org](https://llmstxt.org)): how to read the site, the
-  datasheet YAML and PDFs, and the full table of contents in reading order,
-  linking the Markdown pages.
-* `/llms-full.txt`: every Markdown page in one file, in the same order.
+* `/llms.txt` ([llmstxt.org](https://llmstxt.org)), described below.
+* `/llms-full.txt`: every Markdown page in one file, in reading order.
+* `/en/products/<model>/llms-full.txt` and `/en/software/<project>/llms-full.txt`:
+  the same for one product or software section (added 2026-11-27).
+* `<meta name="description">` on every HTML page.
 * `/sitemap.xml` and `/robots.txt`.
 
 The raw MyST sources (`_sources/`) are not published: they contain
 unexpanded includes and directives that agents cannot follow.
+
+Decisions of 2026-11-27, from a review of how well LLM agents can use the
+site:
+
+* **Front matter on every Markdown page.**  An agent often fetches one page
+  without the site around it, and a page titled "Fuse" or "Specifications"
+  exists for several instruments.  Each `<page>.md`, and each page in the
+  `llms-full.txt` files, starts with YAML front matter: `title`,
+  `description`, `breadcrumb` (the toctree ancestors), `document` (the guide
+  and its revision, from the guide's `index.md` front matter), `product` and
+  `product_status` (from `products/<model>/index.md`), `software` (the
+  documented package and version, for mounted projects), `url` (the HTML
+  page) and `last_updated` (the newest commit date of the page source and
+  the files it includes, such as the datasheet YAML; autodoc pages count
+  only their `.rst`).  Values are JSON strings, which are valid YAML.
+* **One description per page, from one source.**  The description is the
+  `description` front matter of an owned page, else an entry in
+  `site_index_descriptions` in `conf.py` for a mounted project page, else
+  the first sentences of the page's introduction, else the names of the API
+  objects it documents.  The same text is used in the front matter, in
+  `llms.txt` and in the HTML meta description.
+* **llms.txt follows llmstxt.org.**  The H1 and blockquote summary are
+  followed by notes without headings: the recommended Python package
+  (`pyjoulescope_driver`, see `software/index.md`), how the site is laid
+  out, and the bundles.  Then H2 sections that are lists of
+  `[title](url): description`: Start here (`site_index_start` in
+  `conf.py`), Bundles with approximate token counts, Datasheets (YAML), the
+  table of contents with one section per top-level section, Where to buy, and
+  Optional (PDFs and release archives, which repeat other content).
+  Every page stays listed, as `tests/test_site.py` checks.
+* **Bundles per section, not a smaller llms-full.txt.**  `/llms-full.txt` is
+  about 290k tokens, more than most agents can read at once.  llmstxt.org
+  defines only `/llms.txt`; `llms-full.txt` is a convention without a
+  standard for splitting.  Agents find files by following links from
+  `/llms.txt`, so each product and software project gets its own
+  `llms-full.txt`, linked from the Bundles section with its size.
+  `/llms-full.txt` keeps every page, so its meaning does not change.
+* **Authoring noise is removed from the Markdown.**  HTML comments (SPDX
+  headers, include-fragment notes, the Sphinx quickstart comment) and
+  download and CI badges carry nothing for a reader and are removed from
+  the Markdown pages, except inside code blocks.  The HTML pages are
+  unchanged.  The `<a id>` anchors stay, since links target them.
+* **Text files are served as UTF-8.**  The deploy job sets
+  `text/plain; charset=utf-8` on `.txt` files, as it does for `.md` and
+  `.yaml`, so ±, µ and Ω survive in `llms.txt`.
+* **|version| in mounted projects** is the project's package version
+  (`_source_read` in `conf.py`), because the site has no single version.
 
 ### Navigation
 

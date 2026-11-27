@@ -1,3 +1,9 @@
+---
+description: >-
+  The JS320 part numbers: JS320-K000 with factory calibration and JS320-K001
+  with an added ISO 17025:2017 calibration.
+---
+
 (js320-ordering-information)=
 
 # Ordering Information

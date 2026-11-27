@@ -1,3 +1,10 @@
+---
+description: >-
+  Fix Joulescope UI problems: report issues, a Joulescope not detected on
+  Windows, lost samples in long captures, virtual machines, network storage,
+  and a blank window.
+---
+
 (ui-troubleshooting)=
 
 # Troubleshooting

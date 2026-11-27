@@ -1,3 +1,10 @@
+---
+description: >-
+  The Joulescope JS220 specifications: ratings, mechanical, operating
+  conditions, current and voltage measurement, parasitic effects, the fuse
+  and GPIO, from js220_datasheet.yaml.
+---
+
 (js220-specifications)=
 
 # Specifications

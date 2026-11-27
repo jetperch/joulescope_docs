@@ -1,3 +1,8 @@
+---
+description: >-
+  The revision history of the Joulescope JS110 User's Guide.
+---
+
 (js110-change-log)=
 
 # Change log

@@ -6,6 +6,7 @@
 Project conf.py files are not used by this build.  See doc/architecture.md.
 """
 
+import importlib.metadata
 import json
 import os
 import pathlib
@@ -187,6 +188,71 @@ latex_documents, PDF_PATHS = ([], {}) if _ARCHIVE else _latex_documents()
 site_index_pdf_paths = PDF_PATHS
 
 
+def _package_versions():
+    """{project: "<package> <version>"} for the mounted projects with a package."""
+    result = {}
+    for name, p in PROJECTS.items():
+        try:
+            result[name] = f'{p["package"]} {importlib.metadata.version(p["package"])}'
+        except (KeyError, importlib.metadata.PackageNotFoundError):
+            pass
+    return result
+
+
+# The documented package versions, in the Markdown front matter (site_index).
+site_index_software = {} if _ARCHIVE else _package_versions()
+# llms.txt "Start here": (docname[#anchor], [title, [note]]).  Notes default
+# to the page description.
+site_index_start = [
+    ('products/js320/guide/index',),
+    ('products/js320/datasheet',),
+    ('software/index#python-package', 'Which Python package to use',
+     'use pyjoulescope_driver for new code.'),
+    ('software/pyjoulescope_examples/index',),
+    ('software/joulescope_driver/getting_started', 'Joulescope Driver: getting started'),
+    ('software/joulescope_driver/js320_topics',),
+    ('software/joulescope_ui/index',),
+    ('theory/index',),
+]
+# Descriptions for mounted project pages whose first paragraph does not
+# summarize them.  Owned pages use "description" front matter instead.
+site_index_descriptions = {
+    'software/joulescope_driver/index':
+        'The Joulescope Driver: the C library joulescope_driver and its Python binding '
+        'pyjoulescope_driver, the recommended package for controlling Joulescope '
+        'instruments from code.',
+    'software/joulescope_driver/c_api': 'The C API reference of the Joulescope Driver.',
+    'software/joulescope_driver/py_api':
+        'The pyjoulescope_driver Python API reference and its command-line tools, such as '
+        'info, statistics and record.',
+    'software/joulescope_driver/js220_topics':
+        'The JS220 publish-subscribe topics: the device path format, settings, '
+        'measurement streams and commands.',
+    'software/joulescope_driver/js320_topics':
+        'The JS320 publish-subscribe topics as JSON metadata: every setting, measurement '
+        'stream and command, with its data type, default and options.',
+    'software/joulescope_driver/h_meta':
+        'The C API for topic metadata: the JSON that describes each topic\'s type, '
+        'default, options and flags.',
+    'software/pyjoulescope/index':
+        'pyjoulescope, the original synchronous Python API for Joulescope instruments '
+        '(package joulescope), built on pyjoulescope_driver.  New code should use '
+        'pyjoulescope_driver.',
+    'software/pyjoulescope/user/intro':
+        'What the joulescope Python package does and the platforms it supports.',
+    'software/pyjoulescope/user/quickstart':
+        'Run the joulescope command-line tool and read samples in a short Python script '
+        'with the joulescope package.',
+    'software/jls/index':
+        'JLS, the Joulescope file format for long recordings of sampled signals, with its '
+        'C library jls and Python package pyjls.',
+    'software/jls/readme':
+        'The JLS file format: its features, why it exists, how it stores huge '
+        'one-dimensional signals with summaries for fast display, and its resources.',
+    'software/jls/c_api': 'The C API reference of the JLS library.',
+}
+
+
 def _switcher_url(name):
     return f'/en/archive/{name}/versions.json'
 
@@ -230,9 +296,24 @@ def _write_pdf_paths(app, exception):
         (pathlib.Path(app.outdir) / 'pdf_paths.json').write_text(json.dumps(PDF_PATHS, indent=2))
 
 
+def _source_read(app, docname, source):
+    """Give |version| in a project's reStructuredText its package version.
+
+    The site documents several projects, so the global version is empty.
+    """
+    parts = docname.split('/')
+    if _ARCHIVE or len(parts) < 3 or parts[0] != 'software':
+        return
+    software = site_index_software.get(parts[1])
+    if software and '|version|' in source[0] and app.env.doc2path(docname).suffix == '.rst':
+        v = software.split()[-1]
+        source[0] = f'.. |version| replace:: {v}\n.. |release| replace:: {v}\n\n' + source[0]
+
+
 def setup(app):
     if not _ARCHIVE:
         mount.patch_relfn2path(MOUNT, PROJECTS)
+    app.connect('source-read', _source_read)
     # Before the theme reads theme_switcher at the default priority (500).
     app.connect('html-page-context', _page_context, priority=400)
     app.connect('build-finished', _write_versions)

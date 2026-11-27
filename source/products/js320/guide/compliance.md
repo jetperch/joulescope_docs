@@ -1,3 +1,9 @@
+---
+description: >-
+  Joulescope JS320 regulatory compliance: FCC, Canada, Europe, safety, RoHS
+  and country of origin.
+---
+
 (js320-compliance)=
 
 # Compliance

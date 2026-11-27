@@ -1,3 +1,10 @@
+---
+description: >-
+  Why a sleep-current measurement can read far higher than the datasheet:
+  leakage paths through debuggers, USB and grounds, Joulescope's own
+  leakage, and how to measure without leakage.
+---
+
 (theory-leakage)=
 
 # Leakage current

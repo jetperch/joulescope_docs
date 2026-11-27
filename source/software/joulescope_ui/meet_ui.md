@@ -1,3 +1,9 @@
+---
+description: >-
+  A tour of the Joulescope UI: the Multimeter and Oscilloscope views, energy
+  and charge, signal management and widgets.
+---
+
 (ui-meet-the-joulescope-ui)=
 
 # Meet the Joulescope UI

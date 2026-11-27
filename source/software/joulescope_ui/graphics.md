@@ -1,3 +1,9 @@
+---
+description: >-
+  Choose the OpenGL renderer of the Joulescope UI, for example the software
+  renderer when integrated Intel graphics crash the UI on Windows.
+---
+
 (ui-graphics-configuration)=
 
 # Graphics configuration

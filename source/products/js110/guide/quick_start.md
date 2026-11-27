@@ -1,3 +1,9 @@
+---
+description: >-
+  Install the Joulescope UI, connect the Joulescope JS110, and make a first
+  measurement.
+---
+
 (js110-quick-start)=
 
 # Quick start

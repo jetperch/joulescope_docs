@@ -1,3 +1,9 @@
+---
+description: >-
+  Connect a Joulescope to the host computer and to a power source and
+  target, then make a first measurement in the Joulescope UI.
+---
+
 (getting-started-first-steps)=
 
 # First steps

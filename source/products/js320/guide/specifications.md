@@ -1,3 +1,10 @@
+---
+description: >-
+  The Joulescope JS320 specifications: ratings, mechanical, operating
+  conditions, current and voltage measurement, parasitic effects, the fuse
+  and GPIO, from js320_datasheet.yaml.
+---
+
 (js320-specifications)=
 
 # Specifications

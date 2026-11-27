@@ -1,6 +1,10 @@
 ---
 revision: "2.0"
 date: 2026-10-26
+description: >-
+  The user's guide for the Joulescope JS110 precision DC energy analyzer:
+  setup, specifications, theory of operation, GPIO, isolation, maintenance
+  and troubleshooting.
 ---
 
 (js110)=

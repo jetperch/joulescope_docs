@@ -49,8 +49,10 @@ What counts as a URL:
   PDFs.  New material goes inside this structure.
 * Pages, at `<path>.html`, and their Markdown copies at `<path>.md`.
 * Directory URLs such as `/en/products/js320/`, which serve `index.html`.
-* `<model>_datasheet.yaml`, the PDFs, `/llms.txt`, `/llms-full.txt`,
-  `/sitemap.xml`, `/robots.txt`, `/en/objects.inv`.
+* `<model>_datasheet.yaml`, the PDFs, `/llms.txt`, `/llms-full.txt`, the
+  section bundles `/en/products/<model>/llms-full.txt` and
+  `/en/software/<project>/llms-full.txt`, `/sitemap.xml`, `/robots.txt`,
+  `/en/objects.inv`.
 * `/en/archive/<project>/versions.json`, which archived releases read at
   run time, and `/en/archive/<project>/<tag>/`, which is never rebuilt or
   deleted.

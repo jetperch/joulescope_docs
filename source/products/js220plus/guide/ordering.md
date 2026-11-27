@@ -1,3 +1,9 @@
+---
+description: >-
+  The JS220+ part number, JS220-K002, which includes ISO 17025:2017
+  calibration.
+---
+
 (js220plus-ordering-information)=
 
 # Ordering Information

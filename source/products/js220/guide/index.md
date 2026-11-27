@@ -1,6 +1,10 @@
 ---
 revision: "2.0"
 date: 2026-10-26
+description: >-
+  The user's guide for the Joulescope JS220 precision DC energy analyzer:
+  setup, connections, specifications, theory of operation, GPIO, fuse,
+  filters and maintenance.
 ---
 
 (js220)=

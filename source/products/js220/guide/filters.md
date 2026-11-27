@@ -7,7 +7,7 @@ second.
 
 ## Analog Filter
 
-The JS220 includes a 6^(th) order analog Butterworth low-pass filter with a
+The JS220 includes a 6th order analog Butterworth low-pass filter with a
 nominal 315 kHz bandwidth. The gain at the bandwidth is - 3 dB gain. The
 analog front end includes several additional RC poles at much higher
 frequencies. The combined response is shown in the figure below.

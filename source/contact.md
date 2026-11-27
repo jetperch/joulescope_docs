@@ -1,3 +1,9 @@
+---
+description: >-
+  How to buy Joulescope products, submit warranty claims, get support, and
+  reach Jetperch LLC.
+---
+
 (contact)=
 
 # Contact
