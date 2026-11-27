@@ -126,7 +126,7 @@ for more detail.
 ## Host Computer
 
 The Joulescope instrument requires a host computer to operate. The Joulescope
-instrument sends 2 million current and voltage samples per second immediately
+instrument sends 1 million current and voltage samples per second immediately
 to the host computer over USB. Unlike traditional oscilloscopes, a Joulescope
 is always capturing data. The terms “trigger” and “sample buffer” do not fully
 apply to the Joulescope device, since all sample data arrives at the host

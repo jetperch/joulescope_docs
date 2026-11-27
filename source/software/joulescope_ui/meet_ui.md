@@ -184,10 +184,10 @@ shortcuts, markers and the analysis tools.
 
 ## Energy and Charge
 
-Joulescopes measure current and voltage at 2,000,000 samples per second. It
-then multiplies current by voltage to compute power. Joulescopes then
-integrate current to compute charge and integrate power over time to compute
-energy. The Joulescope UI displays charge and energy in both the **Multimeter
+Joulescopes measure current and voltage at 1,000,000 (JS320) or 2,000,000
+(JS110 and JS220) samples per second. It then multiplies current by voltage
+to compute power. Joulescopes then integrate current to compute charge and
+integrate power over time to compute energy. The Joulescope UI displays charge and energy in both the **Multimeter
 View** and **Oscilloscope View**. This value starts accumulating when the
 software starts. Use **Tools** → **Clear Accumulators** to reset them to zero
 at any time.

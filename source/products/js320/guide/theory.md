@@ -19,7 +19,7 @@ larger burden voltage that can cause the target device to behave unusually.
 
 The Joulescope amplifies the voltage across the shunt resistor and then uses
 an analog-to-digital converter (ADC) to digitize the value. The ADC digitizes
-the value 2 million times per second to create 2 million samples per second
+the value 1 million times per second to create 1 million samples per second
 (SPS). The Joulescope instrument processes these ADC values on the instrument
 using a sensor-side FPGA.
 
@@ -28,9 +28,6 @@ Ohm’s Law to compute current. The FPGA applies calibration coefficients to
 convert the measured voltage into the measured current. Joulescopes are
 individually calibrated and tested in the factory to ensure that every
 Joulescope performs to specification.
-
-The instrument then downsamples by 2 from 2 Msps to 1 Msps. This downsampling
-saves USB bandwidth without affecting the measurement bandwidth.
 
 ### Autoranging
 
@@ -348,7 +345,7 @@ for more detail.
 ## Host Computer
 
 The Joulescope instrument requires a host computer to operate. The Joulescope
-instrument sends 2 million current and voltage samples per second immediately
+instrument sends 1 million current and voltage samples per second immediately
 to the host computer over USB. Unlike traditional oscilloscopes, a Joulescope
 is always capturing data. The terms “trigger” and “sample buffer” do not fully
 apply to the Joulescope device, since all sample data arrives at the host
