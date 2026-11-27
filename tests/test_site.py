@@ -99,6 +99,7 @@ def test_agent_indexes():
         assert f'/en/{page}.html</loc>' in sitemap, page
     assert 'Sitemap: https://docs.joulescope.com/sitemap.xml' in (SITE / 'robots.txt').read_text()
     assert (SITE / 'llms-full.txt').stat().st_size > 100_000
+    assert 'https://www.joulescope.com/agents.md' in llms  # store cross-link
     assert not [p for p in (EN / '_sources').rglob('*') if p.is_file()]  # raw MyST
 
 

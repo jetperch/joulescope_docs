@@ -89,6 +89,11 @@ def _llms_txt(app, pages):
         '- Release archives of the software documentation are under',
         f'  {base}archive/<project>/<tag>/, listed in',
         f'  {base}archive/<project>/versions.json.', '',
+        '## Where to buy', '',
+        '- The Joulescope Store, https://www.joulescope.com, sells the instruments',
+        '  and accessories.  Its agent instructions are at',
+        '  https://www.joulescope.com/agents.md.',
+        '- https://www.joulescope.com/pages/distributors lists the distributors.', '',
     ]
     yamls = [(doc, f'{doc.rsplit("/", 2)[-2]}_datasheet.yaml') for _, doc in pages
              if doc.startswith('products/') and doc.endswith('/datasheet')]
