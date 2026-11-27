@@ -52,10 +52,7 @@ today, found by reading the generated Markdown, `software/*.md`.
 
 ## pyjoulescope_examples
 
-10. `fuse.py` writes the JS220 F/K quantization to a JS320 (it accepts any
-    model except the JS110).  Either add the JS320 constants or refuse the
-    JS320; the docs list it as JS220 only until then.
-11. The README "download the latest" link points at `archive/master.zip`; the
+10. The README "download the latest" link points at `archive/master.zip`; the
     branch is `main`.
 
 ## Order

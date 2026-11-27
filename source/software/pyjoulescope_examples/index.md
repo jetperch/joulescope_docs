@@ -64,7 +64,7 @@ The instrument settings they publish are listed in the
 | Detect current events while streaming | [detector.py](https://github.com/jetperch/pyjoulescope_examples/blob/main/examples/pyjoulescope_driver/detector.py) | JS320, JS220 |
 | Drive the BNC trigger output from host-side detection | [trigger_out.py](https://github.com/jetperch/pyjoulescope_examples/blob/main/examples/pyjoulescope_driver/trigger_out.py) | JS320, JS220 |
 | Turn power to the target device on or off | [dut_power.py](https://github.com/jetperch/pyjoulescope_examples/blob/main/examples/pyjoulescope_driver/dut_power.py) | All |
-| Configure the fuse | [fuse.py](https://github.com/jetperch/pyjoulescope_examples/blob/main/examples/pyjoulescope_driver/fuse.py) | JS220 |
+| Configure the fuse | [fuse.py](https://github.com/jetperch/pyjoulescope_examples/blob/main/examples/pyjoulescope_driver/fuse.py) | JS320, JS220 |
 | Measure time synchronization between several instruments | [timesync.py](https://github.com/jetperch/pyjoulescope_examples/blob/main/examples/pyjoulescope_driver/timesync.py) | All |
 
 
