@@ -61,7 +61,7 @@ event handlers, and tasks.
   running correctly. Joulescope’s extremely fast current range switching
   maintains low voltage drop even under rapidly varying current demands.
 
-- **Makes the invisible visible**: The JS320 measures current and voltage 2
+- **Makes the invisible visible**: The JS320 measures current and voltage 1
   million times per second with 200 kHz bandwidth. This high sampling rate
   makes the power consumption of interrupt service routines, inrush currents,
   and other short events visible.
